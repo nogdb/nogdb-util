@@ -9,7 +9,8 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(JSON_BuildTests OFF)
+set(nogdb_BuildTests OFF CACHE BOOL "disable nogdb testing" FORCE)
+set(JSON_BuildTests OFF CACHE BOOL "disable json testing" FORCE)
 
 add_subdirectory(nogdb)
 add_subdirectory(dep/json)
@@ -29,7 +30,16 @@ function(executable_runtest name)
         nlohmann_json
     )
     target_include_directories(runtest_${name} PUBLIC /usr/local/include)
+    add_test(
+        NAME build_runtest_${name}
+        COMMAND "${CMAKE_COMMAND}" --build ${CMAKE_BINARY_DIR} --target runtest_${name}
+    )
+    add_test(
+        NAME test_${name}
+        COMMAND runtest_${name}
+    )
 endfunction()
 
+enable_testing()
 executable_runtest(translator src/translator.cpp)
 
