@@ -1,0 +1,6 @@
+[submodule "nogdb"]
+	path = nogdb
+	url = https://github.com/nogdb/nogdb.git
+[submodule "dep/json"]
+	path = dep/json
+	url = https://github.com/nlohmann/json.git
