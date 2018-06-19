@@ -9,11 +9,13 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(nogdb_BuildTests OFF CACHE BOOL "disable nogdb testing" FORCE)
-set(JSON_BuildTests OFF CACHE BOOL "disable json testing" FORCE)
+set(nogdb_BuildTests OFF CACHE BOOL "disable nogdb testing")
+set(JSON_BuildTests OFF CACHE BOOL "disable json testing")
+set(BUILD_TESTING OFF CACHE BOOL "disable Simple-Web-Server (and other testing)")
 
 add_subdirectory(nogdb)
 add_subdirectory(dep/json)
+add_subdirectory(dep/Simple-Web-Server)
 
 # executable_runtest(name srcs...)
 # Create runtest executable.
@@ -25,9 +27,10 @@ function(executable_runtest name)
     )
     link_directories(/usr/local/lib)
     target_link_libraries(runtest_${name}
-        gtest
+        ${gtest_LIB}
         nogdb
         nlohmann_json
+        simple-web-server
     )
     target_include_directories(runtest_${name} PUBLIC /usr/local/include)
     add_test(
@@ -41,5 +44,7 @@ function(executable_runtest name)
 endfunction()
 
 enable_testing()
+find_library(gtest_LIB gtest)
 executable_runtest(translator src/translator.cpp)
+executable_runtest(server_http_response server/http_response.cpp src/translator.cpp)
 

@@ -89,7 +89,7 @@ namespace nogdb {
     };
 }
 
-TEST(Translator, TranslateErrorType) {
+TEST(TranslatorTest TranslateErrorType) {
     EXPECT_EQ(json(Error::Type::DATASTORE).dump(), "\"d\"");
     EXPECT_EQ(json(Error::Type::GRAPH).dump(), "\"g\"");
     EXPECT_EQ(json(Error::Type::CONTEXT).dump(), "\"c\"");
@@ -103,12 +103,12 @@ TEST(Translator, TranslateErrorType) {
     EXPECT_EQ(json::parse("\"s\"").get<Error::Type>(), Error::Type::SQL);
 }
 
-TEST(Translator, TranslateError) {
+TEST(TranslatorTest TranslateError) {
     auto e = Error(SQL_SYNTAX_ERROR, Error::Type::SQL);
     EXPECT_EQ(json::parse(json(e).dump()), e);
 }
 
-TEST(Translator, TranslatePropertyType) {
+TEST(TranslatorTest TranslatePropertyType) {
     EXPECT_EQ(json(PropertyType::TINYINT).dump(), "\"i\"");
     EXPECT_EQ(json(PropertyType::UNSIGNED_TINYINT).dump(), "\"I\"");
     EXPECT_EQ(json(PropertyType::SMALLINT).dump(), "\"s\"");
@@ -136,7 +136,7 @@ TEST(Translator, TranslatePropertyType) {
     EXPECT_EQ(json::parse("\"n\"").get<PropertyType>(), PropertyType::UNDEFINED);
 }
 
-TEST(Translator, TranslatePropertyDescriptor) {
+TEST(TranslatorTest TranslatePropertyDescriptor) {
     auto p = PropertyDescriptor{
         1,
         PropertyType::INTEGER,
@@ -149,7 +149,7 @@ TEST(Translator, TranslatePropertyDescriptor) {
     EXPECT_EQ(json::parse(json(p).dump()).get<PropertyDescriptor>(), p);
 }
 
-TEST(Translator, TranslateClassType) {
+TEST(TranslatorTest TranslateClassType) {
     EXPECT_EQ(json(ClassType::VERTEX).dump(), "\"v\"");
     EXPECT_EQ(json(ClassType::EDGE).dump(), "\"e\"");
     EXPECT_EQ(json(ClassType::UNDEFINED).dump(), "\"n\"");
@@ -159,7 +159,7 @@ TEST(Translator, TranslateClassType) {
     EXPECT_EQ(json::parse("\"n\"").get<ClassType>(), ClassType::UNDEFINED);
 }
 
-TEST(Translator, TranslateClassDescriptor) {
+TEST(TranslatorTest TranslateClassDescriptor) {
     auto c = ClassDescriptor(1,
                              "MyClass",
                              ClassType::VERTEX,
@@ -172,18 +172,18 @@ TEST(Translator, TranslateClassDescriptor) {
     EXPECT_EQ(json::parse(json(c).dump()).get<ClassDescriptor>(), c);
 }
 
-TEST(Translator, TranslateRecordDescriptor) {
+TEST(TranslatorTest TranslateRecordDescriptor) {
     auto r = RecordDescriptor(10, 101);
     ASSERT_EQ(json(r).dump(), R"({"rid":[10,101]})");
     EXPECT_EQ(json::parse(json(r).dump()).get<RecordDescriptor>(), r);
 }
 
-TEST(Translator, TranslateBytes) {
+TEST(TranslatorTest TranslateBytes) {
     EXPECT_EQ(json(Bytes(0x112348D0)).dump(), "\"X'D0482311'\"");
     EXPECT_EQ(json::parse("\"X'D0482311'\"").get<Bytes>(), Bytes(0x112348D0));
 }
 
-TEST(Translator, TranslateBytesWithType) {
+TEST(TranslatorTest TranslateBytesWithType) {
     auto tiny = Bytes((int8_t)CHAR_MIN);
     auto utiny = Bytes((uint8_t)UCHAR_MAX);
     auto small = Bytes((int16_t)SHRT_MIN);
@@ -245,14 +245,14 @@ TEST(Translator, TranslateBytesWithType) {
     EXPECT_EQ(b, blob);
 }
 
-TEST(Translator, TranslateResult) {
+TEST(TranslatorTest TranslateResult) {
     auto rs = Result(RecordDescriptor(2, 3),
                      Record().set("prop1", (uint8_t)0x11).set("prop2", (uint8_t)0x22));
     ASSERT_EQ(json(rs).dump(), R"({"descriptor":{"rid":[2,3]},"record":{"prop1":"X'11'","prop2":"X'22'"}})");
     EXPECT_EQ(json::parse(json(rs).dump()).get<Result>(), rs);
 }
 
-TEST(Translator, TranslateResultWithSchema) {
+TEST(TranslatorTest TranslateResultWithSchema) {
     auto schemas = vector<ClassDescriptor>{
         ClassDescriptor(2,
                         "My_class",
@@ -275,7 +275,7 @@ TEST(Translator, TranslateResultWithSchema) {
     EXPECT_EQ(testRs, rs);
 }
 
-TEST(Translator, TranslateResultWithSchemaButInvalidClass) {
+TEST(TranslatorTest TranslateResultWithSchemaButInvalidClass) {
     auto schemas = vector<ClassDescriptor>{ClassDescriptor(111, "Class", ClassType::UNDEFINED, {})};
     auto rs = Result(RecordDescriptor(2, 3), Record().set("prop1", (uint8_t)0x11));
 
@@ -288,7 +288,7 @@ TEST(Translator, TranslateResultWithSchemaButInvalidClass) {
     EXPECT_EQ(testRs, rs);
 }
 
-TEST(Translator, TranslateSQLResultType) {
+TEST(TranslatorTest TranslateSQLResultType) {
     EXPECT_EQ(json(SQL::Result::Type::NO_RESULT).dump(), "\"n\"");
     EXPECT_EQ(json(SQL::Result::Type::ERROR).dump(), "\"e\"");
     EXPECT_EQ(json(SQL::Result::Type::CLASS_DESCRIPTOR).dump(), "\"c\"");
@@ -304,31 +304,31 @@ TEST(Translator, TranslateSQLResultType) {
     EXPECT_EQ(json::parse("\"s\"").get<SQL::Result::Type>(), SQL::Result::Type::RESULT_SET);
 }
 
-TEST(Translator, TranslateSQLResultNoResult) {
+TEST(TranslatorTest TranslateSQLResultNoResult) {
     EXPECT_EQ(json(SQLResultTesting()).dump(), json::parse(R"({"type":"n","data":null})").dump());
 }
 
-TEST(Translator, TranslateSQLResultError) {
+TEST(TranslatorTest TranslateSQLResultError) {
     auto rs = SQLResultTesting(new Error(SQL_SYNTAX_ERROR, Error::Type::SQL));
     EXPECT_EQ(json(rs).dump(), (json{{"type","e"},{"data",rs.get<Error>()}}.dump()));;
 }
 
-TEST(Translator, TranslateSQLResultClassDescriptor) {
+TEST(TranslatorTest TranslateSQLResultClassDescriptor) {
     auto rs = SQLResultTesting(new ClassDescriptor(2, "C", ClassType::VERTEX, {}));
     EXPECT_EQ(json(rs).dump(), (json{{"type", "c"},{"data",rs.get<ClassDescriptor>()}}.dump()));
 }
 
-TEST(Translator, TranslateSQLResultPropertyDescriptor) {
+TEST(TranslatorTest TranslateSQLResultPropertyDescriptor) {
     auto rs = SQLResultTesting(new PropertyDescriptor(2, PropertyType::TEXT));
     EXPECT_EQ(json(rs).dump(), (json{{"type","p"},{"data",rs.get<PropertyDescriptor>()}}.dump()));
 }
 
-TEST(Translator, TranslateSQLResultRecordDescriptor) {
+TEST(TranslatorTest TranslateSQLResultRecordDescriptor) {
     auto rs = SQLResultTesting(new vector<RecordDescriptor>{{2,3}, {2,4}});
     EXPECT_EQ(json(rs).dump(), (json{{"type","r"},{"data",rs.get<vector<RecordDescriptor>>()}}.dump()));
 }
 
-TEST(Translator, TranslateSQLResultResultSet) {
+TEST(TranslatorTest TranslateSQLResultResultSet) {
     auto schemas = vector<ClassDescriptor>{
         ClassDescriptor(2,
                         "My_class",
@@ -357,7 +357,7 @@ TEST(Translator, TranslateSQLResultResultSet) {
     EXPECT_EQ(j.at("data").dump(), jRss.dump());
 }
 
-TEST(Translator, TranslateIndexInfo) {
+TEST(TranslatorTest TranslateIndexInfo) {
     auto ii = IndexInfo{
         { 1, make_pair(11, true) },
         { 2, make_pair(12, false) }
