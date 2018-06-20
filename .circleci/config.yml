@@ -19,7 +19,9 @@ jobs:
     steps:
       - checkout
 
-      - run: cd nogdb-util/graph-editor
+      - run: ls
+
+      - run: cd graph-editor
 
       # Download and cache dependencies
       - restore_cache:
