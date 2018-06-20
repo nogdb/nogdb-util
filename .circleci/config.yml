@@ -14,19 +14,16 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/workspace
+    working_directory: ~/workspace/graph-editor
 
     steps:
       - checkout
-
-      - run: ls
-
-      - run: cd graph-editor
+          path: ~/workspace
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "graph-editor/package.json" }}
+          - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
@@ -35,7 +32,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "graph-editor/package.json" }}
+          key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
       - run: yarn test
