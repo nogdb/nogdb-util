@@ -17,8 +17,7 @@ jobs:
     working_directory: ~/nogdb-util/graph-editor
 
     steps:
-      - checkout:
-        path: ~/nogdb-util
+      - checkout
 
       # Download and cache dependencies
       - restore_cache:
