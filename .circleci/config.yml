@@ -17,7 +17,7 @@ jobs:
     working_directory: ~/workspace/graph-editor
 
     steps:
-      - checkout
+      - checkout:
           path: ~/workspace
 
       # Download and cache dependencies
