@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.1.3)
 
 project(nogdb-util LANGUAGES CXX)
 
-file(GLOB util_SOURCE src/*.[ch]pp)
-file(GLOB server_SOURCE server/*.[ch]pp)
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+file(GLOB nogdb_util_FILE src/*.[ch]pp)
+file(GLOB nogdb_server_FILE server/*.[ch]pp)
 
 set(nogdb_BuildTests OFF CACHE BOOL "disable nogdb testing")
 set(JSON_BuildTests OFF CACHE BOOL "disable json testing")
@@ -17,6 +17,24 @@ add_subdirectory(nogdb)
 add_subdirectory(dep/json)
 add_subdirectory(dep/Simple-Web-Server)
 
+add_library(nogdb_util_OBJECT EXCLUDE_FROM_ALL OBJECT ${nogdb_util_FILE})
+target_include_directories(nogdb_util_OBJECT
+    PUBLIC
+        $<TARGET_PROPERTY:nogdb,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+add_executable(server
+    ${nogdb_server_FILE}
+    $<TARGET_OBJECTS:nogdb_util_OBJECT>
+)
+add_dependencies(server nogdb_util_OBJECT)
+target_link_libraries(server
+    nogdb
+    nlohmann_json
+    simple-web-server
+)
+
 # executable_runtest(name srcs...)
 # Create runtest executable.
 function(executable_runtest name)
@@ -25,7 +43,6 @@ function(executable_runtest name)
         test/test_${name}.cpp
         ${ARGN}
     )
-    link_directories(/usr/local/lib)
     target_link_libraries(runtest_${name}
         ${gtest_LIB}
         nogdb

@@ -37,13 +37,15 @@ protected:
     virtual void SetUp() {
         ctx = Context("test.db");
         server.config.port = 8090;
-        setupHttpResponse(server, ctx);
+        server::setupHttpResponse(server, ctx);
         svThread = thread([&]() { server.start(); });
         this_thread::sleep_for(chrono::milliseconds(5));
     }
      virtual void TearDown() {
          server.stop();
          svThread.join();
+         ctx = Context{}; // unlock test.db
+         system("rm -r test.db");
      }
 
     Context ctx;
@@ -51,9 +53,27 @@ protected:
     thread svThread;
 };
 
-TEST_F(ServerHttpResponseTest, sample) {
+TEST_F(ServerHttpResponseTest, ResponseSQLExecute) {
     HttpClient client("localhost:8090");
-    auto res = client.request("POST", "/sql/execute", json{{"sql", "DROP CLASS V IF EXISTS"}}.dump());
-    EXPECT_EQ(json(SQL::Result()), json::parse(res->content.string()));
+
+    auto res = client.request("POST", "/sql/execute", json{{"sql", "CREATE CLASS 'V' IF NOT EXISTS EXTENDS VERTEX"}}.dump());
+    auto result = json::parse(res->content.string());
+    EXPECT_EQ(result["type"], SQL::Result::Type::CLASS_DESCRIPTOR);
+    EXPECT_EQ(result["data"]["name"], "V");
+
+    res = client.request("POST", "/sql/execute", json{{"sql", "CREATE PROPERTY V.p1 TEXT"}}.dump());
+    result = json::parse(res->content.string());
+    EXPECT_EQ(result["type"], SQL::Result::Type::PROPERTY_DESCRIPTOR);
+    EXPECT_EQ(result["data"]["type"], PropertyType::TEXT);
+
+    res = client.request("POST", "/sql/execute", json{{"sql", "CREATE VERTEX V SET p1='v1'"}}.dump());
+    result = json::parse(res->content.string());
+    EXPECT_EQ(result["type"], SQL::Result::Type::RECORD_DESCRIPTORS);
+
+    res = client.request("POST", "/sql/execute", json{{"sql", "SELECT * FROM V"}}.dump());
+    result = json::parse(res->content.string());
+    EXPECT_EQ(result["type"], SQL::Result::Type::RESULT_SET);
+    EXPECT_EQ(result["data"].size(), 1);
+    EXPECT_EQ(result["data"][0]["record"]["p1"], "v1");
 }
 

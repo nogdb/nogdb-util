@@ -356,7 +356,17 @@ void nogdb::to_json(json &j, const Result &rs, const ClassDescriptor &schema) {
         try {
             type = schema.properties.at(p.first).type;
         } catch (...) {
-            type = PropertyType::UNDEFINED;
+            if (p.first == "@className") {
+                type = PropertyType::TEXT;
+            } else if (p.first == "@recordId") {
+                type = PropertyType::TEXT;
+            } else if (p.first == "@version") {
+                type = PropertyType::UNSIGNED_BIGINT;
+            } else if (p.first == "@depth") {
+                type = PropertyType::UNSIGNED_INTEGER;
+            } else {
+                type = PropertyType::UNDEFINED;
+            }
         }
         to_json(j["record"][p.first], p.second, type);
     }
