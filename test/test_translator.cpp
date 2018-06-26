@@ -392,6 +392,14 @@ TEST(TranslatorTest, TranslateSQLResultResultSet) {
     EXPECT_EQ(j.at("data").dump(), jRss.dump());
 }
 
+TEST(TranslatorTest, TranslateTxnMode) {
+    EXPECT_EQ(json(Txn::Mode::READ_ONLY).dump(), "\"READ_ONLY\"");
+    EXPECT_EQ(json(Txn::Mode::READ_WRITE).dump(), "\"READ_WRITE\"");
+
+    EXPECT_EQ(json::parse("\"READ_ONLY\"").get<Txn::Mode>(), Txn::Mode::READ_ONLY);
+    EXPECT_EQ(json::parse("\"READ_WRITE\"").get<Txn::Mode>(), Txn::Mode::READ_WRITE);
+}
+
 TEST(TranslatorTest, TranslateIndexInfo) {
     auto ii = IndexInfo{
         { 1, make_pair(11, true) },

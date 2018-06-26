@@ -33,11 +33,13 @@ using HttpServer = SimpleWeb::Server<SimpleWeb::HTTP>;
 using HttpClient = SimpleWeb::Client<SimpleWeb::HTTP>;
 
 #define TEST_DBPART "test.db"
-static const unsigned short TEST_PORT = 8090;
+static const auto TEST_PORT = (unsigned short)8090;
+static const auto TEST_ADDESS = string("localhost:") + to_string(TEST_PORT);
 
 class ServerHttpResponseTest : public testing::Test {
 protected:
     virtual void SetUp() {
+        system("rm -rf " TEST_DBPART);
         ctx = server::Context(TEST_DBPART);
         server.config.port = TEST_PORT;
         server::setupHttpResponse(server, ctx);
@@ -47,8 +49,6 @@ protected:
      virtual void TearDown() {
          server.stop();
          svThread.join();
-         ctx = server::Context{}; // unlock test.db
-         system("rm -r " TEST_DBPART);
      }
 
     server::Context ctx;
@@ -92,16 +92,72 @@ TEST_F(ServerHttpResponseTest, ResponseSQLExecute) {
 }
 
 TEST_F(ServerHttpResponseTest, ResponseHandler) {
-    HttpClient client("localhost:" + to_string(TEST_PORT));
+    HttpClient client(TEST_ADDESS);
 
     auto response = client.request("POST", "/SQL/execute", json{{"sql", "CREATE CLASS 'V' IF NOT EXISTS EXTENDS VERTEX"}}.dump());
+    ASSERT_EQ(response->status_code, "200 OK");
     auto result = json::parse(response->content.string());
     EXPECT_EQ(result["type"], SQL::Result::Type::CLASS_DESCRIPTOR);
     EXPECT_EQ(result["data"]["name"], "V");
 
     response = client.request("POST", "/SQL/execute", json{{"sql", "DROP CLASS 'V' IF EXISTS"}}.dump());
+    ASSERT_EQ(response->status_code, "200 OK");
     result = json::parse(response->content.string());
     EXPECT_EQ(result["type"], SQL::Result::Type::NO_RESULT);
 }
 
+TEST_F(ServerHttpResponseTest, ResponseHandlerTransaction) {
+    HttpClient client(TEST_ADDESS);
 
+    // create txn1
+    auto response = client.request("POST", "/Txn/create", json{{"mode", "READ_WRITE"}}.dump());
+    ASSERT_EQ(response->status_code, "200 OK");
+    auto result = json::parse(response->content.string());
+    ASSERT_TRUE(result["txnID"].is_number());
+    TxnId txnID1 = result["txnID"].get<TxnId>();
+
+    // create class 'V' in txn1
+    response = client.request("POST", "/SQL/execute", json{{"txnID", txnID1}, {"sql", "CREATE CLASS V IF NOT EXISTS EXTENDS VERTEX"}}.dump());
+    ASSERT_EQ(response->status_code, "200 OK");
+    result = json::parse(response->content.string());
+    EXPECT_EQ(result["type"], SQL::Result::Type::CLASS_DESCRIPTOR);
+    EXPECT_EQ(result["data"]["name"], "V");
+
+    // create txn2
+    response = client.request("POST", "/Txn/create", json{{"mode", "READ_ONLY"}}.dump());
+    ASSERT_EQ(response->status_code, "200 OK");
+    result = json::parse(response->content.string());
+    ASSERT_TRUE(result["txnID"].is_number());
+    TxnId txnID2 = result["txnID"].get<TxnId>();
+
+    // txn2 can't find class 'V' because txn1 hasn't commited.
+    response = client.request("POST", "/SQL/execute", json{{"txnID", txnID2}, {"sql", "SELECT * FROM V"}}.dump());
+    ASSERT_EQ(response->status_code, "500 Internal Server Error");
+    result = json::parse(response->content.string());
+    EXPECT_EQ(result["error"], "CTX_NOEXST_CLASS: A class does not exist");
+
+    // commit txn1
+    response = client.request("POST", "/Txn/commit", json{{"txnID", txnID1}}.dump());
+    ASSERT_EQ(response->status_code, "200 OK");
+    result = json::parse(response->content.string());
+    EXPECT_TRUE(result.is_object());
+    EXPECT_EQ(result.size(), 0);
+
+    // other txn can find class 'V'
+    response = client.request("POST", "/SQL/execute", json{{"sql", "SELECT * FROM V"}}.dump());
+    ASSERT_EQ(response->status_code, "200 OK");
+    result = json::parse(response->content.string());
+    EXPECT_EQ(result["type"], SQL::Result::Type::RESULT_SET);
+    EXPECT_EQ(result["data"].size(), 0);
+
+    // rollback txn2
+    response = client.request("POST", "/Txn/rollback", json{{"txnID", txnID2}}.dump());
+    ASSERT_EQ(response->status_code, "200 OK");
+    result = json::parse(response->content.string());
+    EXPECT_TRUE(result.is_object());
+    EXPECT_EQ(result.size(), 0);
+
+    // clean-up
+    response = client.request("POST", "/SQL/execute", json{{"sql", "DROP CLASS V IF EXISTS"}}.dump());
+    ASSERT_EQ(response->status_code, "200 OK");
+}

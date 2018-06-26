@@ -8,7 +8,9 @@ namespace nogdb {
             using nogdb::Context::Context;
 
             Txn& getTxn(TxnId id);
-            void setTxn(Txn &txn);
+            TxnId setTxn(Txn &&txn);
+            void commitTxn(TxnId id);
+            void rollbackTxn(TxnId id);
 
         private:
             std::map<TxnId, Txn> txnHolder{};

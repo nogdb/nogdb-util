@@ -65,6 +65,9 @@ namespace nogdb {
     void from_json(const json&, SQL::Result::Type&);
 
     void to_json(json&, const SQL::Result&, const std::vector<ClassDescriptor> &schema = {});
+
+    void to_json(json&, const Txn::Mode&);
+    void from_json(const json&, Txn::Mode&);
 }
 
 namespace std {

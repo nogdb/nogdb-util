@@ -504,6 +504,30 @@ void nogdb::to_json(json &j, const SQL::Result &rs, const vector<ClassDescriptor
     }
 }
 
+void nogdb::to_json(json &j, const Txn::Mode &m) {
+    switch (m) {
+        case Txn::Mode::READ_ONLY:
+            j = json("READ_ONLY");
+            break;
+        case Txn::Mode::READ_WRITE:
+            j = json("READ_WRITE");
+            break;
+        default:
+            assert(false);
+            break;
+    }
+}
+void nogdb::from_json(const json &j, Txn::Mode &m) {
+    assert(j.is_string());
+    if (j == "READ_ONLY") {
+        m = Txn::Mode::READ_ONLY;
+    } else if (j == "READ_WRITE") {
+        m = Txn::Mode::READ_WRITE;
+    } else {
+        assert(false);
+    }
+}
+
 
 void std::to_json(json &j, const IndexInfo &ii) {
     j.clear();
