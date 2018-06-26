@@ -63,5 +63,5 @@ endfunction()
 enable_testing()
 find_library(gtest_LIB gtest)
 executable_runtest(translator src/translator.cpp)
-executable_runtest(server_http_response server/http_response.cpp src/translator.cpp)
+executable_runtest(server_http_response server/http_response.cpp server/context.cpp src/translator.cpp)
 

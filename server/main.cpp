@@ -89,7 +89,7 @@ int main(int argc, char * argv[]) {
     try {
         Option opt = Option(argc, argv);
 
-        Context ctx{opt.dbPath};
+        server::Context ctx{opt.dbPath};
 
         HttpServer httpSv{};
         httpSv.config.address = opt.address;

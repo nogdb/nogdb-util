@@ -32,11 +32,14 @@ using namespace nogdb;
 using HttpServer = SimpleWeb::Server<SimpleWeb::HTTP>;
 using HttpClient = SimpleWeb::Client<SimpleWeb::HTTP>;
 
+#define TEST_DBPART "test.db"
+static const unsigned short TEST_PORT = 8090;
+
 class ServerHttpResponseTest : public testing::Test {
 protected:
     virtual void SetUp() {
-        ctx = Context("test.db");
-        server.config.port = 8090;
+        ctx = server::Context(TEST_DBPART);
+        server.config.port = TEST_PORT;
         server::setupHttpResponse(server, ctx);
         svThread = thread([&]() { server.start(); });
         this_thread::sleep_for(chrono::milliseconds(5));
@@ -44,36 +47,61 @@ protected:
      virtual void TearDown() {
          server.stop();
          svThread.join();
-         ctx = Context{}; // unlock test.db
-         system("rm -r test.db");
+         ctx = server::Context{}; // unlock test.db
+         system("rm -r " TEST_DBPART);
      }
 
-    Context ctx;
+    server::Context ctx;
     HttpServer server;
     thread svThread;
 };
 
-TEST_F(ServerHttpResponseTest, ResponseSQLExecute) {
-    HttpClient client("localhost:8090");
+TEST_F(ServerHttpResponseTest, ResponseDbGetDbInfo) {
+    auto txn = Txn(this->ctx, Txn::Mode::READ_ONLY);
+    auto result = json::parse(server::responseDbGetDbInfo(txn, {}));
+    EXPECT_EQ(result["dbPath"], TEST_DBPART);
+    EXPECT_EQ(result["maxDB"], 1024);
+    EXPECT_EQ(result["maxDBSize"], 1073741824);
+}
 
-    auto res = client.request("POST", "/sql/execute", json{{"sql", "CREATE CLASS 'V' IF NOT EXISTS EXTENDS VERTEX"}}.dump());
-    auto result = json::parse(res->content.string());
+TEST_F(ServerHttpResponseTest, ResponseSQLExecute) {
+    auto txn = Txn(this->ctx, Txn::Mode::READ_WRITE);
+
+    auto jSQL = json{{"sql", "CREATE CLASS 'V' IF NOT EXISTS EXTENDS VERTEX"}};
+    auto result = json::parse(server::responseSQLExecute(txn, jSQL));
     EXPECT_EQ(result["type"], SQL::Result::Type::CLASS_DESCRIPTOR);
     EXPECT_EQ(result["data"]["name"], "V");
 
-    res = client.request("POST", "/sql/execute", json{{"sql", "CREATE PROPERTY V.p1 TEXT"}}.dump());
-    result = json::parse(res->content.string());
+    jSQL = json{{"sql", "CREATE PROPERTY V.p1 TEXT"}};
+    result = json::parse(server::responseSQLExecute(txn, jSQL));
     EXPECT_EQ(result["type"], SQL::Result::Type::PROPERTY_DESCRIPTOR);
     EXPECT_EQ(result["data"]["type"], PropertyType::TEXT);
 
-    res = client.request("POST", "/sql/execute", json{{"sql", "CREATE VERTEX V SET p1='v1'"}}.dump());
-    result = json::parse(res->content.string());
+    jSQL = json{{"sql", "CREATE VERTEX V SET p1='v1'"}};
+    result = json::parse(server::responseSQLExecute(txn, jSQL));
     EXPECT_EQ(result["type"], SQL::Result::Type::RECORD_DESCRIPTORS);
 
-    res = client.request("POST", "/sql/execute", json{{"sql", "SELECT * FROM V"}}.dump());
-    result = json::parse(res->content.string());
+    jSQL = json{{"sql", "SELECT * FROM V"}};
+    result = json::parse(server::responseSQLExecute(txn, jSQL));
     EXPECT_EQ(result["type"], SQL::Result::Type::RESULT_SET);
     EXPECT_EQ(result["data"].size(), 1);
     EXPECT_EQ(result["data"][0]["record"]["p1"], "v1");
+
+    // Txn auto rollback when de-construct.
+    // txn.rollback();
 }
+
+TEST_F(ServerHttpResponseTest, ResponseHandler) {
+    HttpClient client("localhost:" + to_string(TEST_PORT));
+
+    auto response = client.request("POST", "/SQL/execute", json{{"sql", "CREATE CLASS 'V' IF NOT EXISTS EXTENDS VERTEX"}}.dump());
+    auto result = json::parse(response->content.string());
+    EXPECT_EQ(result["type"], SQL::Result::Type::CLASS_DESCRIPTOR);
+    EXPECT_EQ(result["data"]["name"], "V");
+
+    response = client.request("POST", "/SQL/execute", json{{"sql", "DROP CLASS 'V' IF EXISTS"}}.dump());
+    result = json::parse(response->content.string());
+    EXPECT_EQ(result["type"], SQL::Result::Type::NO_RESULT);
+}
+
 

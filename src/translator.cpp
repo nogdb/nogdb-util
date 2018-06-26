@@ -64,6 +64,30 @@ void nogdb::from_json(const json &j, Error &e) {
     e = Error(j.at("code"), j.at("type"));
 }
 
+void nogdb::to_json(json &j, const DBInfo &i) {
+    j = json{{"dbPath", i.dbPath},
+        {"maxDB", i.maxDB},
+        {"maxDBSize", i.maxDBSize},
+        {"maxPropertyId", i.maxPropertyId},
+        {"numProperty", i.numProperty},
+        {"maxClassId", i.maxClassId},
+        {"numClass", i.numClass},
+        {"maxIndexId", i.maxIndexId},
+        {"numIndex", i.numIndex}};
+}
+void nogdb::from_json(const json &j, DBInfo &i) {
+    i = DBInfo();
+    i.dbPath = j.at("dbPath");
+    i.maxDB = j.at("maxDB");
+    i.maxDBSize = j.at("maxDBSize");
+    i.maxPropertyId = j.at("maxPropertyId");
+    i.numProperty = j.at("numProperty");
+    i.maxClassId = j.at("maxClassId");
+    i.numClass = j.at("numClass");
+    i.maxIndexId = j.at("maxIndexId");
+    i.numIndex = j.at("numIndex");
+}
+
 void nogdb::to_json(json &j, const PropertyType &t) {
     j = string(1, static_cast<char>(t));
 }
@@ -325,6 +349,42 @@ void nogdb::from_json(const json &j, Bytes &b, const PropertyType &t) {
     }
 }
 
+void nogdb::to_json(json &j, const Record &r, const ClassDescriptor &schema) {
+    j.clear();
+    for (const auto &p: r.getAll()) {
+        PropertyType type{};
+        try {
+            type = schema.properties.at(p.first).type;
+        } catch (...) {
+            if (p.first == "@className") {
+                type = PropertyType::TEXT;
+            } else if (p.first == "@recordId") {
+                type = PropertyType::TEXT;
+            } else if (p.first == "@version") {
+                type = PropertyType::UNSIGNED_BIGINT;
+            } else if (p.first == "@depth") {
+                type = PropertyType::UNSIGNED_INTEGER;
+            } else {
+                type = PropertyType::UNDEFINED;
+            }
+        }
+        to_json(j[p.first], p.second, type);
+    }
+}
+void nogdb::from_json(const json &j, Record &r, const ClassDescriptor &schema) {
+    for (auto it = j.cbegin(); it != j.cend(); ++it) {
+        PropertyType type{};
+        Bytes b{};
+        try {
+            type = schema.properties.at(it.key()).type;
+        } catch (...) {
+            type = PropertyType::UNDEFINED;
+        }
+        from_json(it.value(), b, type);
+        r.set(it.key(), static_cast<const Bytes&>(b));
+    }
+}
+
 void nogdb::to_json(json &j, const Result &rs, const vector<ClassDescriptor> &schemas) {
     auto scIt = find_if(schemas.cbegin(),
                    schemas.cend(),
@@ -351,40 +411,11 @@ void nogdb::from_json(const json &j, Result &rs, const vector<ClassDescriptor> &
 }
 void nogdb::to_json(json &j, const Result &rs, const ClassDescriptor &schema) {
     j = json{{"descriptor", rs.descriptor}};
-    for (const auto &p: rs.record.getAll()) {
-        PropertyType type{};
-        try {
-            type = schema.properties.at(p.first).type;
-        } catch (...) {
-            if (p.first == "@className") {
-                type = PropertyType::TEXT;
-            } else if (p.first == "@recordId") {
-                type = PropertyType::TEXT;
-            } else if (p.first == "@version") {
-                type = PropertyType::UNSIGNED_BIGINT;
-            } else if (p.first == "@depth") {
-                type = PropertyType::UNSIGNED_INTEGER;
-            } else {
-                type = PropertyType::UNDEFINED;
-            }
-        }
-        to_json(j["record"][p.first], p.second, type);
-    }
+    to_json(j["record"], rs.record, schema);
 }
 void nogdb::from_json(const json &j, Result &rs, const ClassDescriptor &schema) {
     Record r{};
-    const json &jRs = j.at("record");
-    for (auto it = jRs.cbegin(); it != jRs.cend(); ++it) {
-        PropertyType type{};
-        Bytes b{};
-        try {
-            type = schema.properties.at(it.key()).type;
-        } catch (...) {
-            type = PropertyType::UNDEFINED;
-        }
-        from_json(it.value(), b, type);
-        r.set(it.key(), static_cast<const Bytes&>(b));
-    }
+    from_json(j.at("record"), r, schema);
     rs = Result(j.at("descriptor"), r);
 }
 

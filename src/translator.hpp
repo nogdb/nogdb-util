@@ -30,6 +30,9 @@ namespace nogdb {
     void to_json(json&, const Error&);
     void from_json(const json&, Error&);
 
+    void to_json(json&, const DBInfo&);
+    void from_json(const json&, DBInfo&);
+
     void to_json(json&, const PropertyType&);
     void from_json(const json&, PropertyType&);
 
@@ -45,18 +48,18 @@ namespace nogdb {
     void to_json(json&, const RecordDescriptor&);
     void from_json(const json&, RecordDescriptor&);
 
-    void to_json(json&, const Record&);
-    void from_json(const json&, Record&);
-
     void to_json(json&, const Bytes&);
     void from_json(const json&, Bytes&);
     void to_json(json&, const Bytes&, const PropertyType&);
     void from_json(const json&, Bytes&, const PropertyType&);
 
+    void to_json(json&, const Record&, const ClassDescriptor &schema = {});
+    void from_json(const json&, Record&, const ClassDescriptor &schema = {});
+
     void to_json(json&, const Result&, const std::vector<ClassDescriptor>&);
     void from_json(const json&, Result&, const std::vector<ClassDescriptor>&);
-    void to_json(json&, const Result&, const ClassDescriptor &schema = ClassDescriptor{});
-    void from_json(const json&, Result&, const ClassDescriptor &schema = ClassDescriptor{});
+    void to_json(json&, const Result&, const ClassDescriptor &schema = {});
+    void from_json(const json&, Result&, const ClassDescriptor &schema = {});
 
     void to_json(json&, const SQL::Result::Type&);
     void from_json(const json&, SQL::Result::Type&);

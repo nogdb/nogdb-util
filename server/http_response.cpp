@@ -14,21 +14,53 @@ using nlohmann::json;
 using HttpServer = SimpleWeb::Server<SimpleWeb::HTTP>;
 using HttpResponsePtr = std::shared_ptr<HttpServer::Response>;
 using HttpRequestPtr = std::shared_ptr<HttpServer::Request>;
+using ResponseFunction = function<string(Txn&, const json&)>;
+
+static void responseHandler(ResponseFunction func, Txn::Mode txnMode, server::Context &ctx, HttpResponsePtr res, HttpRequestPtr req) {
+    try {
+        auto content = json::parse(req->content);
+        if (content.find("txn") != content.end()) {
+            try {
+                auto &txn = ctx.getTxn(content["txn"].get<TxnId>());
+                auto result = func(txn, content);
+            } catch (const std::out_of_range) {
+                res->write(SimpleWeb::StatusCode::server_error_internal_server_error, "Invalid Transaction ID");
+            }
+        } else {
+            auto txn = Txn(ctx, txnMode);
+            auto result = func(txn, content);
+            txn.commit();
+            res->write(result);
+        }
+    }
+    catch (const nogdb::Error &e) {
+        res->write(SimpleWeb::StatusCode::server_error_internal_server_error, e.what());
+    }
+    catch (const exception &e) {
+        res->write(SimpleWeb::StatusCode::client_error_bad_request, e.what());
+    }
+}
 
 void nogdb::server::setupHttpResponse(HttpServer &sv, Context &ctx) {
 
-    sv.resource["^/sql/execute$"]["POST"] = [&ctx](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
-        responseSQLExecute(ctx, response, request);
+    sv.resource["^/Db/getDbInfo"]["GET"] = [&ctx](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
+        ::responseHandler(responseDbGetDbInfo, Txn::Mode::READ_WRITE, ctx, response, request);
+    };
+
+    sv.resource["^/SQL/execute$"]["POST"] = [&ctx](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
+        ::responseHandler(responseSQLExecute, Txn::Mode::READ_WRITE, ctx, response, request);
     };
 }
 
-void nogdb::server::responseSQLExecute(Context &ctx, HttpResponsePtr response, HttpRequestPtr request) {
-    try {
-        auto content = json::parse(request->content);
-        auto txn = Txn(ctx, Txn::Mode::READ_WRITE);
+string nogdb::server::responseDbGetDbInfo(Txn &txn, const json &content) {
+    auto result = Db::getDbInfo(txn);
+    json jResult = json(result);
+    return json(result).dump();
+}
+
+string nogdb::server::responseSQLExecute(Txn &txn, const json &content) {
         auto sql = content.at("sql").get_ref<const string&>();
         auto result = SQL::execute(txn, sql);
-        txn.commit();
 
         json jResult;
         if (result.type() == SQL::Result::Type::RESULT_SET) {
@@ -36,12 +68,5 @@ void nogdb::server::responseSQLExecute(Context &ctx, HttpResponsePtr response, H
         } else {
             to_json(jResult, result);
         }
-        response->write(jResult.dump());
-    }
-    catch (const nogdb::Error &e) {
-        response->write(SimpleWeb::StatusCode::server_error_internal_server_error, e.what());
-    }
-    catch (const exception &e) {
-        response->write(SimpleWeb::StatusCode::client_error_bad_request, e.what());
-    }
+        return jResult.dump();
 }
