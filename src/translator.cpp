@@ -564,6 +564,13 @@ void nogdb::from_json(const json &j, Txn::Mode &m) {
 //    }
 //}
 
+void nogdb::from_json(const json &j, ClassFilter &cf) {
+    cf = ClassFilter(j.get<vector<string>>());
+}
+void nogdb::to_json(json &j, const ClassFilter &cf) {
+    j = json(cf.getClassName());
+}
+
 
 void std::to_json(json &j, const IndexInfo &ii) {
     j.clear();

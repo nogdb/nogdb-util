@@ -170,6 +170,11 @@ namespace nogdb {
      * }
      */
     //void from_json(const json&, Condition&);
+
+    /// MARK: - ClassFilter
+    /* <string[]> */
+    void from_json(const json&, ClassFilter&);
+    void to_json(json&, const ClassFilter&);
 }
 
 namespace std {
