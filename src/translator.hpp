@@ -24,53 +24,161 @@
 namespace nogdb {
     using nlohmann::json;
 
+    /// MARK: - Error::Type
+    /* <string> */
     void to_json(json&, const Error::Type&);
     void from_json(const json&, Error::Type&);
 
+    /// MARK: - Error
+    /* {
+     *  "type": <Error::Type>,
+     *  "code": <number>,
+     *  "what": <string>
+     * }
+     */
     void to_json(json&, const Error&);
     void from_json(const json&, Error&);
 
+    /// MARK: - DBInfo
+    /* {
+     *  "dbPath": <string>,
+     *  "maxDB": <number>,
+     *  "maxDBSize": <number>,
+     *  "maxPropertyId": <number>,
+     *  "numProperty": <number>,
+     *  "maxClassId": <number>,
+     *  "numClass": <number>,
+     *  "maxIndexId": <number>,
+     *  "numIndex": <number>
+     * }
+     */
     void to_json(json&, const DBInfo&);
     void from_json(const json&, DBInfo&);
 
+    /// MARK: - PropertyType
+    /* <string> */
     void to_json(json&, const PropertyType&);
     void from_json(const json&, PropertyType&);
 
+    /// MARK: - PropertyDescriptor
+    /* {
+     *  "id": <number>,
+     *  "type": <PropertyType>
+     *  "indexInfo": <IndexInfo>
+     * }
+     */
     void to_json(json&, const PropertyDescriptor&);
     void from_json(const json&, PropertyDescriptor&);
 
+    /// MARK: - ClassType
+    /* <string> */
     void to_json(json&, const ClassType&);
     void from_json(const json&, ClassType&);
 
+    /// MARK: - ClassDescriptor
+    /* {
+     *  "id": <number>,
+     *  "name": <string>,
+     *  "type": <ClassType>,
+     *  "properties": {
+     *      <string>: <PropertyDescriptor>,
+     *      ...
+     *  },
+     *  "super": <string>,
+     *  "sub": <string[]>
+     * }
+     */
     void to_json(json&, const ClassDescriptor&);
     void from_json(const json&, ClassDescriptor&);
 
+    /// MARK: - RecordDescriptor
+    /* {
+     *  "rid": <number[2]>
+     * }
+     */
     void to_json(json&, const RecordDescriptor&);
     void from_json(const json&, RecordDescriptor&);
 
+    /// MARK: - Bytes
+    /* <string>|<number> */
     void to_json(json&, const Bytes&);
     void from_json(const json&, Bytes&);
     void to_json(json&, const Bytes&, const PropertyType&);
     void from_json(const json&, Bytes&, const PropertyType&);
 
+    /// MARK: - Record
+    /* {
+     *  <string>: <Bytes>,
+     *  ...
+     * }
+     */
     void to_json(json&, const Record&, const ClassDescriptor &schema = {});
     void from_json(const json&, Record&, const ClassDescriptor &schema = {});
 
+    /// MARK: - Result
+    /* {
+     *  "descriptor": <RecordDescriptor>,
+     *  "record": <Record>
+     * }
+     */
     void to_json(json&, const Result&, const std::vector<ClassDescriptor>&);
     void from_json(const json&, Result&, const std::vector<ClassDescriptor>&);
     void to_json(json&, const Result&, const ClassDescriptor &schema = {});
     void from_json(const json&, Result&, const ClassDescriptor &schema = {});
 
+    /// MARK: - SQL::Result::Type
+    /* <string> */
     void to_json(json&, const SQL::Result::Type&);
     void from_json(const json&, SQL::Result::Type&);
 
+    /// MARK: - SQL::Result
+    /* {
+     *  "type": <SQL::Result::Type>
+     *
+     *  // relate on type
+     *  "data":
+     *      null
+     *      | <Error>
+     *      | <ClassDescriptor>
+     *      | <PropertyDescriptor>
+     *      | <RecordDescriptor[]>
+     *      | <Result[]>
+     * }
+     */
     void to_json(json&, const SQL::Result&, const std::vector<ClassDescriptor> &schema = {});
 
+    /// MARK: - Txn::Mode
+    /* "READ_ONLY"|"READ_WRITE" */
     void to_json(json&, const Txn::Mode&);
     void from_json(const json&, Txn::Mode&);
+
+    /// MARK: - Condition
+    // Can not translate from json to Condition because it hasn't default constructor.
+    /* {
+     *  "propName": <string>,
+     *  "comp": <string>,
+     *
+     *  // relate on compatator
+     *  "value":
+     *      <string>
+     *      |<Bytes>
+     *      |<Bytes[]>
+     *      |null
+     *
+     *  // optional
+     *  "ignoreCase": <bool>
+     * }
+     */
+    //void from_json(const json&, Condition&);
 }
 
 namespace std {
+    /// MARK: - IndexInfo
+    /* {
+     *  <string>: [ <number>, <bool> ],
+     *  ...
+     * }
+     */
     void to_json(nlohmann::json&, const nogdb::IndexInfo&);
     void from_json(const nlohmann::json&, nogdb::IndexInfo&);
 }

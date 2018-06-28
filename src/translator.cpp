@@ -32,26 +32,25 @@ void nogdb::to_json(json &j, const Error::Type &t) {
     j = string(1, static_cast<char>(t));
 }
 void nogdb::from_json(const json &j, Error::Type &t) {
-    if (j.is_string()) {
-        switch (j.get_ref<const string&>().c_str()[0]) {
-            case static_cast<char>(Error::Type::DATASTORE):
-                t = Error::Type::DATASTORE;
-                break;
-            case static_cast<char>(Error::Type::GRAPH):
-                t = Error::Type::GRAPH;
-                break;
-            case static_cast<char>(Error::Type::CONTEXT):
-                t = Error::Type::CONTEXT;
-                break;
-            case static_cast<char>(Error::Type::TRANSACTION):
-                t = Error::Type::TRANSACTION;
-                break;
-            case static_cast<char>(Error::Type::SQL):
-                t = Error::Type::SQL;
-                break;
-            default:
-                break;
-        }
+    switch (j.get_ref<const string&>().c_str()[0]) {
+        case static_cast<char>(Error::Type::DATASTORE):
+            t = Error::Type::DATASTORE;
+            break;
+        case static_cast<char>(Error::Type::GRAPH):
+            t = Error::Type::GRAPH;
+            break;
+        case static_cast<char>(Error::Type::CONTEXT):
+            t = Error::Type::CONTEXT;
+            break;
+        case static_cast<char>(Error::Type::TRANSACTION):
+            t = Error::Type::TRANSACTION;
+            break;
+        case static_cast<char>(Error::Type::SQL):
+            t = Error::Type::SQL;
+            break;
+        default:
+            throw json::other_error::create(501, "JSON string must be nogdb::Error::Type charactor, but is '" + j.get<string>() + "'");
+            break;
     }
 }
 
@@ -240,11 +239,11 @@ void nogdb::from_json(const json &j, Bytes &b) {
             b = Bytes(j.get<unsigned int>());
         } else if (j.is_number_integer()) {
             b = Bytes(j.get<int>());
-        } else if (j.is_number_float()) {
+        } else /* if (j.is_number_float()) */ {
             b = Bytes(j.get<double>());
-        } else {
-            assert(false);
         }
+    } else {
+        throw json::type_error::create(302, "type must be string or number, but is " + string(j.type_name()));
     }
 }
 void nogdb::to_json(json &j, const Bytes &b, const PropertyType &t) {
@@ -372,6 +371,7 @@ void nogdb::to_json(json &j, const Record &r, const ClassDescriptor &schema) {
     }
 }
 void nogdb::from_json(const json &j, Record &r, const ClassDescriptor &schema) {
+    r.clear();
     for (auto it = j.cbegin(); it != j.cend(); ++it) {
         PropertyType type{};
         Bytes b{};
@@ -500,7 +500,7 @@ void nogdb::to_json(json &j, const SQL::Result &rs, const vector<ClassDescriptor
             break;
         default:
             assert(false);
-            break;
+            abort();
     }
 }
 
@@ -518,15 +518,51 @@ void nogdb::to_json(json &j, const Txn::Mode &m) {
     }
 }
 void nogdb::from_json(const json &j, Txn::Mode &m) {
-    assert(j.is_string());
     if (j == "READ_ONLY") {
         m = Txn::Mode::READ_ONLY;
     } else if (j == "READ_WRITE") {
         m = Txn::Mode::READ_WRITE;
     } else {
-        assert(false);
+        throw json::other_error::create(501, "JSON string must be 'READ_ONLY' or 'READ_WRITE', but is '" + j.get<string>() + "'");
     }
 }
+
+//void nogdb::from_json(const json &j, Condition &c) {
+//    auto propName = j.at("propName").get_ref<const string&>();
+//    auto comp = j.at("comp").get_ref<const string&>();
+//
+//    static const auto op = map<string, function<void()>>{
+//        { "eq", [&](){ c.eq(j.at("value").get<Bytes>()); }},
+//        { "gt", [&](){ c.gt(j.at("value").get<Bytes>()); }},
+//        { "lt", [&](){ c.lt(j.at("value").get<Bytes>()); }},
+//        { "ge", [&](){ c.ge(j.at("value").get<Bytes>()); }},
+//        { "le", [&](){ c.le(j.at("value").get<Bytes>()); }},
+//        { "contain",   [&](){ c.contain(j.at("value").get_ref<const string&>()); }},
+//        { "beginWith", [&](){ c.beginWith(j.at("value").get_ref<const string&>()); }},
+//        { "endWith",   [&](){ c.endWith(j.at("value").get_ref<const string&>()); }},
+//        { "like",      [&](){ c.like(j.at("value").get_ref<const string&>()); }},
+//        { "regex",     [&](){ c.regex(j.at("value").get_ref<const string&>()); }},
+//        { "null",      [&](){ c.null(); }},
+//        { "between",   [&](){
+//            c.between(j.at("value").at(0).get<Bytes>(),
+//                      j.at("value").at(1).get<Bytes>()); }
+//        },
+//        { "in", [&](){ c.in(j.at("value").get<vector<Bytes>>()); }}
+//    };
+//
+//    c = Condition(propName);
+//    op.at(comp)();
+//
+//    json::const_iterator it;
+//    if ((it = j.find("ignoreCase")) != j.end()
+//        && it->get<bool>() == true) {
+//        c.ignoreCase();
+//    }
+//    if ((it = j.find("not")) != j.end()
+//        && it->get<bool>() == true) {
+//        c = !c;
+//    }
+//}
 
 
 void std::to_json(json &j, const IndexInfo &ii) {
