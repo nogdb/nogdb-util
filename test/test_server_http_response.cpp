@@ -346,7 +346,7 @@ TEST_F(ServerHttpResponseTest, ResponseVertexDestroyWithRecordDescriptor) {
     ASSERT_EQ("200 OK", response->status_code);
     auto result = json::parse(response->content.string());
     ASSERT_EQ(json::object(), result);
-    EXPECT_TRUE(Db::getRecord({this->ctx, Txn::Mode::READ_ONLY}, this->recD[0]).empty());
+    EXPECT_THROW(Db::getRecord({this->ctx, Txn::Mode::READ_ONLY}, this->recD[0]).empty(), nogdb::Error);
 }
 
 TEST_F(ServerHttpResponseTest, ResponseVertexDestroyWithClassName) {
@@ -484,7 +484,7 @@ TEST_F(ServerHttpResponseTest, ResponseEdgeDestroyWithRecordDescriptor) {
     ASSERT_EQ("200 OK", response->status_code);
     auto result = json::parse(response->content.string());
     ASSERT_EQ(json::object(), result);
-    EXPECT_TRUE(Db::getRecord({this->ctx, Txn::Mode::READ_ONLY}, this->edgeDesc).empty());
+    EXPECT_THROW(Db::getRecord({this->ctx, Txn::Mode::READ_ONLY}, this->edgeDesc).empty(), nogdb::Error);
 }
 
 TEST_F(ServerHttpResponseTest, ResponseEdgeDestroyWithClassName) {
