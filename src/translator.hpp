@@ -18,6 +18,9 @@
  *
  */
 
+#ifndef __NOGDB_UTIL_TRANSLATOR_HPP_INCLUDED__
+#define __NOGDB_UTIL_TRANSLATOR_HPP_INCLUDED__
+
 #include <nogdb/nogdb.h>
 #include <nlohmann/json.hpp>
 
@@ -187,3 +190,5 @@ namespace std {
     void to_json(nlohmann::json&, const nogdb::IndexInfo&);
     void from_json(const nlohmann::json&, nogdb::IndexInfo&);
 }
+
+#endif

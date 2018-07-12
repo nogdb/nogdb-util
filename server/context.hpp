@@ -1,3 +1,5 @@
+#ifndef __NOGDB_UTIL_SERVER_CONTEXT_HPP_INCLUDED__
+#define __NOGDB_UTIL_SERVER_CONTEXT_HPP_INCLUDED__
 
 #include <nogdb/nogdb.h>
 
@@ -17,3 +19,5 @@ namespace nogdb {
         };
     }
 }
+
+#endif

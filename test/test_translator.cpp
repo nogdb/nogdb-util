@@ -22,6 +22,7 @@
 #include <nogdb/nogdb.h>
 #include <nlohmann/json.hpp>
 
+#include "test_nogdb_util.hpp"
 #include "../src/translator.hpp"
 
 using namespace std;
@@ -29,48 +30,6 @@ using namespace nogdb;
 using nlohmann::json;
 
 namespace nogdb {
-    bool operator==(const DBInfo &lhs, const DBInfo &rhs) {
-        return (lhs.dbPath == rhs.dbPath
-                && lhs.maxDB == rhs.maxDB
-                && lhs.maxDBSize == rhs.maxDBSize
-                && lhs.maxPropertyId == rhs.maxPropertyId
-                && lhs.numProperty == rhs.numProperty
-                && lhs.maxClassId == rhs.maxClassId
-                && lhs.numClass == rhs.numClass
-                && lhs.maxIndexId == rhs.maxIndexId
-                && lhs.numIndex == rhs.numIndex);
-    }
-    bool operator==(const PropertyDescriptor &lhs, const PropertyDescriptor &rhs) {
-        return (lhs.id == rhs.id
-                && lhs.type == rhs.type
-                && lhs.indexInfo == rhs.indexInfo);
-    }
-
-    bool operator==(const ClassDescriptor &lhs, const ClassDescriptor &rhs) {
-        return (lhs.id == rhs.id
-                && lhs.name == rhs.name
-                && lhs.type == rhs.type
-                && lhs.properties == rhs.properties
-                && lhs.super == rhs.super
-                && lhs.sub == rhs.sub);
-    }
-
-    bool operator==(const RecordDescriptor &lhs, const RecordDescriptor &rhs) {
-        return lhs.rid == rhs.rid;
-    }
-
-    bool operator==(const Bytes &lhs, const Bytes &rhs) {
-        return lhs.size() == rhs.size() && memcmp(lhs.getRaw(), rhs.getRaw(), lhs.size()) == 0;
-    }
-
-    bool operator==(const Record &lhs, const Record &rhs) {
-        return lhs.getAll() == rhs.getAll();
-    }
-
-    bool operator==(const Result &lhs, const Result &rhs) {
-        return lhs.descriptor == rhs.descriptor && lhs.record == rhs.record;
-    }
-
     class SQLResultTesting : public SQL::Result {
     public:
         SQLResultTesting() : SQL::Result() {}
@@ -128,7 +87,7 @@ TEST(TranslatorTest, TranslateDBInfo) {
     i.dbPath = "test_path";
     i.maxDB = UINT_MAX;
     i.maxDBSize = ULONG_MAX;
-    i.maxPropertyId = UINT_MAX;
+    i.maxPropertyId = USHRT_MAX;
     i.numProperty = 1;
     i.maxClassId = USHRT_MAX;
     i.numClass = 2;
@@ -398,6 +357,21 @@ TEST(TranslatorTest, TranslateTxnMode) {
 
     EXPECT_EQ(json::parse("\"READ_ONLY\"").get<Txn::Mode>(), Txn::Mode::READ_ONLY);
     EXPECT_EQ(json::parse("\"READ_WRITE\"").get<Txn::Mode>(), Txn::Mode::READ_WRITE);
+}
+
+/// wait for Condition has defalut constructor
+//TEST(TranslatorTest, TranslateCondition) {
+//    EXPECT_NO_THROW(json::parse(R"({"propName":"p1","comp":"eq","value":"v1"})").get<Condition>());
+//    EXPECT_NO_THROW(json::parse(R"({"propName":"p2","comp":"gt","value":11})").get<Condition>());
+//    EXPECT_NO_THROW(json::parse(R"({"propName":"p3","comp":"lt","value":3.141})").get<Condition>());
+//    EXPECT_NO_THROW(json::parse(R"({"propName":"p4","comp":"ge","value":12})").get<Condition>());
+//    EXPECT_NO_THROW(json::parse(R"({"propName":"p5","comp":"le","value":13})").get<Condition>());
+//    EXPECT_NO_THROW(json::parse(R"({"propName":"p6","comp":"gt","value":2.3})").get<Condition>());
+//}
+
+TEST(TranslatorTest, TranslateClassFilter) {
+    EXPECT_EQ(json(ClassFilter{"c1", "c2", "c3"}), json::parse(R"(["c1","c2","c3"])"));
+    EXPECT_EQ(json::parse(R"(["c1","c2","c3"])").get<ClassFilter>().getClassName(), (ClassFilter{"c1","c2","c3"}.getClassName()));
 }
 
 TEST(TranslatorTest, TranslateIndexInfo) {
