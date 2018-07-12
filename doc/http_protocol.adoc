@@ -1,0 +1,742 @@
+# HTTP Protocol
+:toc:
+
+NogDB RESTful HTTP protocol allows to talk with a NogDB Server instance using the HTTP protocol and JSON.
+// NogDB supports also a highly optimized Binary protocol for superior performances.
+
+## HTTP Method
+
+This protocol uses only `POST` method of the HTTP protocol.
+
+When using `POST` the following are important when preparing the contents of the post message:
+
+- Always have the content type set to `application/json`.
+- Where data or data structure is involved the content is in JSON format.
+
+## Syntax
+
+The REST API is flexible, with the following rules:
+
+- Data returned is in JSON format.
+- Support only http connections.
+- The API itself is case sensitive.
+
+The REST URL syntax used is the POST method:
+
+Syntax: `+http://<server>:<port>/<category>/<operation>+`
+
+HTTP Response can be:
+
+- 200 OK
+- 400 Bad Request
+- 500 Internal Server Error
+- or else.
+
+When response "200 OK", results are always in JSON format. Example:
+
+[source, JSON]
+{
+    "type": "s",
+    "data": [
+        {
+            "descriptor": {
+                "rid": [6, 7]
+            },
+            "record": {
+                "prop1": "hello"
+            }
+        },
+        {
+            "descriptor": {
+                "rid": [6, 10]
+            },
+            "record": {
+                "prop1": "world"
+            }
+        }
+    ]
+}
+
+## HTTP commands
+
+### Category `Class`
+
+#### Operation `create`
+
+URL: `+http://<server>:<port>/Class/create+`
+
+Body:
+ 
+[source, subs="normal"]
+{
+    "className": <string>,
+    "type": <<<ClassType>>>
+}
+
+Response: `<<<ClassDescriptor>>>`
+
+#### Operation `createExtend`
+
+URL: `+http://<server>:<port>/Class/createExtend+`
+
+Body:
+ 
+[source, subs="normal"]`
+{
+    "className": <string>,
+    "superClass": <string>
+}
+
+Response: `<<<ClassDescriptor>>>`
+
+#### Operation `drop`
+
+URL: `+http://<server>:<port>/Class/drop+`
+
+Body:
+ 
+[source, subs="normal"]
+{
+    "className": <string>
+}
+
+Response: `{}`
+
+#### Operation `alter`
+
+URL: `+http://<server>:<port>/Class/alter+`
+
+Body:
+ 
+[source, subs="normal"]
+{
+    "oldClassName": <string>,
+    "newClassName": <string>
+}
+
+Response: `{}`
+
+### Category `Property`
+
+#### Operation `add`
+
+URL: `+http://<server>:<port>/Property/add+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>,
+    "propertyName": <string>,
+    "type": <<<PropertyType>>>,
+}
+
+Response: `<<<PropertyDescriptor>>>`
+
+#### Operation `alter`
+
+URL: `+http://<server>:<port>/Property/alter+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>,
+    "oldPropertyName": <string>,
+    "newPropertyName": <string>
+}
+
+Response: `{}`
+
+#### Operation `remove`
+
+URL: `+http://<server>:<port>/Property/remove+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>,
+    "propertyName": <string>
+}
+
+Response: `{}`
+
+#### Operation `createIndex`
+
+URL: `+http://<server>:<port>/Property/createIndex+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>,
+    "propertyName": <string>,
+    "isUnique": <bool>
+}
+
+Response: `{}`
+
+#### Operation `dropIndex`
+
+URL: `+http://<server>:<port>/Property/dropIndex+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>,
+    "propertyName": <string>
+}
+
+Response: `{}`
+
+### Category `Vertex`
+
+#### Operation `create`
+
+URL: `+http://<server>:<port>/Vertex/create+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>,
+    "record": <<<Record>>>
+}
+
+Response: `<<<RecordDescriptor>>>`
+
+#### Operation `update`
+
+URL: `+http://<server>:<port>/Vertex/update+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "record": <<<Record>>>
+}
+
+Response: `{}`
+
+#### Operation `destroy`
+
+URL: `+http://<server>:<port>/Vertex/destroy+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>
+}
+
+or
+
+[source, subs="normal"]
+{
+    "className": <string>
+}
+
+Response: 
+
+#### Operation `get`
+
+URL: `+http://<server>:<port>/Vertex/get+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `getInEdge`
+
+URL: `+http://<server>:<port>/Vertex/getInEdge+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recodeDescriptor": <<<RecordDescriptor>>>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `getOutEdge`
+
+URL: `+http://<server>:<port>/Vertex/getOutEdge+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recodeDescriptor": <<<RecordDescriptor>>>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `getAllEdge`
+
+URL: `+http://<server>:<port>/Vertex/getAllEdge+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recodeDescriptor": <<<RecordDescriptor>>>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+### Category `Edge`
+
+#### Operation `create`
+
+URL: `+http://<server>:<port>/Edge/create+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>,
+    "srcVertexRecordDescriptor": <<<RecordDescriptor>>>,
+    "dstVertexRecordDescriptor": <<<RecordDescriptor>>>,
+    "record": <<<Record>>>
+}
+
+Response: `<<<RecordDescriptor>>>`
+
+#### Operation `update`
+
+URL: `+http://<server>:<port>/Edge/update+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "record": <<<Record>>>
+}
+
+Response: `{}`
+
+#### Operation `updateSrc`
+
+URL: `+http://<server>:<port>/Edge/updateSrc+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "newSrcVertexRecordDescriptor": <<<RecordDescriptor>>>
+}
+
+Response: `{}` 
+
+#### Operation `updateDst`
+
+URL: `+http://<server>:<port>/Edge/updateDst+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "newDstVertexRecordDescriptor": <<<RecordDescriptor>>>
+}
+
+Response: `{}`
+
+#### Operation `destroy`
+
+URL: `+http://<server>:<port>/Edge/destroy+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>
+}
+
+[source, subs="normal"]
+{
+     "className": <string>
+}
+
+Response: `{}`
+
+#### Operation `get`
+
+URL: `+http://<server>:<port>/Edge/get+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `getSrc`
+
+URL: `+http://<server>:<port>/Edge/getSrc+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>
+}
+
+Response: `<<<Result>>>`
+
+#### Operation `getDst`
+
+URL: `+http://<server>:<port>/Edge/getDst+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>
+}
+
+Response: `<<<Result>>>`
+
+#### Operation `getSrcDst`
+
+URL: `+http://<server>:<port>/Edge/getSrcDst+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>
+}
+
+Response: `<<<Result>>[]>`
+
+### Category `Db`
+
+#### Operation `getRecord`
+
+URL: `+http://<server>:<port>/Db/getRecord+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>
+}
+
+Response: `<<<Record>>>`
+
+#### Operation `getSchema`
+
+URL: `+http://<server>:<port>/Db/getSchema+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "className": <string>
+}
+
+or
+
+[source, subs="normal"]
+{
+    "classId": <number>
+}
+
+Response: `<<<ClassDescriptor>>>`
+
+or
+
+Body: `{}`
+
+Response: `<<<ClassDescriptor>>[]>
+
+#### Operation `getDbInfo`
+
+URL: `+http://<server>:<port>/Db/getDbInfo+`
+
+Body: `{}`
+
+Response: `<<<DBInfo>>>`
+
+### Category `Traverse`
+
+#### Operation `inEdgeBfs`
+
+URL: `+http://<server>:<port>/Traverse/inEdgeBfs+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "minDepth": <number>,
+    "maxDepth": <number>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `outEdgeBfs`
+
+URL: `+http://<server>:<port>/Traverse/outEdgeBfs+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "minDepth": <number>,
+    "maxDepth": <number>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `allEdgeBfs`
+
+URL: `+http://<server>:<port>/Traverse/allEdgeBfs+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "minDepth": <number>,
+    "maxDepth": <number>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `inEdgeDfs`
+
+URL: `+http://<server>:<port>/Traverse/inEdgeDfs+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "minDepth": <number>,
+    "maxDepth": <number>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `outEdgeDfs`
+
+URL: `+http://<server>:<port>/Traverse/outEdgeDfs+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "minDepth": <number>,
+    "maxDepth": <number>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `allEdgeDfs`
+
+URL: `+http://<server>:<port>/Traverse/allEdgeDfs+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "recordDescriptor": <<<RecordDescriptor>>>,
+    "minDepth": <number>,
+    "maxDepth": <number>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+#### Operation `shortestPath`
+
+URL: `+http://<server>:<port>/Traverse/shortestPath+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "srcVertexRecordDescriptor": <<<RecordDescriptor>>>,
+    "dstVertexRecordDescriptor": <<<RecordDescriptor>>>,
+    "classFilter": <string[]> (OPTIONAL)
+}
+
+Response: `<<<Result>>[]>`
+
+### Category `SQL`
+
+#### Operation `execute`
+
+URL: `+http://<server>:<port>/SQL/execute+`
+
+Body:
+
+[source, subs="normal"]
+{
+    "sql": <string>
+}
+
+Response: `<<<SQL::Result>>>`
+
+## Data Structure
+
+### Error::Type
+
+[source]
+"d" (DATASTORE)
+"g" (GRAPH)
+"c" (CONTEXT)
+"t" (TRANSACTION)
+"s" (SQL)
+
+### Error
+
+[source, subs="normal"]
+{
+    "type": <<<Error::Type>>>,
+    "code": <number>,
+    "what": <string>
+}
+
+### DBInfo
+
+[source]
+{
+    "dbPath": <string>,
+    "maxDB": <number>,
+    "maxDBSize": <number>,
+    "maxPropertyId": <number>,
+    "numProperty": <number>,
+    "maxClassId": <number>,
+    "numClass": <number>,
+    "maxIndexId": <number>,
+    "numIndex": <number>
+}
+
+### PropertyType
+
+[source]
+"i" (TINYINT)
+"I" (UNSIGNED_TINYINT)
+"s" (SMALLINT)
+"S" (UNSIGNED_SMALLINT)
+"d" (INTEGER)
+"D" (UNSIGNED_INTEGER)
+"l" (BIGINT)
+"L" (UNSIGNED_BIGINT)
+"t" (TEXT)
+"f" (REAL)
+"b" (BLOB)
+"n" (UNDEFINED)
+
+### PropertyDescriptor
+
+[source, subs="normal"]
+{
+    "id": <number>,
+    "type": <<<PropertyType>>>,
+    "indexInfo": <<<IndexInfo>>>
+}
+
+### ClassType
+
+[source]
+"v" (VERTEX)
+"e" (EDGE)
+"n" (UNDEFINED)
+
+### ClassDescriptor
+
+[source, subs="normal"]
+{
+    "id": <number>,
+    "name": <string>,
+    "type": <<<ClassType>>>,
+    "properties": {
+        <string>: <<<PropertyDescriptor>>>,
+        . . .
+    },
+    "super": <string>,
+    "sub": <string[]>
+}
+
+### RecordDescriptor
+
+[source]
+{
+    "rid": [<ClassID>, <PosID>]
+}
+
+### Bytes
+
+[source]
+<string>|<number>
+
+### Record
+
+[source, subs="normal"]
+{
+    <string>: <<<Bytes>>>,
+    . . .
+}
+
+### Result
+
+[source, subs="normal"]
+{
+    "descriptor": <<<RecordDescriptor>>>,
+    "record": <<<Record>>>
+}
+
+### SQL::Result::Type
+
+[source]
+"n" (NO_RESULT)
+"e" (ERROR)
+"c" (CLASS_DESCRIPTOR)
+"p" (PROPERTY_DESCRIPTOR)
+"r" (RECORD_DESCRIPTORS)
+"s" (RESULT_SET)
+
+### SQL::Result
+
+[source, subs="normal"]
+----
+{
+    "type": <<<SQL::Result::Type>>>,
+
+    // relate on type
+    "data":
+        null
+        | <<<Error>>>
+        | <<<ClassDescriptor>>>
+        | <<<PropertyDescriptor>>>
+        | <<<RecordDescriptor>>[]>
+        | <<<Result>>[]>
+}
+----
