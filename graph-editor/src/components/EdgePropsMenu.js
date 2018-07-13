@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {TabContent,TabPane,Nav,NavItem,NavLink,Card,Button,CardTitle,CardText,Row,Col} from "reactstrap";
+import {TabContent,TabPane,Nav,NavItem,NavLink,Row,Col} from "reactstrap";
 import classnames from "classnames";
 import { connect} from 'react-redux';
 import {getNodeID} from '../actions/dataAction.js';
@@ -52,7 +52,7 @@ class EdgePropertyMenu extends Component {
       }
     };
       render () {
-        const {graph,scale,data} = this.props;
+        const {data} = this.props;
   
           return (
             <div className="Left-tab">

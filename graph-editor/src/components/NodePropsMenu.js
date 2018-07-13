@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {TabContent,TabPane,Nav,NavItem,NavLink,Card,Button,CardTitle,CardText,Row,Col} from "reactstrap";
+import {TabContent,TabPane,Nav,NavItem,NavLink,Row,Col} from "reactstrap";
 import classnames from "classnames";
 import { connect} from 'react-redux';
 import {getNodeID,updateGraph} from '../actions/dataAction.js';
@@ -83,8 +83,8 @@ class NodePropertyMenu extends Component {
     this.props.changeColorNodeActionCreator(this.props.data.nodeID,colors)
        
       };
-      setDisplayFormat = (dumb) => {
-          let canvasNode = this.props.graph.graphCanvas.nodes.slice();
+      // setDisplayFormat = (dumb) => {
+      //     let canvasNode = this.props.graph.graphCanvas.nodes.slice();
           // let canvasEdge = this.props.graph.grapCanvas.edges.slice();
           // let BackupGraph = this.props.graph.graphCanvas.nodes.slice();
           // let backUp;
@@ -104,14 +104,10 @@ class NodePropertyMenu extends Component {
           //   }
           // }
          
-          // this.props.UpdateGraphActionCreator(canvasNode,canvasEdge)
-            
-           
-          
-       
-      }
+          // this.props.UpdateGraphActionCreator(canvasNode,canvasEdge) 
+      // }
     render () {
-      const {graph,scale,data} = this.props;
+      const {data} = this.props;
         return (
             <div className="Left-tab">
           <div id="topbar-prop">

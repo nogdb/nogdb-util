@@ -70,7 +70,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
   let nodeForSizeAndColor = state.graphCanvas.nodes.slice();
   let updateColor, updateGroup, updateSize;
   switch (action.type) {
-    case "ADD_NODE_ACTION":
+    case "ADD_NODE_ACTION": {
       const newGraphNodeCanvas = state.graphCanvas.nodes.slice();
       const newGraphEdgeCanvas = state.graphCanvas.edges.slice();
       console.log(action)
@@ -90,9 +90,8 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           nodes: newGraphNodeCanvas,
           edges: newGraphEdgeCanvas
         }
-        
-      };
-      break;
+      }
+      }
     case "CLEAR_CANVAS":
       return {
         ...state,
@@ -101,7 +100,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           edges: action.payload.edges
         }
       };
-    case "REMOVE_NODE":
+    case "REMOVE_NODE": {
       let backupNode = state.graphCanvas.nodes.slice();
       let backupEdge = state.graphCanvas.edges.slice();
       for (let ele in backupNode) {
@@ -115,7 +114,8 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           nodes: backupNode,
           edges: backupEdge
         }
-      };
+      }
+    }
     case "EDIT_SIZE":
       for (let ele in nodeForSizeAndColor) {
         if (nodeForSizeAndColor[ele].id === action.nodeID) {
@@ -153,7 +153,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             options: { ...state.options, groups: updateGroup }
           };
       }
-
+      break;
     case "CHANGE_COLOR_NODE":
       for (let ele in nodeForSizeAndColor) {
         if (nodeForSizeAndColor[ele].id === action.nodeID) {
@@ -171,29 +171,30 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
-          }; break;
+          }; 
         case "B":
           updateSize = { ...externalOption.B, size: action.size };
           updateGroup = { ...externalOption, B: updateSize };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
-          }; break;
+          }; 
         case "C":
           updateSize = { ...externalOption.C, size: action.size };
           updateGroup = { ...externalOption, C: updateSize };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
-          }; break;
+          }; 
         case "D":
           updateSize = { ...externalOption.D, size: action.size };
           updateGroup = { ...externalOption, D: updateSize };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
-          }; break;
+          }; 
       } 
+      break;
     case "UPDATE_GRAPH":
       return {
         ...state,
@@ -208,7 +209,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         ...state
       };
       return state;
-      break;
+      
   }
 };
 

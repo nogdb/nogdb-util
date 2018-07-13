@@ -15,7 +15,6 @@ const dataReducer = (state = data, action) => {
         nodeID: action.payload
       };
       return state;
-      break;
 
     case "GET_EDGE_ID":
       state = {
@@ -23,7 +22,6 @@ const dataReducer = (state = data, action) => {
         edgeID: action.payload
       };
       return state;
-      break;
 
     case "GET_NODE_CLASS":
       state = {
@@ -31,7 +29,6 @@ const dataReducer = (state = data, action) => {
         nodeClass: action.payload
       };
       return state;
-      break;
 
     case "GET_NODE_NAME":
       state = {
@@ -39,7 +36,6 @@ const dataReducer = (state = data, action) => {
         nodeName: action.payload
       };
       return state;
-      break;
 
     case "GET_EDGE_CLASS":
       state = {
@@ -47,7 +43,6 @@ const dataReducer = (state = data, action) => {
         edgeClass: action.payload
       };
       return state;
-      break;
 
     case "GET_IN_RELATION":
       state = {
@@ -55,7 +50,6 @@ const dataReducer = (state = data, action) => {
         edgeIn: action.payload
       };
       return state;
-      break;
 
     case "GET_OUT_RELATION":
       state = {
@@ -63,14 +57,12 @@ const dataReducer = (state = data, action) => {
         edgeOut: action.payload
       };
       return state;
-      break;
 
     default:
       state = {
         ...state
       };
       return state;
-      break;
   }
 };
 export default dataReducer;

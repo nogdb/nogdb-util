@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import Modal from "react-modal";
-import $ from "jquery";
 import "./App.css";
-import { Alert } from "reactstrap";
-import {TabContent,TabPane,Nav,NavItem,NavLink,Card,Button,CardTitle,CardText,Row,Col,Container} from "reactstrap";
-import classnames from "classnames";
+import {Row,Col,Container} from "reactstrap";
 import NogDBTitle from '../components/Title';
 import Console from '../components/Console';
 import Canvas from '../components/Canvas';
@@ -15,19 +12,19 @@ import NodePropertyMenu from '../components/NodePropsMenu';
 import EdgePropertyMenu from '../components/EdgePropsMenu';
 
 
-const customStyle = {
-  content: {
-    posittion: "absolute",
-    top: "20px",
-    left: "40px",
-    right: "40px",
-    bottom: "40px",
-    marginRight: "15%",
-    marginLeft: "15%",
-    marginTop: "15%",
-    marginBottom: "15%"
-  }
-};
+// const customStyle = {
+//   content: {
+//     posittion: "absolute",
+//     top: "20px",
+//     left: "40px",
+//     right: "40px",
+//     bottom: "40px",
+//     marginRight: "15%",
+//     marginLeft: "15%",
+//     marginTop: "15%",
+//     marginBottom: "15%"
+//   }
+// };
 const customAddNodeStyle = {
   content: {
     posittion: "absolute",
@@ -41,32 +38,32 @@ const customAddNodeStyle = {
     marginBottom: "10%"
   }
 };
-const customEditRStyle = { 
-  content : {
-    posittion:'absolute',
-    top    : '20px',
-    left   : '40px',
-    right  : '40px',
-    bottom : '40px',
-    marginRight  : '15%',
-    marginLeft   : '15%',
-    marginTop    : '10%',
-    marginBottom : '10%' 
-  }
-} ;
-const customCreateEdgeModal = {
-  content: {
-    position: "absolute",
-    top: "20px",
-    left: "40px",
-    right: "40px",
-    bottom: "40px",
-    marginRight: "15%",
-    marginLeft: "15%",
-    marginTop: "15%",
-    marginBottom: "15%"
-  }
-};
+// const customEditRStyle = { 
+//   content : {
+//     posittion:'absolute',
+//     top    : '20px',
+//     left   : '40px',
+//     right  : '40px',
+//     bottom : '40px',
+//     marginRight  : '15%',
+//     marginLeft   : '15%',
+//     marginTop    : '10%',
+//     marginBottom : '10%' 
+//   }
+// } ;
+// const customCreateEdgeModal = {
+//   content: {
+//     position: "absolute",
+//     top: "20px",
+//     left: "40px",
+//     right: "40px",
+//     bottom: "40px",
+//     marginRight: "15%",
+//     marginLeft: "15%",
+//     marginTop: "15%",
+//     marginBottom: "15%"
+//   }
+// };
 
   const mapStateToProps = state => {
     return {
@@ -244,7 +241,7 @@ class App extends Component {
       }
  
   render() {
-    const {graph,scale,data} = this.props;
+    const {graph,scale} = this.props;
     let pHeader;
     if (scale.isFullscreen === true) {
       pHeader = null;

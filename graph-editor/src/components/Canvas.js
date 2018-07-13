@@ -19,20 +19,7 @@ import {
   hideEdgeMenu
 } from "../actions/nodeEdgesMenu";
 import { removeNode } from "../actions/menuAction";
-import Modal from "react-modal";
-import {
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  Card,
-  Button,
-  CardTitle,
-  CardText,
-  Row,
-  Col
-} from "reactstrap";
+
 
 const mapStateToProps = state => {
   return {
@@ -82,58 +69,58 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
-const customStyle = {
-  content: {
-    posittion: "absolute",
-    top: "20px",
-    left: "40px",
-    right: "40px",
-    bottom: "40px",
-    marginRight: "15%",
-    marginLeft: "15%",
-    marginTop: "15%",
-    marginBottom: "15%"
-  }
-};
-const customAddNodeStyle = {
-  content: {
-    posittion: "absolute",
-    top: "20px",
-    left: "40px",
-    right: "40px",
-    bottom: "40px",
-    marginRight: "15%",
-    marginLeft: "15%",
-    marginTop: "10%",
-    marginBottom: "10%"
-  }
-};
-const customEditRStyle = {
-  content: {
-    posittion: "absolute",
-    top: "20px",
-    left: "40px",
-    right: "40px",
-    bottom: "40px",
-    marginRight: "15%",
-    marginLeft: "15%",
-    marginTop: "10%",
-    marginBottom: "10%"
-  }
-};
-const customCreateEdgeModal = {
-  content: {
-    position: "absolute",
-    top: "20px",
-    left: "40px",
-    right: "40px",
-    bottom: "40px",
-    marginRight: "15%",
-    marginLeft: "15%",
-    marginTop: "15%",
-    marginBottom: "15%"
-  }
-};
+// const customStyle = {
+//   content: {
+//     posittion: "absolute",
+//     top: "20px",
+//     left: "40px",
+//     right: "40px",
+//     bottom: "40px",
+//     marginRight: "15%",
+//     marginLeft: "15%",
+//     marginTop: "15%",
+//     marginBottom: "15%"
+//   }
+// };
+// const customAddNodeStyle = {
+//   content: {
+//     posittion: "absolute",
+//     top: "20px",
+//     left: "40px",
+//     right: "40px",
+//     bottom: "40px",
+//     marginRight: "15%",
+//     marginLeft: "15%",
+//     marginTop: "10%",
+//     marginBottom: "10%"
+//   }
+// };
+// const customEditRStyle = {
+//   content: {
+//     posittion: "absolute",
+//     top: "20px",
+//     left: "40px",
+//     right: "40px",
+//     bottom: "40px",
+//     marginRight: "15%",
+//     marginLeft: "15%",
+//     marginTop: "10%",
+//     marginBottom: "10%"
+//   }
+// };
+// const customCreateEdgeModal = {
+//   content: {
+//     position: "absolute",
+//     top: "20px",
+//     left: "40px",
+//     right: "40px",
+//     bottom: "40px",
+//     marginRight: "15%",
+//     marginLeft: "15%",
+//     marginTop: "15%",
+//     marginBottom: "15%"
+//   }
+// };
 
 class Canvas extends Component {
   constructor(props) {
@@ -194,9 +181,8 @@ class Canvas extends Component {
     }
   };
 
-  setDisplayFormat = dumb => {
-    this.setState(prevState => {
-      let canvasNode = this.props.graph.graphCanvas.nodes.slice();
+  setDisplayFormat = () => {
+    let canvasNode = this.props.graph.graphCanvas.nodes.slice();
       let canvasEdge = this.props.graph.grapCanvas.edges.slice();
       let backupGraph = this.props.graph.graphCanvas.nodes.slice();
       let backupNode;
@@ -215,12 +201,14 @@ class Canvas extends Component {
           canvasNode[ele] = update;
         }
       }
-      return {
+    this.setState( {
+      
+      
         graph: {
           nodes: canvasNode,
           edges: canvasEdge
         }
-      };
+      
     });
   };
 
@@ -490,7 +478,7 @@ class Canvas extends Component {
               this.handleNodeClass();
               // this.getCreateDate();
             }.bind(this),
-            deselectNode: function(event) {
+            deselectNode: function(/*event*/) {
               this.props.hideNodeMenuActionCreator();
               // this.handleAlertFalse();
               // this.toggleCreateRAlertmsgFalse();
@@ -504,7 +492,7 @@ class Canvas extends Component {
               this.props.hideNodeMenuActionCreator();
               // this.setDisplayEdge();
             }.bind(this),
-            deselectEdge: function(event) {
+            deselectEdge: function(/*event*/) {
               // this.toggleRelationMenu();
               this.props.hideEdgeMenuActionCreator();
 

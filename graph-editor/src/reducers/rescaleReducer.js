@@ -11,14 +11,13 @@ const rescaleReducer = (state = componentScale,action) => {
             ...state,
             isFullscreen:true
           }
-          break;
+          
         
         case 'EXIT_FULLSCREEN':
         return  {
               ...state,
               isFullscreen:false
             }
-            break;
 ///////////////////////////////////////////////////////////////////////
 
         case 'SHOW_NODE_MENU':
@@ -26,28 +25,24 @@ const rescaleReducer = (state = componentScale,action) => {
               ...state,
               nodeMenu:true
             }
-            break;
         
         case 'HIDE_NODE_MENU':
         return  {
               ...state,
               nodeMenu:false
             }
-            break;
 //////////////////////////////////////////////////////////////////////////
         case 'SHOW_EDGE_MENU':
         return {
             ...state,
             edgeMenu:true
         }
-        break;
 
         case 'HIDE_EDGE_MENU':
         return {
             ...state,
             edgeMenu:false
         }
-        break;
         
 
 
@@ -56,7 +51,6 @@ const rescaleReducer = (state = componentScale,action) => {
               ...state
             }
             return state;
-            break;
     }
 }
 export default rescaleReducer;
