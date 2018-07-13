@@ -8,7 +8,7 @@ jobs:
     branches:
       only:
         - graph-editor
-        - /pull\/.*/
+        - /pull.*/
     docker:
       # specify the version you desire here
       - image: circleci/node:8.11.3
