@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Dependencies
+node_modules
+
+# Logs
+yarn-error.log
