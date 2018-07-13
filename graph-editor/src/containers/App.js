@@ -7,7 +7,7 @@ import Console from '../components/Console';
 import Canvas from '../components/Canvas';
 import History from '../components/History';
 import { connect} from 'react-redux';
-import {addNode,clearCanvas,fullscreen,exitFullscreen} from '../actions/mainButtonAction'
+import {addNodeToCanvas,addNodeToDatabase,clearCanvas,fullscreen,exitFullscreen} from '../actions/mainButtonAction'
 import NodePropertyMenu from '../components/NodePropsMenu';
 import EdgePropertyMenu from '../components/EdgePropsMenu';
 
@@ -75,16 +75,19 @@ const customAddNodeStyle = {
 
   const mapDispatchToProps = dispatch => {
     return {
-      onAddNode: newNode => {
-        dispatch (addNode(newNode))
+      addNodeToCanvasActionCreator: newNode => {
+        dispatch (addNodeToCanvas(newNode))
       },
-      onClearCanvas : nullCanvas => {
+      addNodeToDatabaseActionCreator: newNode => {
+        dispatch (addNodeToDatabase(newNode))
+      },
+      clearCanvasActionCreator : nullCanvas => {
         dispatch (clearCanvas(nullCanvas))
       },
-      onSetFullSceen :() => {
+      setFullsceenActionCreator :() => {
         dispatch (fullscreen())
       },
-      onExitFullScreen : () => {
+      exitFullscreenActionCreator : () => {
         dispatch (exitFullscreen())
       }
       
@@ -133,10 +136,6 @@ class App extends Component {
     // this.handleNodeClass = this.handleNodeClass.bind(this);
     // this.handleIncoming = this.handleIncoming.bind(this);
     // this.handleOutcoming = this.handleOutcoming.bind(this);
-    // this.setToPreviousGraph = this.setToPreviousGraph.bind(this);
-    // this.handleRemoveNode = this.handleRemoveNode.bind(this);
-    // this.handleDeleteNode = this.handleDeleteNode.bind(this);
-    // this.handleDeleteRelation = this.handleDeleteRelation.bind(this);
     // this.AddNodeToDatabase = this.AddNodeToDatabase.bind(this);
     // this.setFlagtoAddDatabase = this.setFlagtoAddDatabase.bind(this);
     // this.AddEdgeToDatabase = this.AddEdgeToDatabase.bind(this);
@@ -178,12 +177,13 @@ class App extends Component {
       [{
         id: (this.props.graph.graphCanvas.nodes.length+1).toString(),
         label: this.state.textValue,
-        group: this.state.group
+        group: this.state.group,
+        date:" ",
+        time:" "
       }]
     ;
-   
-
-    this.props.onAddNode(newNode)
+    this.props.addNodeToDatabaseActionCreator(newNode)
+    this.props.addNodeToCanvasActionCreator(newNode)
     this.setState({
       textValue: ""
     })
@@ -236,7 +236,7 @@ class App extends Component {
         nodes:[],
         edges:[]
       }
-        this.props.onClearCanvas(nullGraph)
+        this.props.clearCanvasActionCreator(nullGraph)
         this.setState({ graph: { nodes: [], edges: [] } });
       }
  
@@ -287,11 +287,11 @@ class App extends Component {
             <button id="Addnode-modal" onClick={this.toggleModalAddNode}>Add node</button>
             
             { scale.isFullscreen === false ? (
-              <button id="FullScreen-button" onClick={this.props.onSetFullSceen}>
+              <button id="FullScreen-button" onClick={this.props.setFullsceenActionCreator}>
                 Full screen
               </button>
               ) : (
-                <button id="FullScreen-button" onClick={this.props.onExitFullScreen}>
+                <button id="FullScreen-button" onClick={this.props.exitFullscreenActionCreator}>
                 Exit Fullscreen
               </button>
               )
@@ -819,21 +819,13 @@ export default connect(
 //       isEditNodeActive: !this.state.isEditNodeActive
 //     });
 //   };
-//   toggleDeletenodeModal = () => {
-//     this.setState({
-//       isDeleteNodeActivate: !this.state.isDeleteNodeActivate
-//     });
-//   };
+
 //   toggleEditRelationModal = () => {
 //     this.setState({
 //       isEditRelationActive:!this.state.isEditRelationActive
 //     })
 //   }
-//   toggleDeleteRelationModal = () => {
-//     this.setState({
-//       isDeleteRelationActivate: !this.state.isDeleteRelationActivate
-//     });
-//   };
+  
 //   toggleShowMenu = () => {
 //     this.setState(prevState => ({
 //       showMenu: !prevState.showMenu
@@ -939,38 +931,8 @@ export default connect(
 //     this.setState({ graph: { nodes: BackupNode, edges: BackupEdges } });
 //     this.toggleShowMenu();
 //   };
-//   handleRemoveRelation = () => {
-//     let BackupNode = this.state.graph.edges.slice();
-//     let BackupEdges = this.state.graph.edges.slice();
+  
 
-//     for (let ele1 in BackupEdges) {
-//       if (BackupEdges[ele1].id === this.state.relationID) {
-//         BackupEdges.splice(ele1, 1);
-//       }
-//     }
-
-//     this.setState({ graph: { nodes: BackupNode, edges: BackupEdges } });
-//     this.toggleRelationMenu();
-//   };
-
-//   handleDeleteRelation = () => {
-//     for (let ele1 in graphDB.edges) {
-//       if (graphDB.edges[ele1].id === this.state.relationID) {
-//         graphDB.edges.splice(ele1, 1);
-//       }
-//     }
-//     this.handleRemoveRelation();
-//     this.toggleDeleteRelationModal();
-//   };
-//   handleDeleteNode = () => {
-//     for (let ele1 in graphDB.nodes) {
-//       if (graphDB.nodes[ele1].id === this.state.nodeID) {
-//         graphDB.nodes.splice(ele1, 1);
-//       }
-//     }
-//     this.handleRemoveNode();
-//     this.toggleDeletenodeModal();
-//   };
 //   Resetalldisplaydata = () => {
 //     this.resetrid();
 //     this.resetNodeclass();

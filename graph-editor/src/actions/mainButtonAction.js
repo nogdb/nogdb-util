@@ -1,5 +1,10 @@
-const addNode = (newNode) => ({
+const addNodeToCanvas = (newNode) => ({
     type: 'ADD_NODE_ACTION',
+    payload:newNode
+})
+
+const addNodeToDatabase = (newNode) => ({
+    type: 'ADD_NODE_DB',
     payload:newNode
 })
 const clearCanvas = (nullCanvas) => ({
@@ -18,7 +23,8 @@ const addNodeToDBError =() => ({
 
 
 export {
-    addNode,
+    addNodeToCanvas,
+    addNodeToDatabase,
     clearCanvas,
     fullscreen,
     exitFullscreen,

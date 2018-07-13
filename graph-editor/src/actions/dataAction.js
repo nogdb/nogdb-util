@@ -32,6 +32,15 @@ const updateGraph = (newNode, newEdge) => ({
   payload1: newNode,
   payload2: newEdge
 });
+const dedeteNodeInDatabase = (nodeID) => ({
+  type: 'DELETE_NODE_FROM_DATABASE',
+  payload:nodeID
+})
+
+const deleteEdgeFromDatabase =(edgeID) => ({
+  type: 'DELETE_EDGE_FROM_DATABASE',
+  payload:edgeID
+})
 
 export {
   getNodeID,
@@ -41,5 +50,7 @@ export {
   getEdgeClass,
   getInRelation,
   getOutRelation,
-  updateGraph
+  updateGraph,
+  dedeteNodeInDatabase,
+  deleteEdgeFromDatabase
 };

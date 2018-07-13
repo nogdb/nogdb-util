@@ -3,4 +3,9 @@ const removeNode = (nodeID)=>({
     payload: nodeID
 })
 
-export {removeNode}
+const removeEdgeCanvas = (edgeID) => ({
+    type: 'REMOVE_EDGE',
+    payload: edgeID
+})
+
+export {removeNode,removeEdgeCanvas}

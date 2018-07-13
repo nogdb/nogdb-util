@@ -59,27 +59,28 @@ const graphCanvasReducer = (state = graphSetting, action) => {
   let nodeGroup;
   let externalOption = state.options.groups;
   let nodeForSizeAndColor = state.graphCanvas.nodes.slice();
+  let backupNode = state.graphCanvas.nodes.slice();
+  let backupEdge = state.graphCanvas.edges.slice();
   let updateColor, updateGroup, updateSize;
   switch (action.type) {
-    case "ADD_NODE_ACTION": 
-      const newGraphNodeCanvas = state.graphCanvas.nodes.slice();
-      const newGraphEdgeCanvas = state.graphCanvas.edges.slice();
-      console.log(action);
+    case "ADD_NODE_ACTION":
+      //const newGraphNodeCanvas = state.graphCanvas.nodes.slice();
+      //const newGraphEdgeCanvas = state.graphCanvas.edges.slice();
+      console.log(action)
       for (let ele in action.payload) {
         if (
-          JSON.stringify(newGraphNodeCanvas).includes(
+          JSON.stringify(backupNode).includes(
             JSON.stringify(action.payload[ele])
           ) === false
         ) {
-          newGraphNodeCanvas.push(action.payload[ele]);
+          backupNode.push(action.payload[ele]);
         }
       }
-      console.log(newGraphNodeCanvas);
       return {
         ...state,
         graphCanvas: {
-          nodes: newGraphNodeCanvas,
-          edges: newGraphEdgeCanvas
+          nodes: backupNode,
+          edges: backupEdge
         }
       }
     case "CLEAR_CANVAS":
@@ -90,9 +91,9 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           edges: action.payload.edges
         }
       };
-    case "REMOVE_NODE": {
-      let backupNode = state.graphCanvas.nodes.slice();
-      let backupEdge = state.graphCanvas.edges.slice();
+    case "REMOVE_NODE":
+      //let backupNode = state.graphCanvas.nodes.slice();
+      //let backupEdge = state.graphCanvas.edges.slice();
       for (let ele in backupNode) {
         if (backupNode[ele].id === action.payload) {
           backupNode.splice(ele, 1);
@@ -104,12 +105,28 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           nodes: backupNode,
           edges: backupEdge
         }
+      };
+
+      case "REMOVE_EDGE":
+      //let backupNode = state.graphCanvas.nodes.slice();
+      //let backupEdge = state.graphCanvas.edges.slice();
+      for (let ele in backupEdge) {
+        if (backupEdge[ele].id === action.payload) {
+          backupEdge.splice(ele, 1);
+        }
       }
-    }
+      return {
+        ...state,
+        graphCanvas: {
+          nodes: backupNode,
+          edges: backupEdge
+        }
+      }; 
+
     case "EDIT_SIZE":
-      for (let ele in nodeForSizeAndColor) {
-        if (nodeForSizeAndColor[ele].id === action.nodeID) {
-          nodeGroup = nodeForSizeAndColor[ele].group;
+      for (let ele in backupNode) {
+        if (backupNode[ele].id === action.nodeID) {
+          nodeGroup = backupNode[ele].group;
           break;
         }
       }
@@ -145,9 +162,9 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       }
       break;
     case "CHANGE_COLOR_NODE":
-      for (let ele in nodeForSizeAndColor) {
-        if (nodeForSizeAndColor[ele].id === action.nodeID) {
-          nodeGroup = nodeForSizeAndColor[ele].group;
+      for (let ele in backupNode) {
+        if (backupNode[ele].id === action.nodeID) {
+          nodeGroup = backupNode[ele].group;
           break;
         }
       }
