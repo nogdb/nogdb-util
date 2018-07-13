@@ -3,33 +3,37 @@
     "eslint:recommended",
     "plugin:react/recommended"
   ],
-    "plugins": [
-      "react"
-    ],
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "sourceType": "module"
+  "parser": "babel-eslint",
+  "plugins": [
+    "react"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
     },
-    "env": {
-      "es6": true,
-      "node": true,
-      "jest": true,
-      "browser": true
+    "sourceType": "module"
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "jest": true,
+    "browser": true
+  },
+  "rules": {
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/prop-types": "warn",
+    "no-console": "off"
+  },
+  "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React", 
+      "version": "15.0", 
+      "flowVersion": "0.53" 
     },
-    "rules": {
-      "react/jsx-uses-react": "error",
-      "react/jsx-uses-vars": "error",
-      "no-console": "off"
-    },
-    "settings": {
-      "react": {
-        "createClass": "createReactClass",
-        "pragma": "React", 
-        "version": "15.0", 
-        "flowVersion": "0.53" 
-      },
-      "propWrapperFunctions": [ "forbidExtraProps" ] 
-    }
+    "propWrapperFunctions": [ "forbidExtraProps" ] 
   }
+}
