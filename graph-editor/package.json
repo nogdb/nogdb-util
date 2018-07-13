@@ -21,16 +21,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "lint": "eslint src",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "eslint": "^4.19.1"
-  },
-  "proxy": {
-    "/SQL": {
-      "target": "http://192.168.179.108:8090",
-      "secure": false
-    }
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.10.0"
   }
 }

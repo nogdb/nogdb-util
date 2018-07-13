@@ -9,7 +9,8 @@
     "parserOptions": {
       "ecmaFeatures": {
         "jsx": true
-      }
+      },
+      "sourceType": "module"
     },
     "env": {
       "es6": true,
@@ -19,7 +20,8 @@
     },
     "rules": {
       "react/jsx-uses-react": "error",
-      "react/jsx-uses-vars": "error"
+      "react/jsx-uses-vars": "error",
+      "no-console": "off"
     },
     "settings": {
       "react": {

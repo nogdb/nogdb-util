@@ -5,6 +5,9 @@
 version: 2
 jobs:
   build:
+    branches:
+      only:
+        - graph-editor
     docker:
       # specify the version you desire here
       - image: circleci/node:8.11.3
@@ -34,5 +37,10 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
         
-      # run tests!
-      - run: yarn test
+      - run: 
+          name: Running lint
+          command: yarn lint
+      
+      - run: 
+          name: Running tests
+          command: yarn test
