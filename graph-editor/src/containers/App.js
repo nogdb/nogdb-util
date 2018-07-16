@@ -4,8 +4,8 @@ import "./App.css";
 import {Row,Col,Container} from "reactstrap";
 import NogDBTitle from '../components/Title';
 import Console from '../components/Console';
-import Canvas from '../components/Canvas';
-import History from '../components/History';
+import Canvas from '../components/canvas';
+import History from '../components/history';
 import { connect} from 'react-redux';
 import {addNodeToCanvas,addNodeToDatabase,clearCanvas,fullscreen,exitFullscreen} from '../actions/mainButtonAction'
 import NodePropertyMenu from '../components/NodePropsMenu';

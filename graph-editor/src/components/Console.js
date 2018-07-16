@@ -48,6 +48,7 @@ class Console extends Component {
             <button onClick={() => this.props.executeConsoleActionCreater(this.state.textAreaValue)}>Compile</button>
              {console.log(graph)}
             </div>
+            
         )
     }
 }
