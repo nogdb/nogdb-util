@@ -83,29 +83,29 @@ class NodePropertyMenu extends Component {
     this.props.changeColorNodeActionCreator(this.props.data.nodeID,colors)
        
       };
-      // setDisplayFormat = (dumb) => {
-      //     let canvasNode = this.props.graph.graphCanvas.nodes.slice();
-          // let canvasEdge = this.props.graph.grapCanvas.edges.slice();
-          // let BackupGraph = this.props.graph.graphCanvas.nodes.slice();
-          // let backUp;
-          // for (let ele in BackupGraph.nodes) {
-          //   if ( BackupGraph.nodes[ele].id === this.props.data.nodeID) {      
-          //     backUp = BackupGraph.nodes[ele];
-          //     break;
-          //   }
-          // }
-          // let chosen;
-          // for (let ele in canvasNode) {
-          //   if (this.state.nodeID === canvasNode[ele].id) {
-          //     chosen = canvasNode[ele];
+      setDisplayFormat = (dumb) => {
+          let canvasNode = this.props.graph.graphCanvas.nodes.slice();
+          let canvasEdge = this.props.graph.grapCanvas.edges.slice();
+          let BackupGraph = this.props.graph.graphCanvas.nodes.slice();
+          let backUp;
+          for (let ele in BackupGraph.nodes) {
+            if ( BackupGraph.nodes[ele].id === this.props.data.nodeID) {      
+              backUp = BackupGraph.nodes[ele];
+              break;
+            }
+          }
+          let chosen;
+          for (let ele in canvasNode) {
+            if (this.state.nodeID === canvasNode[ele].id) {
+              chosen = canvasNode[ele];
     
-          //     const update = { ...chosen, label: backUp.id };
-          //     canvasNode[ele] = update;
-          //   }
-          // }
+              const update = { ...chosen, label: backUp.id };
+              canvasNode[ele] = update;
+            }
+          }
          
-          // this.props.UpdateGraphActionCreator(canvasNode,canvasEdge) 
-      // }
+          this.props.UpdateGraphActionCreator(canvasNode,canvasEdge) 
+      }
     render () {
       const {data} = this.props;
         return (

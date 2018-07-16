@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import graphCanvasReducer from './graphCanvasReducer'
-import rescaleReducer from './RescaleReducer';
+import rescaleReducer from './rescaleReducer';
 import dataReducer from './dataRecuder';
 
 

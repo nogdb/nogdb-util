@@ -20,7 +20,11 @@ import {
   showEdgeMenu,
   hideEdgeMenu
 } from "../actions/nodeEdgesMenu";
-import { removeNode } from "../actions/menuAction";
+import { removeNode, removeEdgeCanvas } from "../actions/menuAction";
+import {
+  Modal,
+  Button
+} from "reactstrap"
 
 
 const mapStateToProps = state => {
@@ -119,19 +123,19 @@ const mapDispatchToProps = dispatch => {
 //     marginBottom: "10%"
 //   }
 // };
-// const customCreateEdgeModal = {
-//   content: {
-//     position: "absolute",
-//     top: "20px",
-//     left: "40px",
-//     right: "40px",
-//     bottom: "40px",
-//     marginRight: "15%",
-//     marginLeft: "15%",
-//     marginTop: "15%",
-//     marginBottom: "15%"
-//   }
-// };
+const customCreateEdgeModal = {
+  content: {
+    position: "absolute",
+    top: "20px",
+    left: "40px",
+    right: "40px",
+    bottom: "40px",
+    marginRight: "15%",
+    marginLeft: "15%",
+    marginTop: "15%",
+    marginBottom: "15%"
+  }
+};
 
 class Canvas extends Component {
   constructor(props) {
