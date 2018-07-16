@@ -173,7 +173,7 @@ class App extends Component {
    
   }
   
-  handleAddNodeButton() {
+      handleAddNodeButton() {
     let newNode = 
       [{
         id: (this.props.graph.graphCanvas.nodes.length+1).toString(),
