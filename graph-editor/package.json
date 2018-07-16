@@ -4,9 +4,19 @@
   "description": "repository for graph editor, nogdb-util",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.1.1",
+    "jquery": "^3.3.1",
     "react": "^16.4.1",
+    "react-d3-graph": "^1.2.2",
     "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4"
+    "react-graph-vis": "^1.0.2",
+    "react-modal": "^3.4.5",
+    "react-redux": "^5.0.7",
+    "react-scripts": "1.1.4",
+    "reactstrap": "^6.2.0",
+    "redux": "^4.0.0",
+    "redux-saga": "^0.16.0"
   },
   "scripts": {
     "start": "react-scripts start",
