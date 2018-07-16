@@ -4,7 +4,7 @@ const data = {
   nodeName: null,
   edgeID: null,
   edgeClass: null,
-  edgeIn: null,
+  edgeIn: null, 
   edgeOut: null
 };
 const dataReducer = (state = data, action) => {

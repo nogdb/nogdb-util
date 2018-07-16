@@ -38,6 +38,7 @@ class Console extends Component {
        
       }
     render () {
+        const {graph,scale,data} = this.props;
 
         return (
             <div className="Top-Box" align="center">

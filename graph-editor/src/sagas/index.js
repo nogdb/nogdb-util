@@ -1,10 +1,14 @@
-import { all, takeEvery, call } from 'redux-saga/effects'
-import { post } from '../services/webService'
+import { all, takeEvery, call, put } from 'redux-saga/effects'
+import { get, post } from '../services/webService'
+import { addRespondFromConsole } from '../actions/databaseAction';
 
 
 function* rootSaga() {
     yield all([
         takeEvery('EXECUTE', addConsoletoDB),
+        takeEvery('ADD_NODE_DB',addNodetoDB),
+        takeEvery('DELETE_NODE_FROM_DATABASE',deleteNodeFromDB),
+        takeEvery('DELETE_EDGE_FROM_DATABASE',deleteEdgeFromDB)
         //  takeEvery('ADD_NODE_TO_DB', addNodeToDB),
         // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
         // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
@@ -17,15 +21,37 @@ function* rootSaga() {
     ])
 }
 
+function* addNodetoDB(newNode) {
+    console.log('>addNodetoDB')
+    try {
+       const response = yield call(post, 'http://localhost:3000/Vertex/create', 
+        {
+            "className": newNode[0].group,
+            "record": { 
+                "label": newNode[0].label,
+                "createdate":newNode[0].date,
+                "time":newNode[0].time
+
+            }
+        });
+        console.log(response);
+        // yield put(addNode(newNode));
+    } catch(error) {        
+        //  yield put(addNodeToDBError(error));
+    }
+}
+
 function* addConsoletoDB(sqlStr) {
     console.log('>>>>>')
+    console.log(sqlStr.payload)
     try {
-     const resp =  yield call(post, 'http://localhost:3001/SQL/execute', 
+     const resp =  yield call(post, 'http://localhost:3000/SQL/execute', 
         {
-            "sql": sqlStr
+            "sql": sqlStr.payload
         });
-        // yield put(addNode(newNode));
-        console.log(resp);
+
+        yield put(addRespondFromConsole(resp.data.data));
+        //  console.log(resp);
     } catch(error) {        
        console.log(error)
     }
@@ -38,23 +64,40 @@ function* addConsoletoDB(sqlStr) {
 //     }
 // }
 
-// function* addNodeToDB(newNode) {
-//     try {
-//         yield call(post, 'http://google.co.th/Vertex/create', 
-//         {
-//             "className": newNode.group,
-//             "record": { 
-//                 "xxx": newNode.label,
-//                 "createdate":,
-//                 "time":,
 
-//             }
-//         });
-//         yield put(addNode(newNode));
-//     } catch(error) {        
-//          yield put(addNodeToDBError(error));
-//     }
-// }
+function* deleteNodeFromDB(nodeID) {
+    console.log('>deleteNodefromDB')
+    try {
+           yield call(post, 'http://localhost:3000/Vertex/destroy', 
+        {
+            "RecordDescriptor": nodeID
+
+        });
+       
+
+        // yield put(addNode(newNode));
+    } catch(error) {        
+        //  yield put(addNodeToDBError(error));
+    }
+}
+
+function* deleteEdgeFromDB(edgeID) {
+    console.log('>deleteEdgefromDB')
+    try {
+           yield call(post, 'http://localhost:3000/Edge/destroy', 
+        {
+            "RecordDescriptor": edgeID
+
+        });
+       
+
+        // yield put(addNode(newNode));
+    } catch(error) {        
+        //  yield put(addNodeToDBError(error));
+    }
+}
+
+
 
 // function* addEdgeToDB(newEdge) {
 

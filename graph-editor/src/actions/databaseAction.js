@@ -3,8 +3,14 @@ const executeConsole = SQL => ({
     payload: SQL
   });
 
+const addRespondFromConsole = (respond) => ({
+    type: 'CONSOLE_RESPOND',
+    payload: respond
+})
+
 
 
   export {
-      executeConsole
+      executeConsole,
+      addRespondFromConsole
   }

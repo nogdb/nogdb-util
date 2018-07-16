@@ -200,13 +200,11 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     let id = []
     let name = []
     let node = []
-    let edge= []
       for(let i = 0; i < action.payload.length;i++){
         id.push(action.payload[i].descriptor.rid)
         name.push(action.payload[i].record.name)
-        node[i] = {id:JSON.stringify(id[i]),label:name[i]}
+        node[i] = {id:JSON.stringify(id[i]),label :name[i]}
       }
-     
       console.log(node)
       return {
         ...state,
