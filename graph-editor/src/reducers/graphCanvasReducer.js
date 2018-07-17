@@ -1,7 +1,7 @@
 const graphSetting = {
   graphCanvas: {
     nodes: [
-      
+    
     ],
     edges: [
       

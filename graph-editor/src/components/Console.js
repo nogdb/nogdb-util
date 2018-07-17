@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {executeConsole} from '../actions/databaseAction.js';
+import {executeConsole,getAllClassFromDatabase} from '../actions/databaseAction.js';
 
 const mapStateToProps = state => {
     return {
@@ -17,6 +17,9 @@ const mapStateToProps = state => {
         console.log('#####', action)
         dispatch (action)
       },
+      getAllClassFromDatabaseActionCreator: () => {
+        dispatch (getAllClassFromDatabase());
+      }
       
     }
   }
@@ -46,7 +49,7 @@ class Console extends Component {
             onChange={this.handleTextArea}> </textarea>
             {/* {console.log(this.state.textAreaValue)} */}
             <button onClick={() => this.props.executeConsoleActionCreater(this.state.textAreaValue)}>Compile</button>
-             {console.log(graph)}
+            <button onClick={() => this.props.getAllClassFromDatabaseActionCreator()}>Get AllCLASS</button>
             </div>
             
         )

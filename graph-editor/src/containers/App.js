@@ -10,6 +10,7 @@ import { connect} from 'react-redux';
 import {addNodeToCanvas,addNodeToDatabase,clearCanvas,fullscreen,exitFullscreen} from '../actions/mainButtonAction'
 import NodePropertyMenu from '../components/NodePropsMenu';
 import EdgePropertyMenu from '../components/EdgePropsMenu';
+import {getAllClassFromDatabase} from '../actions/databaseAction';
 
 
 // const customStyle = {
@@ -89,6 +90,9 @@ const customAddNodeStyle = {
       },
       exitFullscreenActionCreator : () => {
         dispatch (exitFullscreen())
+      },
+      getAllClassFromDatabaseActionCreator: () => {
+        dispatch (getAllClassFromDatabase());
       }
       
     }
@@ -306,7 +310,7 @@ class App extends Component {
         </Col>
 
 
-        
+       
       </Row>
       {/* <NodePropertyMenu/> */}
       

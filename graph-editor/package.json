@@ -30,15 +30,19 @@
   },
   "proxy": {
     "/SQL": {
-      "target": "http://192.168.182.212:8090",
+      "target": "http://127.0.0.1:8090",
       "secure": false
     },
     "/Vertex" : {
-      "target" : "http://192.168.182.212:8090",
+      "target" : "http://127.0.0.1:8090",
       "secure" : false
         },
     "/Edge" : {
-      "target" : "http://192.168.182.212:8090",
+      "target" : "http://127.0.0.1:8090",
+      "secure" : false
+    },
+    "/Db" : {
+      "target" : "http://127.0.0.1:8090",
       "secure" : false
     }
   }

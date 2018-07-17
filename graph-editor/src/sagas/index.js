@@ -1,6 +1,9 @@
 import { all, takeEvery, call, put } from 'redux-saga/effects'
 import { get, post } from '../services/webService'
-import { addRespondFromConsole } from '../actions/databaseAction';
+import { addRespondFromConsole,sendAllClassFromDatabaseToState,getAllClassFromDatabase} from '../actions/databaseAction';
+
+
+
 
 
 function* rootSaga() {
@@ -8,7 +11,8 @@ function* rootSaga() {
         takeEvery('EXECUTE', addConsoletoDB),
         takeEvery('ADD_NODE_DB',addNodetoDB),
         takeEvery('DELETE_NODE_FROM_DATABASE',deleteNodeFromDB),
-        takeEvery('DELETE_EDGE_FROM_DATABASE',deleteEdgeFromDB)
+        takeEvery('DELETE_EDGE_FROM_DATABASE',deleteEdgeFromDB),
+        takeEvery('GET_ALL_CLASS_FROM_DATABASE',getAllClassFromDB)
         //  takeEvery('ADD_NODE_TO_DB', addNodeToDB),
         // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
         // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
@@ -44,25 +48,34 @@ function* addNodetoDB(newNode) {
 function* addConsoletoDB(sqlStr) {
     console.log('>>>>>')
     console.log(sqlStr.payload)
+    //  this.props.getAllClassFromDatabaseActionCreator(className)
     try {
      const resp =  yield call(post, 'http://localhost:3000/SQL/execute', 
         {
             "sql": sqlStr.payload
         });
-
+        if (resp.data.type === "n"){
+            console.log("There is no result");
+        }else if (resp.data.type === "s"){
         yield put(addRespondFromConsole(resp.data.data));
-        //  console.log(resp);
+        // console.log(resp.data.data)
+        for(let ele in resp.data.data){
+        yield put(getAllClassFromDatabase(resp.data.data[ele].descriptor.rid[0]))
+        }
+       
+            console.log("RESULT_SET")
+        }else if (resp.data.type === "c"){
+            console.log("CLASS_DESCRIPTOR")
+        }else if (resp.data.type === "p"){
+            console.log("PROPERTY_DESCRIPTOR")
+        }else if (resp.data.type === "r"){
+            console.log("RECORD_DESCRIPTORS")
+            console.log(resp)
+        }
     } catch(error) {        
-       console.log(error)
+        console.log(error)
     }
 }
-
-// tmp = {
-//     "type": "RECORD_DESCRIPTORS",
-//     "data": {
-        
-//     }
-// }
 
 
 function* deleteNodeFromDB(nodeID) {
@@ -97,6 +110,23 @@ function* deleteEdgeFromDB(edgeID) {
     }
 }
 
+function* getAllClassFromDB(selectID) {
+    console.log('>getallclassfromDB')
+  
+    try {
+          const classdescriptor = yield call(post, 'http://localhost:3000/Db/getSchema', 
+        {
+            "classId": selectID.payload 
+            // "className": selectClassName
+            // "className": 'Person'
+        });
+       
+        console.log(classdescriptor.data.type)
+          yield put(sendAllClassFromDatabaseToState(classdescriptor));
+    } catch(error) {        
+         console.log(error)
+    }
+}
 
 
 // function* addEdgeToDB(newEdge) {
