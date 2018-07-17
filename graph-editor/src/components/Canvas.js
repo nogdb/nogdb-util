@@ -217,6 +217,7 @@ class Canvas extends Component {
   };
   render() {
     const { state, scale, data } = this.props;
+    const graphOptions = Object.assign({width: '100%', height: '100%', autoResize: true}, state.options)
     let commandBox;
     if (scale.nodeMenu === true) {
       commandBox = (
@@ -453,7 +454,7 @@ class Canvas extends Component {
         {/*console.log("NodeID :"+data.nodeID)*/}
         <Graph
           graph={state.graphCanvas}
-          options={state.options}
+          options={graphOptions}
           events={{
             selectNode: function(event) {
               // if (this.state.createEdgeMode === false) {
