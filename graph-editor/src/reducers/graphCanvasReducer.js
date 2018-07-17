@@ -210,7 +210,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };break;
 
-    case  'CONSOLE_RESPOND':
+    case  'ADD_VERTEX_CONSOLE': //ADDNODE
     let id = []
     let name = []
     let node = []
@@ -219,7 +219,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         name.push(action.payload[i].record.name)
         node[i] = {id:JSON.stringify(id[i]),label :name[i]}
       }
-      console.log(node)
+       console.log(node)
       return {
         ...state,
         graphCanvas:{
@@ -230,6 +230,8 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       }
       break;
+      
+      // case 'ADDEDGE'
 
     default:
       state = {

@@ -1,7 +1,12 @@
 import { all, takeEvery, call, put } from 'redux-saga/effects'
 import { get, post } from '../services/webService'
-import { addRespondFromConsole,sendAllClassFromDatabaseToState,getAllClassFromDatabase} from '../actions/databaseAction';
+import { addRespondFromConsole,sendAllClassFromDatabaseToState,getAllClassFromDatabase,addVertexConsole,addEdgeConsole} from '../actions/databaseAction';
 
+
+const SQL_RESULT_TYPE = {
+    RESULT_SET: 's',
+
+}
 
 
 
@@ -12,7 +17,7 @@ function* rootSaga() {
         takeEvery('ADD_NODE_DB',addNodetoDB),
         takeEvery('DELETE_NODE_FROM_DATABASE',deleteNodeFromDB),
         takeEvery('DELETE_EDGE_FROM_DATABASE',deleteEdgeFromDB),
-        takeEvery('GET_ALL_CLASS_FROM_DATABASE',getAllClassFromDB)
+        takeEvery('GET_ALL_CLASS_FROM_DATABASE',checkClassEdgeNode)
         //  takeEvery('ADD_NODE_TO_DB', addNodeToDB),
         // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
         // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
@@ -46,22 +51,61 @@ function* addNodetoDB(newNode) {
 }
 
 function* addConsoletoDB(sqlStr) {
-    console.log('>>>>>')
-    console.log(sqlStr.payload)
-    //  this.props.getAllClassFromDatabaseActionCreator(className)
+    console.log('>>>ConsoleToDB')
+    
     try {
      const resp =  yield call(post, 'http://localhost:3000/SQL/execute', 
         {
             "sql": sqlStr.payload
         });
+        
         if (resp.data.type === "n"){
             console.log("There is no result");
         }else if (resp.data.type === "s"){
-        yield put(addRespondFromConsole(resp.data.data));
+                const classdescriptor = yield call(post, 'http://localhost:3000/Db/getSchema', 
+                {
+
+                });
+
+            console.log(classdescriptor.data)
+                let hash = {}
+                // var ids = [{}]
+                for (let ele in classdescriptor.data){
+                    // ids.push({id : classdescriptor.data[ele].id, type : classdescriptor.data[ele].type })
+                    hash[classdescriptor.data[ele].id] =  classdescriptor.data[ele].type
+                
+                }
+
+               
+              
+                             //  yield put(addRespondFromConsole(resp.data.data));
+   
+             let Nodes=[];
+             let Edges=[];                                   
+            for (let ele in resp.data.data){
+                if(hash[resp.data.data[ele].descriptor.rid[0]] === 'v'){
+                     Nodes.push(resp.data.data[ele])
+                     console.log("node")
+                }else if  (hash[resp.data.data[ele].descriptor.rid[0]] === 'e'){
+                    Edges.push(resp.data.data[ele])
+                    console.log("edges")
+                }
+            }
+            
+            console.log(Nodes)
+             console.log(Edges)
+            yield put(addVertexConsole(Nodes))
+            yield put(addEdgeConsole(Edges))
+        //     Actioncreator >>> Node
+        //     Actioncreator >>> Edge
+
+            
+
+
         // console.log(resp.data.data)
-        for(let ele in resp.data.data){
-        yield put(getAllClassFromDatabase(resp.data.data[ele].descriptor.rid[0]))
-        }
+        // for(let ele in resp.data.data){
+        //   yield put(getAllClassFromDatabase(resp.data.data[ele].descriptor.rid[0]))
+        // }
        
             console.log("RESULT_SET")
         }else if (resp.data.type === "c"){
@@ -71,6 +115,11 @@ function* addConsoletoDB(sqlStr) {
         }else if (resp.data.type === "r"){
             console.log("RECORD_DESCRIPTORS")
             console.log(resp)
+
+            
+           
+
+
         }
     } catch(error) {        
         console.log(error)
@@ -110,19 +159,18 @@ function* deleteEdgeFromDB(edgeID) {
     }
 }
 
-function* getAllClassFromDB(selectID) {
-    console.log('>getallclassfromDB')
+function* checkClassEdgeNode(selectID) {
+    console.log('>check Vertex or Edge')
   
     try {
           const classdescriptor = yield call(post, 'http://localhost:3000/Db/getSchema', 
         {
             "classId": selectID.payload 
-            // "className": selectClassName
-            // "className": 'Person'
         });
        
-        console.log(classdescriptor.data.type)
-          yield put(sendAllClassFromDatabaseToState(classdescriptor));
+        
+        // console.log(classdescriptor.data.type)
+           yield put(sendAllClassFromDatabaseToState(classdescriptor));
     } catch(error) {        
          console.log(error)
     }

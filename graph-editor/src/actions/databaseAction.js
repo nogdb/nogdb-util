@@ -3,9 +3,13 @@ const executeConsole = SQL => ({
     payload: SQL
   });
 
-const addRespondFromConsole = (respond) => ({
-    type: 'CONSOLE_RESPOND',
-    payload: respond
+const addVertexConsole = (Nodes) => ({
+    type: 'ADD_VERTEX_CONSOLE',
+    payload: Nodes
+})
+const addEdgeConsole = (Edges) => ({
+    type: 'ADD_EDGE_CONSOLE',
+    payload:Edges
 })
 const getAllClassFromDatabase =(selectID) => ({
     type: 'GET_ALL_CLASS_FROM_DATABASE',
@@ -24,8 +28,9 @@ const sendAllClassFromDatabaseToState=(allClass) => ({
 
   export {
       executeConsole,
-      addRespondFromConsole,
+      addVertexConsole,
       getAllClassFromDatabase,
       sendAllClassFromDatabaseToState,
+      addEdgeConsole
      
   }
