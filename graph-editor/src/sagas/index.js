@@ -71,6 +71,7 @@ function* addConsoletoDB(sqlStr) {
                 for (let ele in classdescriptor.data){
                     hash[classdescriptor.data[ele].id] =  classdescriptor.data[ele].type          
                 }
+                console.log(hash)
                              //  yield put(addRespondFromConsole(resp.data.data));
                
                             
@@ -101,7 +102,7 @@ function* addConsoletoDB(sqlStr) {
             
 
 
-        // console.log(resp.data.data)
+        console.log(resp.data.data)
         // for(let ele in resp.data.data){
         //   yield put(getAllClassFromDatabase(resp.data.data[ele].descriptor.rid[0]))
         // }

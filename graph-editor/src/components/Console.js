@@ -52,7 +52,6 @@ class Console extends Component {
             onChange={this.handleTextArea}> </textarea>
             {/* {console.log(this.state.textAreaValue)} */}
             <button onClick={() => this.props.executeConsoleActionCreater(this.state.textAreaValue)}>Compile</button>
-            <button onClick={() => this.props.getSrcDstEdgeActionCreator()}>Get EdgeSrcDst</button>
             </div>
             
         )
