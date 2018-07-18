@@ -26,7 +26,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.10.0"
   },
   "proxy": {
     "/SQL": {
