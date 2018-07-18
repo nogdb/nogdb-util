@@ -21,12 +21,12 @@ const SQL_RESULT_TYPE = {
 function* rootSaga() {
   yield all([
     takeEvery("EXECUTE", addConsoletoDB),
-    takeEvery("ADD_NODE_DB", addNodetoDB),
     takeEvery("DELETE_NODE_FROM_DATABASE", deleteNodeFromDB),
     takeEvery("DELETE_EDGE_FROM_DATABASE", deleteEdgeFromDB),
     takeEvery("GET_ALL_CLASS_FROM_DATABASE", checkClassEdgeNode),
-    takeEvery("GET_EDGE_SRC_DST", getSrcDst)
-    //  takeEvery('ADD_NODE_TO_DB', addNodeToDB),
+    takeEvery("GET_EDGE_SRC_DST", getSrcDst),
+    takeEvery("GET_ALL_CLASS_FOR_ADDNODE_BUTTON", getAllClassForAddNodeButton),
+    takeEvery("ADD_NODE_TO_DB", addNodeToDB)
     // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
     // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
     // takeEvery('GET_EDGES_FROM_DB', getEdgesFromDB),
@@ -37,21 +37,23 @@ function* rootSaga() {
   ]);
 }
 
-function* addNodetoDB(newNode) {
+function* addNodeToDB(newNode) {
   console.log(">addNodetoDB");
+  console.log(newNode.payload);
   try {
     const response = yield call(post, "http://localhost:3000/Vertex/create", {
-      className: newNode[0].group,
-      record: {
-        label: newNode[0].label,
-        createdate: newNode[0].date,
-        time: newNode[0].time
+      "className": newNode.payload[0].group,
+      "record": {
+        "name": newNode.payload[0].label,
+        "date" : newNode.payload[0].date,
+        "time": newNode.payload[0].time,
       }
     });
+
     console.log(response);
-    // yield put(addNode(newNode));
   } catch (error) {
-    //  yield put(addNodeToDBError(error));
+    //    yield put(addNodeToDBError(error));
+    console.log(error);
   }
 }
 
@@ -188,6 +190,25 @@ function* checkClassEdgeNode(selectID) {
 
     // console.log(classdescriptor.data.type)
     yield put(sendAllClassFromDatabaseToState(classdescriptor));
+  } catch (error) {
+    console.log(error);
+  }
+}
+function* getAllClassForAddNodeButton() {
+  console.log(">>> getallclassfor-addnodebutton");
+  try {
+    const classdescriptor = yield call(
+      post,
+      "http://localhost:3000/Db/getSchema",
+      {}
+    );
+    let classNameData = [];
+    for (let ele in classdescriptor.data) {
+      if (classdescriptor.data[ele].type === "v") {
+        classNameData.push(classdescriptor.data[ele]);
+      }
+    }
+    yield put(sendAllNodeClassToGraphCanvasReducer(classNameData));
   } catch (error) {
     console.log(error);
   }

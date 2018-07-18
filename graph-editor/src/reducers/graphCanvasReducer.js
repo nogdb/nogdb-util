@@ -60,7 +60,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     case "ADD_NODE_ACTION":
       //const newGraphNodeCanvas = state.graphCanvas.nodes.slice();
       //const newGraphEdgeCanvas = state.graphCanvas.edges.slice();
-      console.log(action.payload);
+
       for (let ele in action.payload) {
         if (
           JSON.stringify(backupNode).includes(

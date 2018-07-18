@@ -4,7 +4,7 @@ const addNodeToCanvas = newNode => ({
 });
 
 const addNodeToDatabase = newNode => ({
-  type: "ADD_NODE_DB",
+  type: "ADD_NODE_TO_DB",
   payload: newNode
 });
 const clearCanvas = nullCanvas => ({

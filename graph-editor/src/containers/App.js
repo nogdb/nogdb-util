@@ -16,7 +16,10 @@ import {
 } from "../actions/mainButtonAction";
 import NodePropertyMenu from "../components/NodePropsMenu";
 import EdgePropertyMenu from "../components/EdgePropsMenu";
-import { getAllClassFromDatabase } from "../actions/databaseAction";
+import {
+  getAllClassFromDatabase,
+  getAllNodeClassForAddNodeButton
+} from "../actions/databaseAction";
 
 // const customStyle = {
 //   content: {
@@ -98,6 +101,9 @@ const mapDispatchToProps = dispatch => {
     },
     getAllClassFromDatabaseActionCreator: () => {
       dispatch(getAllClassFromDatabase());
+    },
+    getAllNodeClassForAddNodeButtonActionCreator: () => {
+      dispatch(getAllNodeClassForAddNodeButton());
     }
   };
 };
@@ -119,13 +125,11 @@ class App extends Component {
       isEditRelationActive: false,
       page: 1,
       prevNodeID: " ",
-
       flagIsAddToCanvas: true,
       createDate: "",
       isEdgeProperty: false,
       createEdgeMode: false,
       isAlertShow: false,
-
       nodeLabel: " ",
       isCreateRelationAlertShow: false
     };
@@ -183,8 +187,8 @@ class App extends Component {
         id: (this.props.graph.graphCanvas.nodes.length + 1).toString(),
         label: this.state.textValue,
         group: this.state.group,
-        date: " ",
-        time: " "
+        date: document.getElementById("myTime").value,
+        time: document.getElementById("myDate").value
       }
     ];
     this.props.addNodeToDatabaseActionCreator(newNode);
@@ -194,11 +198,20 @@ class App extends Component {
     });
     // this.AddNodeToDatabase(newNode);
     // this.AddNodeToCanvas(newNode, this.state.graph.edges);
-    this.toggleModalAddNode();
+    //  console.log(document.getElementById("myTime").value)
+    //  console.log(document.getElementById("myDate").value)
+    this.setModalAddNodeFalse();
   }
-  toggleModalAddNode = () => {
+  setModalAddNodeTrue = () => {
+    this.props.getAllNodeClassForAddNodeButtonActionCreator();
     this.setState({
-      isAddNodeActive: !this.state.isAddNodeActive,
+      isAddNodeActive: true,
+      page: 1
+    });
+  };
+  setModalAddNodeFalse = () => {
+    this.setState({
+      isAddNodeActive: false,
       page: 1
     });
   };
@@ -296,7 +309,7 @@ class App extends Component {
           <Col md={scale.nodeMenu || scale.EdgeMenu ? 9 : 12}>
             {consoleBox}
             <div>
-              <button id="Addnode-modal" onClick={this.toggleModalAddNode}>
+              <button id="Addnode-modal" onClick={this.setModalAddNodeTrue}>
                 Add node
               </button>
 
@@ -329,12 +342,12 @@ class App extends Component {
         <Modal
           isOpen={this.state.isAddNodeActive}
           contentLabel="addnode Modal"
-          onRequestClose={this.toggleModalAddNode}
+          onRequestClose={this.setModalAddNodeTrue}
           style={customAddNodeStyle}
         >
           <div id="AddnodeModal-header">
             Add new node
-            <button id="hidemodal-button" onClick={this.toggleModalAddNode}>
+            <button id="hidemodal-button" onClick={this.setModalAddNodeFalse}>
               Hide Modal
             </button>
           </div>
@@ -367,13 +380,10 @@ class App extends Component {
                   <br />
 
                   <form action="/action_page.php">
-                    CreateDate: <input type="date" name="bday" />{" "}
-                    <input type="submit" />
-                    <input type="time" id="myTime" value="22:15:00" />
+                    CreateDate: <input type="date" name="day" id="myDate" />
+                    <input type="time" id="myTime" />
                     <select id="select-nodetype">
                       <option value="String">String </option>
-                      <option value="Integer">Integer </option>
-                      <option value="etc">Etc </option>
                     </select>
                   </form>
                 </div>
@@ -388,7 +398,7 @@ class App extends Component {
               <br />
               <button
                 id="modal-cancel-button"
-                onClick={this.toggleModalAddNode}
+                onClick={this.setModalAddNodeFalse}
               >
                 Cancel
               </button>
@@ -401,9 +411,8 @@ class App extends Component {
               Bottom modal 2
               <button
                 id="modal-cancel-button"
-                onClick={this.toggleModalAddNode}
+                onClick={this.setModalAddNodeFalse}
               >
-                {" "}
                 Cancel
               </button>
               <button id="Addnode-button" onClick={this.handleAddNodeButton}>

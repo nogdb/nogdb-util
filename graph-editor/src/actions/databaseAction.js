@@ -15,6 +15,9 @@ const getAllClassFromDatabase = selectID => ({
   type: "GET_ALL_CLASS_FROM_DATABASE",
   payload: selectID
 });
+const getAllNodeClassForAddNodeButton = () => ({
+  type: "GET_ALL_CLASS_FOR_ADDNODE_BUTTON"
+});
 
 const sendAllClassFromDatabaseToState = allClass => ({
   type: "SEND_ALL_CLASS_FROM_DATABASE_TO_STATE",
@@ -37,5 +40,6 @@ export {
   sendAllClassFromDatabaseToState,
   addEdgeConsole,
   getSrcDstEdge,
-  sendAllNodeClassToGraphCanvasReducer
+  sendAllNodeClassToGraphCanvasReducer,
+  getAllNodeClassForAddNodeButton
 };
