@@ -277,7 +277,10 @@ class Canvas extends Component {
 
   render() {
     const { state, scale, data } = this.props;
-    const graphOptions = Object.assign({width: '100%', height: '100%', autoResize: true}, state.options)
+    const graphOptions = Object.assign(
+      { width: "100%", height: "100%", autoResize: true },
+      state.options
+    );
     let commandBox;
     if (scale.nodeMenu === true) {
       commandBox = (

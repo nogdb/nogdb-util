@@ -25,11 +25,17 @@ const getSrcDstEdge = edgeID => ({
   payload: edgeID
 });
 
+const sendAllNodeClassToGraphCanvasReducer = allClass => ({
+  type: "GET_ALL_CLASS",
+  payload: allClass
+});
+
 export {
   executeConsole,
   addVertexConsole,
   getAllClassFromDatabase,
   sendAllClassFromDatabaseToState,
   addEdgeConsole,
-  getSrcDstEdge
+  getSrcDstEdge,
+  sendAllNodeClassToGraphCanvasReducer
 };

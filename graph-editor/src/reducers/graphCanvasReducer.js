@@ -46,7 +46,8 @@ const graphSetting = {
   },
   respondFromConsole: [],
   ID: [],
-  name: []
+  name: [],
+  classes: []
 };
 
 const graphCanvasReducer = (state = graphSetting, action) => {
@@ -232,7 +233,20 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           nodes: backupNode
         }
       };
+      break;
     }
+    case "GET_ALL_CLASS": //get all class from getschema index.js
+      console.log("graphreduce");
+      console.log(action.payload);
+      let className = [];
+      for (let i = 0; i < action.payload.length; i++) {
+        className.push(action.payload[i].name);
+      }
+      return {
+        ...state,
+        classes: className
+      };
+
     case "ADD_EDGE_CONSOLE": {
       //AddEDGE
       let edgeID = [];

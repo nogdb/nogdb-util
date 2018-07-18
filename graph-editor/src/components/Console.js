@@ -59,6 +59,7 @@ class Console extends Component {
         >
           Compile
         </button>
+        {/* <button onClick={() => this.props.getSrcDstEdgeActionCreator()}>Get EdgeSrcDst</button> */}
       </div>
     );
   }

@@ -217,9 +217,13 @@ class App extends Component {
       group: selectGroup
     });
   };
+
+  // .graphSetting.graphCanvas.classes
   selectBoxList = graph => {
     let arr = [];
-    const list = Object.keys(graph.options.groups);
+    // console.log(graph.classes);
+    //  const list =Object.keys(graph.classes)
+    const list = graph.classes;
     for (let ele in list) {
       arr.push(
         <option key={ele} value={list[ele]}>
