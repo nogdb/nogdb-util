@@ -81,7 +81,7 @@ function* addConsoletoDB(sqlStr) {
                      Nodes.push(resp.data.data[ele])
                      console.log("node")
                 }else if  (hash[resp.data.data[ele].descriptor.rid[0]] === 'e'){
-
+                      console.log("edge")
                     const recordDescriptor = yield call(post, 'http://localhost:3000/Edge/getSrcDst',
                     {
                      "recordDescriptor": { "rid" : resp.data.data[ele].descriptor.rid}
@@ -89,15 +89,13 @@ function* addConsoletoDB(sqlStr) {
                     // console.log(recordDescriptor);
                     // Edges.push(resp.data.data[ele])
                     Edges.push({data:resp.data.data[ele] ,from:recordDescriptor.data[0].descriptor.rid ,to:recordDescriptor.data[1].descriptor.rid })
-
-
                     console.log(Edges)
                 }
             }
             
             
             yield put(addVertexConsole(Nodes))
-            // yield put(addEdgeConsole(Edges))
+             yield put(addEdgeConsole(Edges))
        
 
             

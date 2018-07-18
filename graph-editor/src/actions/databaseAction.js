@@ -7,10 +7,9 @@ const addVertexConsole = (Nodes) => ({
     type: 'ADD_VERTEX_CONSOLE',
     payload: Nodes
 })
-const addEdgeConsole = (Edges,srcdst) => ({
+const addEdgeConsole = (Edges) => ({
     type: 'ADD_EDGE_CONSOLE',
-    payloadEdge:Edges,
-    payloadSrcDst:srcdst
+    payload:Edges,
 })
 const getAllClassFromDatabase =(selectID) => ({
     type: 'GET_ALL_CLASS_FROM_DATABASE',

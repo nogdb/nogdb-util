@@ -223,8 +223,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         // node[i] = {id:JSON.stringify(nodeID[i]),label :nodeName[i]}
         
       }
-      console.log(backupNode)
-      // console.log(node)
+   
       return {
         ...state,
         graphCanvas:{
@@ -237,27 +236,27 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       }
       break;
       
-      //  case 'ADD_EDGE_CONSOLE' : //AddEDGE
-      //   let edgeID = []
-      //   let src = []
-      //   let dst = []
-      //   let edgeName = [] //label
-      // for(let i = 0; i < action.payload.length;i++){
-      //   edgeID.push(action.payload[i].descriptor.rid)
-      //   src.push();
-      //   dst.push();
-      //   edgeName.push(action.payload[i].record.name)
-      //   backupEdge[i] = {id:JSON.stringify(id[i]),label :name[i]}
-      // }
-      //  console.log(action.payload)
-      // return { 
-      //   ...state,
-      //   graphCanvas:{
-      //     edges: [],
-      //     nodes:[],
-      //   }
-      // }
-      // break;
+       case 'ADD_EDGE_CONSOLE' : //AddEDGE
+        let edgeID = []
+        let src = []
+        let dst = []
+        let edgeName = [] //label
+      for(let i = 0; i < action.payload.length;i++){
+        edgeID.push(action.payload[i].data.descriptor.rid)
+        src.push(action.payload[i].from);
+        dst.push(action.payload[i].to);
+        edgeName.push(action.payload[i].data.record.name)
+        backupEdge.push( {id:JSON.stringify(edgeID[i]),from:JSON.stringify(src[i]),to:JSON.stringify(dst[i]),label :JSON.stringify(edgeName[i])} )
+      }
+       console.log(backupEdge)
+      return { 
+        ...state,
+        graphCanvas:{
+          edges: backupEdge,
+          nodes: backupNode
+        }
+      }
+      break;
 
     default:
       state = {
