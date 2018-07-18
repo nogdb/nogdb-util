@@ -28,5 +28,23 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.10.0"
+  },
+  "proxy": {
+    "/SQL": {
+      "target": "http://192.168.182.212:8090",
+      "secure": false
+    },
+    "/Vertex": {
+      "target": "http://192.168.182.212:8090",
+      "secure": false
+    },
+    "/Edge": {
+      "target": "http://192.168.182.212:8090",
+      "secure": false
+    },
+    "/Db": {
+      "target": "http://192.168.182.212:8090",
+      "secure": false
+    }
   }
 }

@@ -1,6 +1,11 @@
-const removeNode = (nodeID)=>({
-    type: 'REMOVE_NODE',
-    payload: nodeID
-})
+const removeNode = nodeID => ({
+  type: "REMOVE_NODE",
+  payload: nodeID
+});
 
-export {removeNode}
+const removeEdgeCanvas = edgeID => ({
+  type: "REMOVE_EDGE",
+  payload: edgeID
+});
+
+export { removeNode, removeEdgeCanvas };

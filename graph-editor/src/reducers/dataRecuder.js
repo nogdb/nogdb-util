@@ -5,7 +5,8 @@ const data = {
   edgeID: null,
   edgeClass: null,
   edgeIn: null,
-  edgeOut: null
+  edgeOut: null,
+  selectId: null
 };
 const dataReducer = (state = data, action) => {
   switch (action.type) {
@@ -51,6 +52,12 @@ const dataReducer = (state = data, action) => {
       };
       return state;
 
+    case "SEND_SELECT_ID":
+      state = {
+        ...state,
+        selectId: action.payload
+      };
+      break;
     case "GET_OUT_RELATION":
       state = {
         ...state,

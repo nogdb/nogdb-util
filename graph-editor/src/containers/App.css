@@ -26,6 +26,14 @@
   border:1px solid black;
   margin:0;
 }
+.History-body {
+  font-size:70%;
+  text-align:left;
+  padding:1%;
+  border:1px solid black;
+  margin:0;
+  height:200px;
+}
 .Top-Box {
   height:70px;
   border:1px solid black;
@@ -84,7 +92,7 @@
   border:1px solid black;
   position: relative;
 
-  margin-bottom:0;
+  margin-bottom:40;
 }
 #inside-box{
   border:1px solid black;
