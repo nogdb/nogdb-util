@@ -1,17 +1,22 @@
 import React, { Component } from "react";
 import Modal from "react-modal";
 import "./App.css";
-import {Row,Col,Container} from "reactstrap";
-import NogDBTitle from '../components/Title';
-import Console from '../components/Console';
-import Canvas from '../components/Canvas';
-import History from '../components/History';
-import { connect} from 'react-redux';
-import {addNodeToCanvas,addNodeToDatabase,clearCanvas,fullscreen,exitFullscreen} from '../actions/mainButtonAction'
-import NodePropertyMenu from '../components/NodePropsMenu';
-import EdgePropertyMenu from '../components/EdgePropsMenu';
-import {getAllClassFromDatabase} from '../actions/databaseAction';
-
+import { Row, Col, Container } from "reactstrap";
+import NogDBTitle from "../components/Title";
+import Console from "../components/Console";
+import Canvas from "../components/Canvas";
+import History from "../components/History";
+import { connect } from "react-redux";
+import {
+  addNodeToCanvas,
+  addNodeToDatabase,
+  clearCanvas,
+  fullscreen,
+  exitFullscreen
+} from "../actions/mainButtonAction";
+import NodePropertyMenu from "../components/NodePropsMenu";
+import EdgePropertyMenu from "../components/EdgePropsMenu";
+import { getAllClassFromDatabase } from "../actions/databaseAction";
 
 // const customStyle = {
 //   content: {
@@ -39,7 +44,7 @@ const customAddNodeStyle = {
     marginBottom: "10%"
   }
 };
-// const customEditRStyle = { 
+// const customEditRStyle = {
 //   content : {
 //     posittion:'absolute',
 //     top    : '20px',
@@ -49,7 +54,7 @@ const customAddNodeStyle = {
 //     marginRight  : '15%',
 //     marginLeft   : '15%',
 //     marginTop    : '10%',
-//     marginBottom : '10%' 
+//     marginBottom : '10%'
 //   }
 // } ;
 // const customCreateEdgeModal = {
@@ -66,39 +71,36 @@ const customAddNodeStyle = {
 //   }
 // };
 
-  const mapStateToProps = state => {
-    return {
-      graph:state.graph,
-      scale:state.scale,
-      data:state.data
+const mapStateToProps = state => {
+  return {
+    graph: state.graph,
+    scale: state.scale,
+    data: state.data
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addNodeToCanvasActionCreator: newNode => {
+      dispatch(addNodeToCanvas(newNode));
+    },
+    addNodeToDatabaseActionCreator: newNode => {
+      dispatch(addNodeToDatabase(newNode));
+    },
+    clearCanvasActionCreator: nullCanvas => {
+      dispatch(clearCanvas(nullCanvas));
+    },
+    setFullsceenActionCreator: () => {
+      dispatch(fullscreen());
+    },
+    exitFullscreenActionCreator: () => {
+      dispatch(exitFullscreen());
+    },
+    getAllClassFromDatabaseActionCreator: () => {
+      dispatch(getAllClassFromDatabase());
     }
-  }
-
-  const mapDispatchToProps = dispatch => {
-    return {
-      addNodeToCanvasActionCreator: newNode => {
-        dispatch (addNodeToCanvas(newNode))
-      },
-      addNodeToDatabaseActionCreator: newNode => {
-        dispatch (addNodeToDatabase(newNode))
-      },
-      clearCanvasActionCreator : nullCanvas => {
-        dispatch (clearCanvas(nullCanvas))
-      },
-      setFullsceenActionCreator :() => {
-        dispatch (fullscreen())
-      },
-      exitFullscreenActionCreator : () => {
-        dispatch (exitFullscreen())
-      },
-      getAllClassFromDatabaseActionCreator: () => {
-        dispatch (getAllClassFromDatabase());
-      }
-      
-    }
-  }
-
-
+  };
+};
 
 class App extends Component {
   constructor(props) {
@@ -114,7 +116,7 @@ class App extends Component {
       isDeleteNodeActivate: false,
       isDeleteRelationActivate: false,
       isCreateRelationActive: false,
-      isEditRelationActive:false,
+      isEditRelationActive: false,
       page: 1,
       prevNodeID: " ",
 
@@ -123,19 +125,19 @@ class App extends Component {
       isEdgeProperty: false,
       createEdgeMode: false,
       isAlertShow: false,
-     
+
       nodeLabel: " ",
-      isCreateRelationAlertShow:false
+      isCreateRelationAlertShow: false
     };
     this.handleAddNodeButton = this.handleAddNodeButton.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleEditNodeName = this.handleEditNodeName.bind(this);
     this.handleClearCanvas = this.handleClearCanvas.bind(this);
-       // this.handleSrcChange = this.handleSrcChange.bind(this);
+    // this.handleSrcChange = this.handleSrcChange.bind(this);
     // this.handleDscChange = this.handleDscChange.bind(this);
-      // this.AddEdgeToCanvas = this.AddEdgeToCanvas.bind(this);
-      // this.toggleShowMenu = this.toggleShowMenu.bind(this);
+    // this.AddEdgeToCanvas = this.AddEdgeToCanvas.bind(this);
+    // this.toggleShowMenu = this.toggleShowMenu.bind(this);
     // this.handleNodeID = this.handleNodeID.bind(this);
     // this.handleNodeClass = this.handleNodeClass.bind(this);
     // this.handleIncoming = this.handleIncoming.bind(this);
@@ -173,24 +175,23 @@ class App extends Component {
     // this.setinRelationDisplayFormat = this.setinRelationDisplayFormat.bind(this);
     // this.setoutRelationDisplayFormat = this.setoutRelationDisplayFormat.bind(this);
     // this.setmessageDisplayFormat = this.setmessageDisplayFormat.bind(this);
-   
   }
-  
-      handleAddNodeButton() {
-    let newNode = 
-      [{
-        id: (this.props.graph.graphCanvas.nodes.length+1).toString(),
+
+  handleAddNodeButton() {
+    let newNode = [
+      {
+        id: (this.props.graph.graphCanvas.nodes.length + 1).toString(),
         label: this.state.textValue,
         group: this.state.group,
-        date:" ",
-        time:" "
-      }]
-    ;
-    this.props.addNodeToDatabaseActionCreator(newNode)
-    this.props.addNodeToCanvasActionCreator(newNode)
+        date: " ",
+        time: " "
+      }
+    ];
+    this.props.addNodeToDatabaseActionCreator(newNode);
+    this.props.addNodeToCanvasActionCreator(newNode);
     this.setState({
       textValue: ""
-    })
+    });
     // this.AddNodeToDatabase(newNode);
     // this.AddNodeToCanvas(newNode, this.state.graph.edges);
     this.toggleModalAddNode();
@@ -205,158 +206,167 @@ class App extends Component {
     let g = document.getElementById("select-id");
     let selectGroup;
 
-    for (let i =0; i<g.options.length;i++){
-      if (g.options[i].selected ===true){
+    for (let i = 0; i < g.options.length; i++) {
+      if (g.options[i].selected === true) {
         selectGroup = g.options[i].value;
         break;
       }
     }
     this.setState({
-      page:2,
-       group:selectGroup
+      page: 2,
+      group: selectGroup
+    });
+  };
+  selectBoxList = graph => {
+    let arr = [];
+    const list = Object.keys(graph.options.groups);
+    for (let ele in list) {
+      arr.push(
+        <option key={ele} value={list[ele]}>
+          {list[ele]}
+        </option>
+      );
+    }
+    return arr;
+  };
+  handleChange(e) {
+    this.setState({
+      textValue: e.target.value
     });
   }
-  selectBoxList=(graph)=>{
-    let arr =[]
-    const list =Object.keys(graph.options.groups)
-    for(let ele in list){
-      arr.push(<option key={ele} value ={list[ele]}>{list[ele]}</option>)
-    }
-    return arr
-  }
-  handleChange(e){
-    this.setState({
-      textValue:e.target.value
-    })
-  }
   handleEditNodeName(e) {
-        this.setState({
-          editNodeName: e.target.value
-        });
-      }
+    this.setState({
+      editNodeName: e.target.value
+    });
+  }
 
   handleClearCanvas() {
-      let nullGraph ={
-        nodes:[],
-        edges:[]
-      }
-        this.props.clearCanvasActionCreator(nullGraph)
-        this.setState({ graph: { nodes: [], edges: [] } });
-      }
- 
+    let nullGraph = {
+      nodes: [],
+      edges: []
+    };
+    this.props.clearCanvasActionCreator(nullGraph);
+    this.setState({ graph: { nodes: [], edges: [] } });
+  }
+
   render() {
-    const {graph,scale} = this.props;
+    const { graph, scale } = this.props;
     let pHeader;
     if (scale.isFullscreen === true) {
       pHeader = null;
     } else {
-       pHeader = <NogDBTitle/>
+      pHeader = <NogDBTitle />;
     }
     let consoleBox;
     if (scale.isFullscreen === true) {
       consoleBox = null;
     } else {
-      consoleBox = <Console/>
+      consoleBox = <Console />;
     }
     let historyBox;
-    if (scale.isFullscreen === true){
+    if (scale.isFullscreen === true) {
       historyBox = null;
     } else {
-      historyBox = <History/>
+      historyBox = <History />;
     }
     let nodeTabBars;
-    if (scale.nodeMenu === true ){
-      nodeTabBars = <NodePropertyMenu/>
-    } else if (scale.nodeMenu ===false){
+    if (scale.nodeMenu === true) {
+      nodeTabBars = <NodePropertyMenu />;
+    } else if (scale.nodeMenu === false) {
       nodeTabBars = null;
     }
     let edgeTabBars;
-    if (scale.EdgeMenu === true){
-      edgeTabBars = <EdgePropertyMenu/>
-    }else if (scale.EdgeMenu === false){
+    if (scale.EdgeMenu === true) {
+      edgeTabBars = <EdgePropertyMenu />;
+    } else if (scale.EdgeMenu === false) {
       edgeTabBars = null;
     }
-    
-   
-    return(
+
+    return (
       <Container>
-      {pHeader}
-      <Row>
-        <Col md={scale.nodeMenu || scale.EdgeMenu ? 3 : 0}>
-          {nodeTabBars} {edgeTabBars}
-        </Col>
-        <Col md={scale.nodeMenu || scale.EdgeMenu ? 9 : 12}>
-          {consoleBox}
-          <div>
-            <button id="Addnode-modal" onClick={this.toggleModalAddNode}>Add node</button>
-            
-            { scale.isFullscreen === false ? (
-              <button id="FullScreen-button" onClick={this.props.setFullsceenActionCreator}>
-                Full screen
+        {pHeader}
+        <Row>
+          <Col md={scale.nodeMenu || scale.EdgeMenu ? 3 : 0}>
+            {nodeTabBars} {edgeTabBars}
+          </Col>
+          <Col md={scale.nodeMenu || scale.EdgeMenu ? 9 : 12}>
+            {consoleBox}
+            <div>
+              <button id="Addnode-modal" onClick={this.toggleModalAddNode}>
+                Add node
               </button>
+
+              {scale.isFullscreen === false ? (
+                <button
+                  id="FullScreen-button"
+                  onClick={this.props.setFullsceenActionCreator}
+                >
+                  Full screen
+                </button>
               ) : (
-                <button id="FullScreen-button" onClick={this.props.exitFullscreenActionCreator}>
-                Exit Fullscreen
+                <button
+                  id="FullScreen-button"
+                  onClick={this.props.exitFullscreenActionCreator}
+                >
+                  Exit Fullscreen
+                </button>
+              )}
+              <button id="Clear-Canvas" onClick={this.handleClearCanvas}>
+                Clear Canvas
               </button>
-              )
-            }
-            <button id="Clear-Canvas" onClick={this.handleClearCanvas}>
-            Clear Canvas
-            </button>
-          </div>
-        
-          <Canvas state = {graph}/>
-          {historyBox}
-        </Col>
+            </div>
 
+            <Canvas state={graph} />
+            {historyBox}
+          </Col>
+        </Row>
+        {/* <NodePropertyMenu/> */}
 
-       
-      </Row>
-      {/* <NodePropertyMenu/> */}
-      
-
-
-
-      
-
-          
-      
-   
-          <Modal
+        <Modal
           isOpen={this.state.isAddNodeActive}
           contentLabel="addnode Modal"
           onRequestClose={this.toggleModalAddNode}
           style={customAddNodeStyle}
         >
-         
           <div id="AddnodeModal-header">
-            Add new node 
-            <button id="hidemodal-button" onClick={this.toggleModalAddNode}>Hide Modal</button>
+            Add new node
+            <button id="hidemodal-button" onClick={this.toggleModalAddNode}>
+              Hide Modal
+            </button>
           </div>
           {this.state.page === 1 ? (
-            <div id="addnodemodal-middle-div">  
+            <div id="addnodemodal-middle-div">
               Hello middle 1 <hr />
-              Class :  <select id="select-id"> {this.selectBoxList(graph)} </select>
+              Class :{" "}
+              <select id="select-id"> {this.selectBoxList(graph)} </select>
             </div>
           ) : (
             <div id="addnodemodal-middle-div">
-
-              <div id="edit-middle-div"> Group : {this.state.nodeClass} <br /><br></br>
-                <div id="inside-editmid-div"><br/>
+              <div id="edit-middle-div">
+                {" "}
+                Group : {this.state.nodeClass} <br />
+                <br />
+                <div id="inside-editmid-div">
+                  <br />
                   <h5 id="Editnode-classname">name </h5>
-                  <input type="node-edit" placeholder="Edit...." className="Node-editor" onChange={this.handleChange}/>
+                  <input
+                    type="node-edit"
+                    placeholder="Edit...."
+                    className="Node-editor"
+                    onChange={this.handleChange}
+                  />
                   <select id="select-nodetype">
                     <option value="String">String </option>
                     <option value="Integer">Integer </option>
                     <option value="etc">Etc </option>
                   </select>
                   <br />
-                 
+
                   <form action="/action_page.php">
                     CreateDate: <input type="date" name="bday" />{" "}
                     <input type="submit" />
                     <input type="time" id="myTime" value="22:15:00" />
-                    <select id="select-nodetype">       
+                    <select id="select-nodetype">
                       <option value="String">String </option>
                       <option value="Integer">Integer </option>
                       <option value="etc">Etc </option>
@@ -364,24 +374,37 @@ class App extends Component {
                   </form>
                 </div>
               </div>
-
-
-              Hello middle 2 
+              Hello middle 2
               {/* <input type="text" placeholder="Node name...." className="Nodetext" onChange={this.handleChange}/> */}
             </div>
           )}
           {this.state.page === 1 ? (
             <div id="addnodemodal-top-div">
-             
-              Bottom modal 1 <br></br><br></br>
-              <button id="modal-cancel-button" onClick={this.toggleModalAddNode} >Cancel</button>
-              <button id="modal-next-button" onClick={this.handleNextPage}>Next</button>
+              Bottom modal 1 <br />
+              <br />
+              <button
+                id="modal-cancel-button"
+                onClick={this.toggleModalAddNode}
+              >
+                Cancel
+              </button>
+              <button id="modal-next-button" onClick={this.handleNextPage}>
+                Next
+              </button>
             </div>
           ) : (
-            <div id="addnodemodal-bottom-div">  
-              Bottom modal 2 
-              <button id="modal-cancel-button" onClick={this.toggleModalAddNode}> Cancel</button>
-              <button id="Addnode-button" onClick={this.handleAddNodeButton}>Add node</button>
+            <div id="addnodemodal-bottom-div">
+              Bottom modal 2
+              <button
+                id="modal-cancel-button"
+                onClick={this.toggleModalAddNode}
+              >
+                {" "}
+                Cancel
+              </button>
+              <button id="Addnode-button" onClick={this.handleAddNodeButton}>
+                Add node
+              </button>
             </div>
           )}
         </Modal>
@@ -394,14 +417,13 @@ export default connect(
   mapDispatchToProps
 )(App);
 
-  
 //   setridRelationDisplayFormat = () => {
 //     this.setState(prevState => {
 //       let canvasNode = prevState.graph.nodes.slice();
 //       let canvasEdge = prevState.graph.edges.slice();
 //       let backUp;
 //       for (let ele in graphDB.edges) {
-//         if ( graphDB.edges[ele].id === this.state.relationID) {      
+//         if ( graphDB.edges[ele].id === this.state.relationID) {
 //           backUp = graphDB.edges[ele];
 //           break;
 //         }
@@ -413,7 +435,7 @@ export default connect(
 
 //           const update = { ...chosen, label: backUp.id };
 //           canvasEdge[ele] = update;
-          
+
 //         }
 //       }
 //       return {
@@ -425,11 +447,9 @@ export default connect(
 //     });
 //   }
 
-
 //   setclassRelationDisplayFormat = () =>{
 //    //cann't store and query yet
 //   }
-
 
 //   setinRelationDisplayFormat = () =>{
 //     this.setState(prevState => {
@@ -437,7 +457,7 @@ export default connect(
 //       let canvasEdge = prevState.graph.edges.slice();
 //       let backUp;
 //       for (let ele in graphDB.edges) {
-//         if ( graphDB.edges[ele].id === this.state.relationID) {      
+//         if ( graphDB.edges[ele].id === this.state.relationID) {
 //           backUp = graphDB.edges[ele];
 //           break;
 //         }
@@ -449,7 +469,7 @@ export default connect(
 
 //           const update = { ...chosen, label: backUp.to };
 //           canvasEdge[ele] = update;
-          
+
 //         }
 //       }
 //       return {
@@ -466,7 +486,7 @@ export default connect(
 //       let canvasEdge = prevState.graph.edges.slice();
 //       let backUp;
 //       for (let ele in graphDB.edges) {
-//         if ( graphDB.edges[ele].id === this.state.relationID) {      
+//         if ( graphDB.edges[ele].id === this.state.relationID) {
 //           backUp = graphDB.edges[ele];
 //           break;
 //         }
@@ -478,7 +498,7 @@ export default connect(
 
 //           const update = { ...chosen, label: backUp.from };
 //           canvasEdge[ele] = update;
-          
+
 //         }
 //       }
 //       return {
@@ -517,7 +537,7 @@ export default connect(
 //     ]);
 //     this.toggleCreateRelationModalFalse();
 //     this.toggleCreateRAlertmsgTrue();
-    
+
 //   };
 //   setSrcEdge = src => {
 //     this.setState({
@@ -618,7 +638,7 @@ export default connect(
 //       let canvasEdge = prevState.graph.edges.slice();
 //       let backUp;
 //       for (let ele in graphDB.nodes) {
-//         if ( graphDB.nodes[ele].id === this.state.nodeID) {      
+//         if ( graphDB.nodes[ele].id === this.state.nodeID) {
 //           backUp = graphDB.nodes[ele];
 //           break;
 //         }
@@ -641,8 +661,6 @@ export default connect(
 //       };
 //     });
 //   };
-
-
 
 //   handleAlertTrue = () => {
 //     this.setState({
@@ -674,7 +692,7 @@ export default connect(
 //       isPropertyDisplay: "edgeFalse"
 //     });
 //   };
-      
+
 //   handleSrcChange(e) {
 //     this.setState({
 //       srcValue: e.target.value
@@ -685,7 +703,7 @@ export default connect(
 //       dscValue: e.target.value
 //     });
 //   }
-  
+
 //   setNewNodeName = (nodeID, newName) => {
 //     this.setState(prevState => {
 //       let canvasNode = prevState.graph.nodes.slice();
@@ -727,7 +745,6 @@ export default connect(
 //     });
 //   };
 
-  
 //   AddNodeToDatabase = newNode => {
 //     for (let ele in newNode) {
 //       if (
@@ -790,7 +807,6 @@ export default connect(
 //     console.log(graphDB);
 //   };
 
-  
 //   toggleFullScreen() {
 //     if (
 //       (document.fullScreenElement && document.fullScreenElement !== null) ||
@@ -815,8 +831,6 @@ export default connect(
 //       }
 //     }
 //   }
- 
-
 
 //   toggleEditnodeModal = () => {
 //     this.setState({
@@ -829,21 +843,19 @@ export default connect(
 //       isEditRelationActive:!this.state.isEditRelationActive
 //     })
 //   }
-  
+
 //   toggleShowMenu = () => {
 //     this.setState(prevState => ({
 //       showMenu: !prevState.showMenu
 //     }));
 //   };
 
-
-  
-  // handleNodeID(nodeIDs) {
-  //   this.setState({
-  //     nodeID: nodeIDs[0]
-  //   });
-  //   console.log(this.state.nodeID);
-  // }
+// handleNodeID(nodeIDs) {
+//   this.setState({
+//     nodeID: nodeIDs[0]
+//   });
+//   console.log(this.state.nodeID);
+// }
 //   handleNodeID2 = nodeIDs => {
 //     this.setState(prevState => ({
 //       nodeID: nodeIDs[0],
@@ -852,7 +864,7 @@ export default connect(
 //     console.log(this.state.nodeID);
 //     console.log(this.state.prevNodeID);
 //   };
-//  
+//
 //   getCreateDate = () => {
 //     for (let ele in this.state.graph.nodes) {
 //       if (this.state.graph.nodes[ele].id === this.state.nodeID) {
@@ -935,7 +947,6 @@ export default connect(
 //     this.setState({ graph: { nodes: BackupNode, edges: BackupEdges } });
 //     this.toggleShowMenu();
 //   };
-  
 
 //   Resetalldisplaydata = () => {
 //     this.resetrid();
@@ -1075,7 +1086,6 @@ export default connect(
 //     });
 //   };
 //   render() {
-
 
 //     let tabbars;
 //     if (this.state.isPropertyDisplay === "nodeTrue") {
@@ -1224,7 +1234,7 @@ export default connect(
 //                   <br />
 
 //                   <p> Relationship Color </p>
-//                   <select id="select-relationcolor">  
+//                   <select id="select-relationcolor">
 //                     <option value="String">Red </option>
 //                     <option value="Integer">Blue </option>
 //                     <option value="etc">Yellow </option>
@@ -1239,7 +1249,6 @@ export default connect(
 //       null;
 //     }
 
-
 //     let alertmsg;
 //     if (this.state.isAlertShow === true) {
 //       alertmsg = (
@@ -1252,7 +1261,7 @@ export default connect(
 //     }
 //     let alertcreateRelationmsg;
 //     if (this.state.isCreateRelationAlertShow === true){
-//       alertcreateRelationmsg = 
+//       alertcreateRelationmsg =
 //       <Alert color="success" id="CreateRmsg">
 //       Create Relationship succesfully.
 //       </Alert>
@@ -1306,7 +1315,7 @@ export default connect(
 //                     CreateDate: <input type="date" name="bday" />{" "}
 //                     <input type="submit" />
 //                     <input type="time" id="myTime" value="22:15:00" />
-//                     <select id="select-nodetype">       
+//                     <select id="select-nodetype">
 //                       <option value="String">String </option>
 //                       <option value="Integer">Integer </option>
 //                       <option value="etc">Etc </option>
@@ -1337,8 +1346,8 @@ export default connect(
 //               contentLabel="CreateRelation Modal"
 //               onRequestClose={this.state.toggleCreateRelationModalFalse}
 //               style={customStyle}
-//             >  
-//               <div id="Modal-header">Create Relationship from #inNodeID to #outNodeID 
+//             >
+//               <div id="Modal-header">Create Relationship from #inNodeID to #outNodeID
 //                 <button id="hidemodal-button" onClick={this.toggleCreateRelationModalFalse}>Hide Modal</button>
 //               </div>
 //               {this.state.page === 1 ? (
@@ -1352,7 +1361,7 @@ export default connect(
 //                 </div>
 //               )}
 //               {this.state.page === 1 ? (
-//                 <div id="modal-bottom-div"> 
+//                 <div id="modal-bottom-div">
 //                   Bottom modal 1 <hr />
 //                   <button id="modal-cancel-button" onClick={this.toggleCreateRelationModalFalse}>Cancel</button>
 //                   <button id="modal-next-button" onClick={this.handleNextPage}>
@@ -1361,7 +1370,7 @@ export default connect(
 //                 </div>
 //               ) : (
 //                 <div id="modal-bottom-div">
-                 
+
 //                   Bottom modal 2 <hr />
 //                   <button onClick={this.InitializePage}> Back </button>
 //                   <button id="modal-cancel-button" onClick={this.toggleCreateRelationModalFalse} > Cancel</button>
@@ -1374,7 +1383,7 @@ export default connect(
 //               title="remove node from canvas"
 //               onClick={this.handleRemoveNode}
 //             >
-             
+
 //               Remove
 //             </button>
 //             <button
@@ -1382,7 +1391,7 @@ export default connect(
 //               title="delete node from Database"
 //               onClick={this.toggleDeletenodeModal}
 //             >
-           
+
 //               Delete
 //             </button>
 //             <Modal
@@ -1401,7 +1410,7 @@ export default connect(
 //                   No,keep Node
 //                 </button>
 //                 <Button color="danger" onClick={this.handleDeleteNode}>
-                 
+
 //                   Yes,Delete Node!
 //                 </Button>
 //               </div>
@@ -1419,33 +1428,32 @@ export default connect(
 //         <div id="relationMenu-div">
 //           Relationship Menu : {this.state.relationID}
 //           <button onClick={this.toggleEditRelationModal}> Edit Relationship </button>
-//         <Modal isOpen={this.state.isEditRelationActive} contentLabel = "EditRelationship Modal" 
+//         <Modal isOpen={this.state.isEditRelationActive} contentLabel = "EditRelationship Modal"
 //                     onRequestClose={this.toggleEditRelationModal}
-//                     style = {customEditRStyle} > <div id="editRModal-header">  Edit Relationship 
+//                     style = {customEditRStyle} > <div id="editRModal-header">  Edit Relationship
 //              <button id="hidemodal-button" onClick={this.toggleEditRelationModal}>Hide Modal</button>
 //              <hr></hr>
 //              </div>
-            
+
 //                 <div id="editRmodal-middle-div"> relation <hr></hr>
 //                 <div id="ineditRmodal-middle-div">
 //                    inRelation <input type="text" placeholder="Node name...." className="Nodetext" onChange={this.handleChange} />
 //                        <select id="select-id"  > {this.selectBoxList()} </select> <br></br><br></br>
-//                      message   <input type="text" placeholder="Type message here...." className="msgTxt"  /> 
+//                      message   <input type="text" placeholder="Type message here...." className="msgTxt"  />
 //                        <select id="select-id"  > {this.selectBoxList()} </select>        <br></br><br></br>
 //                    outRelation  <input type="text" placeholder="Node name...." className="Nodetext" onChange={this.handleChange} />
 //                        <select id="select-id"  > {this.selectBoxList()} </select>
 //                    </div>
 //                 </div>
 //                 <br></br>
-//                 <div id="editRmodal-bottom-div">  
+//                 <div id="editRmodal-bottom-div">
 //                 <button id="modal-cancel-button" onClick={this.toggleEditRelationModal}> Cancel </button>
 //                 <button id="Addnode-button" onClick={this.handleAddNodeButton} >Save Change</button>
 //                 </div>
 
-               
 //              </Modal>
 //           <button onClick={this.toggleDeleteRelationModal}>
-           
+
 //             Delete Relationship
 //           </button>
 //           <Modal
@@ -1456,17 +1464,17 @@ export default connect(
 //           >
 //             <div id="top-deletenode-div"> Delete Relation </div>
 //             <div id="middle-deletenode-div">
-             
+
 //               Deleting Relation {this.state.relationID} will permanantly be
 //               removed from your Database
 //             </div>
 //             <div id="bottom-deletenode-div">
 //               <button onClick={this.toggleDeleteRelationModal}>
-               
+
 //                 No,keep Relationship
 //               </button>
 //               <Button color="danger" onClick={this.handleDeleteRelation}>
-               
+
 //                 Yes,Delete Relationship!
 //               </Button>
 //             </div>
@@ -1491,10 +1499,10 @@ export default connect(
 //         {/* <p className="Display-msg">Displaying { Nodenumber = this.state.graph.nodes.length} nodes, {Relationnumber = this.state.graph.edges.length} relationships. </p> */}
 //         <br />
 //         <br />
-        
+
 //         {this.isFullscreen === true ? (
 //           <div>
-          
+
 //             <p> Test parah </p>
 //           </div>
 //         ) : (
@@ -1502,66 +1510,66 @@ export default connect(
 //             {commandbox}
 //             {relationbox}
 
-            // <Graph
-            //   graph={this.state.graph}
-            //   options={this.state.options}
-            //   events={{
-                // selectNode: function(event) {
-                //   if (this.state.createEdgeMode === false) {
-                //     this.handleNodeID(event.nodes);
-                //   } else {
-                //     this.handleNodeID2(event.nodes);
-                //   }
-                //   if (this.state.createEdgeMode === true) {
-                //     const src = this.state.prevNodeID.toString();
-                //     const dest = this.state.nodeID.toString();
-                //     this.setSrcEdge(src);
-                //     this.setDecEdge(dest);
-                //     this.toggleCreateRelationModalTrue();
-                //     this.state.createEdgeMode = false;
-                //   }
+// <Graph
+//   graph={this.state.graph}
+//   options={this.state.options}
+//   events={{
+// selectNode: function(event) {
+//   if (this.state.createEdgeMode === false) {
+//     this.handleNodeID(event.nodes);
+//   } else {
+//     this.handleNodeID2(event.nodes);
+//   }
+//   if (this.state.createEdgeMode === true) {
+//     const src = this.state.prevNodeID.toString();
+//     const dest = this.state.nodeID.toString();
+//     this.setSrcEdge(src);
+//     this.setDecEdge(dest);
+//     this.toggleCreateRelationModalTrue();
+//     this.state.createEdgeMode = false;
+//   }
 
-                //   //this.handleNodeID(event.nodes);
-                //   this.handleNodeClass();
-                //   this.getNodeName();
-                //   // this.getCreateDate();
-                //   this.toggleShowMenu();
-                //   this.setDisplayprop();
-                //   console.log(this.state.isPropertyDisplay);
-                // }.bind(this),
+//   //this.handleNodeID(event.nodes);
+//   this.handleNodeClass();
+//   this.getNodeName();
+//   // this.getCreateDate();
+//   this.toggleShowMenu();
+//   this.setDisplayprop();
+//   console.log(this.state.isPropertyDisplay);
+// }.bind(this),
 
-            //     deselectNode: function(event) {
-            //       console.log(event), this.toggleShowMenu();
-            //       // this.Resetalldisplaydata();
-            //       console.log(this.state.isPropertyDisplay);
-            //       //this.toggleRelationMenu();
-            //       this.setHideEdge();
-            //       this.setHideprop();
-            //       this.handleAlertFalse();
-            //       this.toggleCreateRAlertmsgFalse();
-            //     }.bind(this),
+//     deselectNode: function(event) {
+//       console.log(event), this.toggleShowMenu();
+//       // this.Resetalldisplaydata();
+//       console.log(this.state.isPropertyDisplay);
+//       //this.toggleRelationMenu();
+//       this.setHideEdge();
+//       this.setHideprop();
+//       this.handleAlertFalse();
+//       this.toggleCreateRAlertmsgFalse();
+//     }.bind(this),
 
-            //     selectEdge: function(event) {
-            //       this.handlerelationID(event.edges);
-            //       this.getinRelationNode();
-            //       this.getoutRelationNode();
-            //       this.toggleRelationMenu();
-            //       this.setDisplayEdge();
-            //       console.log(this.state.isPropertyDisplay);
-            //     }.bind(this),
-            //     deselectEdge: function(event) {
-            //       //console.log(event);
-            //       //console.log("This is popup!!")
-            //       this.toggleRelationMenu();
+//     selectEdge: function(event) {
+//       this.handlerelationID(event.edges);
+//       this.getinRelationNode();
+//       this.getoutRelationNode();
+//       this.toggleRelationMenu();
+//       this.setDisplayEdge();
+//       console.log(this.state.isPropertyDisplay);
+//     }.bind(this),
+//     deselectEdge: function(event) {
+//       //console.log(event);
+//       //console.log("This is popup!!")
+//       this.toggleRelationMenu();
 
-            //       this.setHideEdge();
-            //       this.setHideprop();
-            //       console.log(this.state.isPropertyDisplay);
-            //     }.bind(this)
-            //   }}
-            // />
-        //   </div>
-        // )}
+//       this.setHideEdge();
+//       this.setHideprop();
+//       console.log(this.state.isPropertyDisplay);
+//     }.bind(this)
+//   }}
+// />
+//   </div>
+// )}
 //         <button id="his-button" onClick={this.toggleShowMenu}>
 //           Command
 //         </button>
@@ -1571,12 +1579,6 @@ export default connect(
 // }
 
 // export default App;
-
-
-
-
-
-
 
 // let Nodenumber;
 // let Relationnumber;

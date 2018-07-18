@@ -21,11 +21,7 @@ import {
   hideEdgeMenu
 } from "../actions/nodeEdgesMenu";
 import { removeNode, removeEdgeCanvas } from "../actions/menuAction";
-import {
-  Modal,
-  Button
-} from "reactstrap"
-
+import { Modal, Button } from "reactstrap";
 
 const mapStateToProps = state => {
   return {
@@ -73,14 +69,14 @@ const mapDispatchToProps = dispatch => {
     removeNodeActionCreator: nodeID => {
       dispatch(removeNode(nodeID));
     },
-    deleteNodeInDatabaseActionCreator: (nodeID) => {
-      dispatch(dedeteNodeInDatabase(nodeID))
+    deleteNodeInDatabaseActionCreator: nodeID => {
+      dispatch(dedeteNodeInDatabase(nodeID));
     },
-    deleteEdgeFromDatabaseActionCreator:(edgeID) => {
-      dispatch(deleteEdgeFromDatabase(edgeID))
+    deleteEdgeFromDatabaseActionCreator: edgeID => {
+      dispatch(deleteEdgeFromDatabase(edgeID));
     },
-    removeEdgeCanvasActionCreator: (edgeID) => {
-      dispatch(removeEdgeCanvas(edgeID))
+    removeEdgeCanvasActionCreator: edgeID => {
+      dispatch(removeEdgeCanvas(edgeID));
     }
   };
 };
@@ -140,17 +136,16 @@ const customCreateEdgeModal = {
 class Canvas extends Component {
   constructor(props) {
     super(props);
-    this.state= {
-      isDeleteNodeActivate:false,
-      isDeleteRelationActivate:false
-    }
+    this.state = {
+      isDeleteNodeActivate: false,
+      isDeleteRelationActivate: false
+    };
     this.handleNodeID = this.handleNodeID.bind(this);
     this.handleGetNodeName = this.handleGetNodeName.bind(this);
     this.getInRelationNode = this.getInRelationNode.bind(this);
     this.getOutRelationNode = this.getOutRelationNode.bind(this);
     this.setDisplayFormat = this.setDisplayFormat.bind(this);
     this.handleDeleteRelation = this.handleDeleteRelation.bind(this);
-
   }
   handleNodeID(nodeIDs) {
     this.props.getNodeIDActionCreator(nodeIDs[0]);
@@ -161,7 +156,9 @@ class Canvas extends Component {
       if (
         this.props.graph.graphCanvas.nodes[ele].id === this.props.data.nodeID
       ) {
-        this.props.getNodeNameActionCreator(this.props.graph.graphCanvas.nodes[ele].label);
+        this.props.getNodeNameActionCreator(
+          this.props.graph.graphCanvas.nodes[ele].label
+        );
       }
     }
   };
@@ -173,7 +170,9 @@ class Canvas extends Component {
         // this.setState({
         //   nodeClass: this.state.graph.nodes[ele].group
         // });
-        this.props.getNodeClassActionCreator(this.props.graph.graphCanvas.nodes[ele].group);
+        this.props.getNodeClassActionCreator(
+          this.props.graph.graphCanvas.nodes[ele].group
+        );
       }
     }
   };
@@ -187,7 +186,9 @@ class Canvas extends Component {
       if (
         this.props.graph.graphCanvas.edges[ele].id === this.props.data.edgeID
       ) {
-        this.props.getInRelationActionCreator(this.props.graph.graphCanvas.edges[ele].to);
+        this.props.getInRelationActionCreator(
+          this.props.graph.graphCanvas.edges[ele].to
+        );
       }
     }
   };
@@ -197,39 +198,38 @@ class Canvas extends Component {
       if (
         this.props.graph.graphCanvas.edges[ele].id === this.props.data.edgeID
       ) {
-        this.props.getOutRelationActionCreator(this.props.graph.graphCanvas.edges[ele].from);
+        this.props.getOutRelationActionCreator(
+          this.props.graph.graphCanvas.edges[ele].from
+        );
       }
     }
   };
 
   setDisplayFormat = () => {
     let canvasNode = this.props.graph.graphCanvas.nodes.slice();
-      let canvasEdge = this.props.graph.grapCanvas.edges.slice();
-      let backupGraph = this.props.graph.graphCanvas.nodes.slice();
-      let backupNode;
-      for (let ele in backupGraph.nodes) {
-        if (backupGraph.nodes[ele].id === this.props.data.nodeID) {
-          backupNode = backupGraph.nodes[ele];
-          break;
-        }
+    let canvasEdge = this.props.graph.grapCanvas.edges.slice();
+    let backupGraph = this.props.graph.graphCanvas.nodes.slice();
+    let backupNode;
+    for (let ele in backupGraph.nodes) {
+      if (backupGraph.nodes[ele].id === this.props.data.nodeID) {
+        backupNode = backupGraph.nodes[ele];
+        break;
       }
-      let chooseNode;
-      for (let ele in canvasNode) {
-        if (this.state.nodeID === canvasNode[ele].id) {
-          chooseNode = canvasNode[ele];
+    }
+    let chooseNode;
+    for (let ele in canvasNode) {
+      if (this.state.nodeID === canvasNode[ele].id) {
+        chooseNode = canvasNode[ele];
 
-          const update = { ...chooseNode, label: backupNode.id };
-          canvasNode[ele] = update;
-        }
+        const update = { ...chooseNode, label: backupNode.id };
+        canvasNode[ele] = update;
       }
-    this.setState( {
-      
-      
-        graph: {
-          nodes: canvasNode,
-          edges: canvasEdge
-        }
-      
+    }
+    this.setState({
+      graph: {
+        nodes: canvasNode,
+        edges: canvasEdge
+      }
     });
   };
 
@@ -250,15 +250,14 @@ class Canvas extends Component {
   };
 
   handleDeleteNode = () => {
-   
-    this.props.deleteNodeInDatabaseActionCreator(this.props.data.nodeID)    
-    this.props.removeNodeActionCreator(this.props.data.nodeID)
+    this.props.deleteNodeInDatabaseActionCreator(this.props.data.nodeID);
+    this.props.removeNodeActionCreator(this.props.data.nodeID);
     this.toggleDeletenodeModal();
   };
 
   handleDeleteRelation = () => {
-    this.props.deleteEdgeFromDatabaseActionCreator(this.props.data.edgeID)
-    this.props.removeEdgeCanvasActionCreator(this.props.data.edgeID)
+    this.props.deleteEdgeFromDatabaseActionCreator(this.props.data.edgeID);
+    this.props.removeEdgeCanvasActionCreator(this.props.data.edgeID);
     this.toggleDeleteRelationModal();
   };
 
@@ -275,7 +274,7 @@ class Canvas extends Component {
   //   this.setState({ graph: { nodes: BackupNode, edges: BackupEdges } });
   //   this.toggleRelationMenu();
   // };
-  
+
   render() {
     const { state, scale, data } = this.props;
     let commandBox;
@@ -404,31 +403,30 @@ class Canvas extends Component {
             <button
               id="deleteNode-button"
               title="delete node from Database"
-                  onClick={this.toggleDeletenodeModal}
+              onClick={this.toggleDeletenodeModal}
             >
               Delete
             </button>
             <Modal
-                       isOpen={this.state.isDeleteNodeActivate}
-                       contentLabel="DeleteNodeModal"
-                       onRequestClose={this.toggleDeletenodeModal}
-                       style={customCreateEdgeModal}
-                     >
-                       <div id="top-deletenode-div"> DeleteNode </div>
-                       <div id="middle-deletenode-div">
-                         Deleting node {this.state.nodeID} will permanantly be removed
-                         from your Database
-                       </div>
-                       <div id="bottom-deletenode-div">
-                         <button onClick={this.toggleDeletenodeModal}>
-                           No,keep Node
-                         </button>
-                         <Button color="danger" onClick={this.handleDeleteNode}>
-                          
-                           Yes,Delete Node!
-                         </Button>
-                       </div>
-                     </Modal>
+              isOpen={this.state.isDeleteNodeActivate}
+              contentLabel="DeleteNodeModal"
+              onRequestClose={this.toggleDeletenodeModal}
+              style={customCreateEdgeModal}
+            >
+              <div id="top-deletenode-div"> DeleteNode </div>
+              <div id="middle-deletenode-div">
+                Deleting node {this.state.nodeID} will permanantly be removed
+                from your Database
+              </div>
+              <div id="bottom-deletenode-div">
+                <button onClick={this.toggleDeletenodeModal}>
+                  No,keep Node
+                </button>
+                <Button color="danger" onClick={this.handleDeleteNode}>
+                  Yes,Delete Node!
+                </Button>
+              </div>
+            </Modal>
           </div>
         </div>
       );
@@ -445,7 +443,6 @@ class Canvas extends Component {
           <button
           // onClick={this.toggleEditRelationModal}
           >
-            
             Edit Relationship
           </button>
           {/* <Modal isOpen={this.state.isEditRelationActive} contentLabel = "EditRelationship Modal" 
@@ -473,33 +470,29 @@ class Canvas extends Component {
         
                        
                      </Modal> */}
-          <button
-          onClick={this.toggleDeleteRelationModal}
-          >
+          <button onClick={this.toggleDeleteRelationModal}>
             Delete Relationship
           </button>
           <Modal
-                    isOpen={this.state.isDeleteRelationActivate}
-                    contentLabel="DeleteRelationModal"
-                    onRequestClose={this.toggleDeleteRelationModal}
-                    style={customCreateEdgeModal}
-                  >
-                    <div id="top-deletenode-div"> Delete Relation </div>
-                    <div id="middle-deletenode-div">
-                     
-                      Deleting Relation {this.state.relationID} will permanantly be
-                      removed from your Database
-                    </div>
-                    <div id="bottom-deletenode-div">
-                      <button onClick={this.toggleDeleteRelationModal}>
-                       
-                        No,keep Relationship
-                      </button>
-                      <Button color="danger" onClick={this.handleDeleteRelation}>
-                        Yes,Delete Relationship!
-                      </Button>
-                    </div>
-                  </Modal>
+            isOpen={this.state.isDeleteRelationActivate}
+            contentLabel="DeleteRelationModal"
+            onRequestClose={this.toggleDeleteRelationModal}
+            style={customCreateEdgeModal}
+          >
+            <div id="top-deletenode-div"> Delete Relation </div>
+            <div id="middle-deletenode-div">
+              Deleting Relation {this.state.relationID} will permanantly be
+              removed from your Database
+            </div>
+            <div id="bottom-deletenode-div">
+              <button onClick={this.toggleDeleteRelationModal}>
+                No,keep Relationship
+              </button>
+              <Button color="danger" onClick={this.handleDeleteRelation}>
+                Yes,Delete Relationship!
+              </Button>
+            </div>
+          </Modal>
         </div>
       );
     } else if (scale.edgeMenu === false) {

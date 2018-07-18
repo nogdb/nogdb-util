@@ -1,13 +1,8 @@
-import React, { Component } from 'react';
-
+import React, { Component } from "react";
 
 class NogDBTitle extends Component {
-    render () {
-       
-
-        return (
-            <div className='App-intro'>  NogDB</div>
-        )
-    }
+  render() {
+    return <div className="App-intro"> NogDB</div>;
+  }
 }
-export default NogDBTitle
+export default NogDBTitle;

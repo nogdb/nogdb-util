@@ -1,11 +1,7 @@
 const graphSetting = {
   graphCanvas: {
-    nodes: [
-    
-    ],
-    edges: [
-      
-    ]
+    nodes: [],
+    edges: []
   },
   options: {
     groups: {
@@ -49,16 +45,13 @@ const graphSetting = {
     }
   },
   respondFromConsole: [],
-  ID:[],
-  name:[]
-    
-
+  ID: [],
+  name: []
 };
 
 const graphCanvasReducer = (state = graphSetting, action) => {
   let nodeGroup;
   let externalOption = state.options.groups;
-  let nodeForSizeAndColor = state.graphCanvas.nodes.slice();
   let backupNode = state.graphCanvas.nodes.slice();
   let backupEdge = state.graphCanvas.edges.slice();
   let updateColor, updateGroup, updateSize;
@@ -66,7 +59,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     case "ADD_NODE_ACTION":
       //const newGraphNodeCanvas = state.graphCanvas.nodes.slice();
       //const newGraphEdgeCanvas = state.graphCanvas.edges.slice();
-      console.log(action.payload)
+      console.log(action.payload);
       for (let ele in action.payload) {
         if (
           JSON.stringify(backupNode).includes(
@@ -82,7 +75,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           nodes: backupNode,
           edges: backupEdge
         }
-      }
+      };
     case "CLEAR_CANVAS":
       return {
         ...state,
@@ -107,7 +100,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
 
-      case "REMOVE_EDGE":
+    case "REMOVE_EDGE":
       //let backupNode = state.graphCanvas.nodes.slice();
       //let backupEdge = state.graphCanvas.edges.slice();
       for (let ele in backupEdge) {
@@ -121,7 +114,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           nodes: backupNode,
           edges: backupEdge
         }
-      }; 
+      };
 
     case "EDIT_SIZE":
       for (let ele in backupNode) {
@@ -180,27 +173,37 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             options: { ...state.options, groups: updateGroup }
           };
         case "B":
-        updateColor = { ...externalOption.B, color: { background: action.color, border: action.color } };
+          updateColor = {
+            ...externalOption.B,
+            color: { background: action.color, border: action.color }
+          };
           updateGroup = { ...externalOption, B: updateSize };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
         case "C":
-        updateColor = { ...externalOption.C, color: { background: action.color, border: action.color }  };
+          updateColor = {
+            ...externalOption.C,
+            color: { background: action.color, border: action.color }
+          };
           updateGroup = { ...externalOption, C: updateColor };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
-          }; 
+          };
         case "D":
-        updateColor = { ...externalOption.D, color: { background: action.color, border: action.color }  };
+          updateColor = {
+            ...externalOption.D,
+            color: { background: action.color, border: action.color }
+          };
           updateGroup = { ...externalOption, D: updateColor };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
       }
+      break;
     case "UPDATE_GRAPH":
       return {
         ...state,
@@ -208,62 +211,60 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           nodes: action.payload1,
           edges: action.payload2
         }
-      };break;
+      };
 
-    case  'ADD_VERTEX_CONSOLE': //ADDNODE
-   
-    let nodeID = []
-    let nodeName =[]
-    let coppyNode = graphSetting.graphCanvas.nodes
-      for(let i = 0; i < action.payload.length;i++){
-        console.log("hello")
-        nodeID.push(action.payload[i].descriptor.rid)
-        nodeName.push(action.payload[i].record.name)
-       backupNode.push({id:JSON.stringify(nodeID[i]),label :nodeName[i]})
+    case "ADD_VERTEX_CONSOLE": {
+      //ADDNODE
+      let nodeID = [];
+      let nodeName = [];
+      for (let i = 0; i < action.payload.length; i++) {
+        console.log("hello");
+        nodeID.push(action.payload[i].descriptor.rid);
+        nodeName.push(action.payload[i].record.name);
+        backupNode.push({ id: JSON.stringify(nodeID[i]), label: nodeName[i] });
         // node[i] = {id:JSON.stringify(nodeID[i]),label :nodeName[i]}
-        
       }
-   
       return {
         ...state,
-        graphCanvas:{
+        graphCanvas: {
           edges: backupEdge,
           //  nodes:graphSetting.graphCanvas.nodes,
-           nodes:backupNode
-          
-        
+          nodes: backupNode
         }
-      }
-      break;
-      
-       case 'ADD_EDGE_CONSOLE' : //AddEDGE
-        let edgeID = []
-        let src = []
-        let dst = []
-        let edgeName = [] //label
-      for(let i = 0; i < action.payload.length;i++){
-        edgeID.push(action.payload[i].data.descriptor.rid)
+      };
+    }
+    case "ADD_EDGE_CONSOLE": {
+      //AddEDGE
+      let edgeID = [];
+      let src = [];
+      let dst = [];
+      let edgeName = []; //label
+      for (let i = 0; i < action.payload.length; i++) {
+        edgeID.push(action.payload[i].data.descriptor.rid);
         src.push(action.payload[i].from);
         dst.push(action.payload[i].to);
-        edgeName.push(action.payload[i].data.record.name)
-        backupEdge.push( {id:JSON.stringify(edgeID[i]),from:JSON.stringify(src[i]),to:JSON.stringify(dst[i]),label :JSON.stringify(edgeName[i])} )
+        edgeName.push(action.payload[i].data.record.name);
+        backupEdge.push({
+          id: JSON.stringify(edgeID[i]),
+          from: JSON.stringify(src[i]),
+          to: JSON.stringify(dst[i]),
+          label: JSON.stringify(edgeName[i])
+        });
       }
-       console.log(backupEdge)
-      return { 
+      console.log(backupEdge);
+      return {
         ...state,
-        graphCanvas:{
+        graphCanvas: {
           edges: backupEdge,
           nodes: backupNode
         }
-      }
-      break;
-
+      };
+    }
     default:
       state = {
         ...state
       };
       return state;
-      
   }
 };
 
