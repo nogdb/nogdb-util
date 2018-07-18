@@ -47,7 +47,8 @@ const graphSetting = {
   respondFromConsole: [],
   ID: [],
   name: [],
-  classes: []
+  classes: [],
+  nodeIDDB: ""
 };
 
 const graphCanvasReducer = (state = graphSetting, action) => {
@@ -274,6 +275,14 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
     }
+    case "SEND_NODE_ID_TO_CANVAS":{
+      return{
+        ...state,
+        nodeIDDB:action.payload
+      }
+    }
+
+
     default:
       state = {
         ...state

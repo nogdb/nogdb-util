@@ -6,7 +6,8 @@ import {
   getAllClassFromDatabase,
   addVertexConsole,
   addEdgeConsole,
-  sendAllNodeClassToGraphCanvasReducer
+  sendAllNodeClassToGraphCanvasReducer,
+  sendNodeIDToCanvas
 } from "../actions/databaseAction";
 
 const SQL_RESULT_TYPE = {
@@ -26,13 +27,13 @@ function* rootSaga() {
     takeEvery("GET_ALL_CLASS_FROM_DATABASE", checkClassEdgeNode),
     takeEvery("GET_EDGE_SRC_DST", getSrcDst),
     takeEvery("GET_ALL_CLASS_FOR_ADDNODE_BUTTON", getAllClassForAddNodeButton),
-    takeEvery("ADD_NODE_TO_DB", addNodeToDB)
+    takeEvery("ADD_NODE_TO_DB", addNodeToDB),
     // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
     // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
     // takeEvery('GET_EDGES_FROM_DB', getEdgesFromDB),
     // takeEvery('UPDATE_NODE_TO_DB', updateNodeToDB),
     // takeEvery('UPDATE_EDGE_TO_DB', updateEdgeToDB),
-    // takeEvery('DELETE_NODE_TO_DB', deleteNodeFromDB),
+    takeEvery("DELETE_NODE_TO_DB", deleteNodeFromDB)
     //  takeEvery('DELETE_EDGE_TO_DB', deleteEdgeFromDB)
   ]);
 }
@@ -49,8 +50,9 @@ function* addNodeToDB(newNode) {
         "time": newNode.payload[0].time,
       }
     });
-
+    yield put(sendNodeIDToCanvas(response.data.rid));
     console.log(response);
+   
   } catch (error) {
     //    yield put(addNodeToDBError(error));
     console.log(error);
@@ -73,6 +75,7 @@ function* addConsoletoDB(sqlStr) {
         "http://localhost:3000/Db/getSchema",
         {}
       );
+      console.log(resp);
       let hash = {};
       for (let ele in classdescriptor.data) {
         hash[classdescriptor.data[ele].id] = classdescriptor.data[ele].type;
@@ -152,9 +155,14 @@ function* getSrcDst() {
 
 function* deleteNodeFromDB(nodeID) {
   console.log(">deleteNodefromDB");
+  const vertexID = JSON.parse(nodeID.payload);
+  console.log(typeof vertexID);
+  console.log(vertexID);
   try {
     yield call(post, "http://localhost:3000/Vertex/destroy", {
-      RecordDescriptor: nodeID
+      recordDescriptor: {
+        rid: vertexID
+      }
     });
 
     // yield put(addNode(newNode));
@@ -167,7 +175,7 @@ function* deleteEdgeFromDB(edgeID) {
   console.log(">deleteEdgefromDB");
   try {
     yield call(post, "http://localhost:3000/Edge/destroy", {
-      RecordDescriptor: edgeID
+      recordDescriptor: edgeID
     });
 
     // yield put(addNode(newNode));

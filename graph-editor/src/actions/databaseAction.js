@@ -33,6 +33,15 @@ const sendAllNodeClassToGraphCanvasReducer = allClass => ({
   payload: allClass
 });
 
+const deleteNodeFromDB = NodeID => ({
+  type: "DELETE_NODE_TO_DB",
+  payload: NodeID
+});
+const sendNodeIDToCanvas = nodeID =>({
+  type : "SEND_NODE_ID_TO_CANVAS",
+  payload: nodeID
+})
+
 export {
   executeConsole,
   addVertexConsole,
@@ -41,5 +50,7 @@ export {
   addEdgeConsole,
   getSrcDstEdge,
   sendAllNodeClassToGraphCanvasReducer,
-  getAllNodeClassForAddNodeButton
+  getAllNodeClassForAddNodeButton,
+  deleteNodeFromDB,
+  sendNodeIDToCanvas
 };

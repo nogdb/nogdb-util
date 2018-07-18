@@ -6,7 +6,6 @@ import {
   getNodeClass,
   getNodename,
   getEdgeID,
-  dedeteNodeInDatabase,
   deleteEdgeFromDatabase
 } from "../actions/dataAction.js";
 import {
@@ -20,6 +19,7 @@ import {
   showEdgeMenu,
   hideEdgeMenu
 } from "../actions/nodeEdgesMenu";
+import { deleteNodeFromDB } from "../actions/databaseAction";
 import { removeNode, removeEdgeCanvas } from "../actions/menuAction";
 import { Modal, Button } from "reactstrap";
 
@@ -69,14 +69,15 @@ const mapDispatchToProps = dispatch => {
     removeNodeActionCreator: nodeID => {
       dispatch(removeNode(nodeID));
     },
-    deleteNodeInDatabaseActionCreator: nodeID => {
-      dispatch(dedeteNodeInDatabase(nodeID));
-    },
     deleteEdgeFromDatabaseActionCreator: edgeID => {
       dispatch(deleteEdgeFromDatabase(edgeID));
     },
     removeEdgeCanvasActionCreator: edgeID => {
       dispatch(removeEdgeCanvas(edgeID));
+    },
+
+    deleteNodeFromDB: nodeID => {
+      dispatch(deleteNodeFromDB(nodeID));
     }
   };
 };
@@ -250,7 +251,7 @@ class Canvas extends Component {
   };
 
   handleDeleteNode = () => {
-    this.props.deleteNodeInDatabaseActionCreator(this.props.data.nodeID);
+    this.props.deleteNodeFromDB(this.props.data.nodeID);
     this.props.removeNodeActionCreator(this.props.data.nodeID);
     this.toggleDeletenodeModal();
   };

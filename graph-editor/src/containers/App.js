@@ -184,7 +184,7 @@ class App extends Component {
   handleAddNodeButton() {
     let newNode = [
       {
-        id: (this.props.graph.graphCanvas.nodes.length + 1).toString(),
+        id: "c",
         label: this.state.textValue,
         group: this.state.group,
         date: document.getElementById("myTime").value,
