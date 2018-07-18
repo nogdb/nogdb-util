@@ -67,20 +67,13 @@ function* addConsoletoDB(sqlStr) {
                 {
 
                 });
-
-            // console.log(classdescriptor.data)
                 let hash = {}
-                // var ids = [{}]
                 for (let ele in classdescriptor.data){
-                    // ids.push({id : classdescriptor.data[ele].id, type : classdescriptor.data[ele].type })
-                    hash[classdescriptor.data[ele].id] =  classdescriptor.data[ele].type
-                
+                    hash[classdescriptor.data[ele].id] =  classdescriptor.data[ele].type          
                 }
-
-               
-              
                              //  yield put(addRespondFromConsole(resp.data.data));
-   
+               
+                            
              let Nodes=[];
              let Edges=[];                                   
             for (let ele in resp.data.data){
@@ -88,17 +81,24 @@ function* addConsoletoDB(sqlStr) {
                      Nodes.push(resp.data.data[ele])
                      console.log("node")
                 }else if  (hash[resp.data.data[ele].descriptor.rid[0]] === 'e'){
-                    Edges.push(resp.data.data[ele])
-                    console.log("edges")
+
+                    const recordDescriptor = yield call(post, 'http://localhost:3000/Edge/getSrcDst',
+                    {
+                     "recordDescriptor": { "rid" : resp.data.data[ele].descriptor.rid}
+                    });
+                    // console.log(recordDescriptor);
+                    // Edges.push(resp.data.data[ele])
+                    Edges.push({data:resp.data.data[ele] ,from:recordDescriptor.data[0].descriptor.rid ,to:recordDescriptor.data[1].descriptor.rid })
+
+
+                    console.log(Edges)
                 }
             }
             
-            //  console.log(classdescriptor.data)
-            //  console.log(Edges)
+            
             yield put(addVertexConsole(Nodes))
-            yield put(addEdgeConsole(Edges))
-        //     Actioncreator >>> Node
-        //     Actioncreator >>> Edge
+            // yield put(addEdgeConsole(Edges))
+       
 
             
 
@@ -131,12 +131,12 @@ function* addConsoletoDB(sqlStr) {
    
 
 function* getSrcDst(edgeID){
-    console.log('>deleteNodefromDB')
+    console.log('>getsrcdstEdge')
+   
     try {
         const recordDescriptor = yield call(post, 'http://localhost:3000/Edge/getSrcDst',
         {
-            "RecordDescriptor": 11
-
+            "recordDescriptor": { "rid" : [11,1]}
         });
        
         console.log(recordDescriptor)

@@ -237,25 +237,24 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       }
       break;
       
-       case 'ADD_EDGE_CONSOLE' : //AddEDGE
-        let id = []
-        let name = []
-        let edges = []
-        let src = []
-        let dsc = []
+      //  case 'ADD_EDGE_CONSOLE' : //AddEDGE
+      //   let edgeID = []
+      //   let src = []
+      //   let dst = []
+      //   let edgeName = [] //label
       // for(let i = 0; i < action.payload.length;i++){
-      //   id.push(action.payload[i].descriptor.rid)
-      //   name.push(action.payload[i].record.name)
-      //   node[i] = {id:JSON.stringify(id[i]),label :name[i]}
+      //   edgeID.push(action.payload[i].descriptor.rid)
+      //   src.push();
+      //   dst.push();
+      //   edgeName.push(action.payload[i].record.name)
+      //   backupEdge[i] = {id:JSON.stringify(id[i]),label :name[i]}
       // }
       //  console.log(action.payload)
-      // return {
+      // return { 
       //   ...state,
       //   graphCanvas:{
       //     edges: [],
       //     nodes:[],
-          
-        
       //   }
       // }
       // break;
