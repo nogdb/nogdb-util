@@ -211,27 +211,54 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };break;
 
     case  'ADD_VERTEX_CONSOLE': //ADDNODE
-    let id = []
-    let name = []
-    let node = []
+   
+    let nodeID = []
+    let nodeName =[]
+    let coppyNode = graphSetting.graphCanvas.nodes
       for(let i = 0; i < action.payload.length;i++){
-        id.push(action.payload[i].descriptor.rid)
-        name.push(action.payload[i].record.name)
-        node[i] = {id:JSON.stringify(id[i]),label :name[i]}
+        console.log("hello")
+        nodeID.push(action.payload[i].descriptor.rid)
+        nodeName.push(action.payload[i].record.name)
+       backupNode.push({id:JSON.stringify(nodeID[i]),label :nodeName[i]})
+        // node[i] = {id:JSON.stringify(nodeID[i]),label :nodeName[i]}
+        
       }
-       console.log(node)
+      console.log(backupNode)
+      // console.log(node)
       return {
         ...state,
         graphCanvas:{
-          edges: [],
-          nodes:node,
+          edges: backupEdge,
+          //  nodes:graphSetting.graphCanvas.nodes,
+           nodes:backupNode
           
         
         }
       }
       break;
       
-      // case 'ADDEDGE'
+       case 'ADD_EDGE_CONSOLE' : //AddEDGE
+        let id = []
+        let name = []
+        let edges = []
+        let src = []
+        let dsc = []
+      // for(let i = 0; i < action.payload.length;i++){
+      //   id.push(action.payload[i].descriptor.rid)
+      //   name.push(action.payload[i].record.name)
+      //   node[i] = {id:JSON.stringify(id[i]),label :name[i]}
+      // }
+      //  console.log(action.payload)
+      // return {
+      //   ...state,
+      //   graphCanvas:{
+      //     edges: [],
+      //     nodes:[],
+          
+        
+      //   }
+      // }
+      // break;
 
     default:
       state = {

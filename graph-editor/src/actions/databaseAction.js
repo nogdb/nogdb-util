@@ -21,7 +21,10 @@ const sendAllClassFromDatabaseToState=(allClass) => ({
     type: 'SEND_ALL_CLASS_FROM_DATABASE_TO_STATE',
     payload : allClass
 })
-
+const getSrcDstEdge = (edgeID) => ({
+    type: 'GET_EDGE_SRC_DST',
+    payload: edgeID
+})
 
 
 
@@ -31,6 +34,7 @@ const sendAllClassFromDatabaseToState=(allClass) => ({
       addVertexConsole,
       getAllClassFromDatabase,
       sendAllClassFromDatabaseToState,
-      addEdgeConsole
+      addEdgeConsole,
+      getSrcDstEdge
      
   }

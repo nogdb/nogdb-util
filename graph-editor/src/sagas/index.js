@@ -17,7 +17,8 @@ function* rootSaga() {
         takeEvery('ADD_NODE_DB',addNodetoDB),
         takeEvery('DELETE_NODE_FROM_DATABASE',deleteNodeFromDB),
         takeEvery('DELETE_EDGE_FROM_DATABASE',deleteEdgeFromDB),
-        takeEvery('GET_ALL_CLASS_FROM_DATABASE',checkClassEdgeNode)
+        takeEvery('GET_ALL_CLASS_FROM_DATABASE',checkClassEdgeNode),
+        takeEvery('GET_EDGE_SRC_DST',getSrcDst)
         //  takeEvery('ADD_NODE_TO_DB', addNodeToDB),
         // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
         // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
@@ -67,7 +68,7 @@ function* addConsoletoDB(sqlStr) {
 
                 });
 
-            console.log(classdescriptor.data)
+            // console.log(classdescriptor.data)
                 let hash = {}
                 // var ids = [{}]
                 for (let ele in classdescriptor.data){
@@ -92,8 +93,8 @@ function* addConsoletoDB(sqlStr) {
                 }
             }
             
-            console.log(Nodes)
-             console.log(Edges)
+            //  console.log(classdescriptor.data)
+            //  console.log(Edges)
             yield put(addVertexConsole(Nodes))
             yield put(addEdgeConsole(Edges))
         //     Actioncreator >>> Node
@@ -125,6 +126,27 @@ function* addConsoletoDB(sqlStr) {
         console.log(error)
     }
 }
+
+
+   
+
+function* getSrcDst(edgeID){
+    console.log('>deleteNodefromDB')
+    try {
+        const recordDescriptor = yield call(post, 'http://localhost:3000/Edge/getSrcDst',
+        {
+            "RecordDescriptor": 11
+
+        });
+       
+        console.log(recordDescriptor)
+        // yield put(addNode(newNode));
+    } catch(error) { 
+        console.log(error)       
+        //  yield put(addNodeToDBError(error));
+    }
+}
+
 
 
 function* deleteNodeFromDB(nodeID) {

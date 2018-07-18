@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {executeConsole,getAllClassFromDatabase} from '../actions/databaseAction.js';
+import {executeConsole,getAllClassFromDatabase,getSrcDstEdge} from '../actions/databaseAction.js';
 
 const mapStateToProps = state => {
     return {
@@ -19,6 +19,9 @@ const mapStateToProps = state => {
       },
       getAllClassFromDatabaseActionCreator: () => {
         dispatch (getAllClassFromDatabase());
+      },
+      getSrcDstEdgeActionCreator: (edgeID) => {
+        dispatch (getSrcDstEdge(edgeID))
       }
       
     }
@@ -49,7 +52,7 @@ class Console extends Component {
             onChange={this.handleTextArea}> </textarea>
             {/* {console.log(this.state.textAreaValue)} */}
             <button onClick={() => this.props.executeConsoleActionCreater(this.state.textAreaValue)}>Compile</button>
-            {/* <button onClick={() => this.props.getAllClassFromDatabaseActionCreator()}>Get AllCLASS</button> */}
+            <button onClick={() => this.props.getSrcDstEdgeActionCreator()}>Get EdgeSrcDst</button>
             </div>
             
         )
