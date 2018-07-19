@@ -40,19 +40,17 @@ function* rootSaga() {
 
 function* addNodeToDB(newNode) {
   console.log(">addNodetoDB");
-  console.log(newNode.payload);
+  /// console.log(newNode.payload);
   try {
     const response = yield call(post, "http://localhost:3000/Vertex/create", {
-      "className": newNode.payload[0].group,
-      "record": {
-        "name": newNode.payload[0].label,
-        "date" : newNode.payload[0].date,
-        "time": newNode.payload[0].time,
+      className: newNode.payload[0].group,
+      record: {
+        name: newNode.payload[0].label,
+        date: newNode.payload[0].date,
+        time: newNode.payload[0].time
       }
     });
     yield put(sendNodeIDToCanvas(response.data.rid));
-    console.log(response);
-   
   } catch (error) {
     //    yield put(addNodeToDBError(error));
     console.log(error);

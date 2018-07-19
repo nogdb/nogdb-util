@@ -59,6 +59,11 @@ const graphCanvasReducer = (state = graphSetting, action) => {
   let updateColor, updateGroup, updateSize;
   switch (action.type) {
     case "ADD_NODE_ACTION":
+      console.log(action.payload);
+      console.log(graphSetting.nodeIDDB);
+      action.payload[0].id = graphSetting.nodeIDDB;
+      console.log(action.payload);
+
       //const newGraphNodeCanvas = state.graphCanvas.nodes.slice();
       //const newGraphEdgeCanvas = state.graphCanvas.edges.slice();
 
@@ -259,14 +264,21 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         src.push(action.payload[i].from);
         dst.push(action.payload[i].to);
         edgeName.push(action.payload[i].data.record.name);
-        backupEdge.push({
-          id: JSON.stringify(edgeID[i]),
-          from: JSON.stringify(src[i]),
-          to: JSON.stringify(dst[i]),
-          label: JSON.stringify(edgeName[i])
-        });
       }
-      console.log(backupEdge);
+      const backupID = edgeID.map(item => JSON.stringify(item));
+      for (let i in backupID) {
+        //console.log(a[i])
+        //console.log(backupEdge.map(item=>item.id))
+        if (backupEdge.map(item => item.id).includes(backupID[i]) === false) {
+          backupEdge.push({
+            id: JSON.stringify(edgeID[i]),
+            from: JSON.stringify(src[i]),
+            to: JSON.stringify(dst[i]),
+            label: edgeName[i]
+          });
+        }
+      }
+      //console.log(backupEdge)
       return {
         ...state,
         graphCanvas: {
@@ -275,13 +287,13 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
     }
-    case "SEND_NODE_ID_TO_CANVAS":{
-      return{
-        ...state,
-        nodeIDDB:action.payload
-      }
-    }
 
+    case "SEND_NODE_ID_TO_CANVAS": {
+      return {
+        ...state,
+        nodeIDDB: action.payload
+      };
+    }
 
     default:
       state = {

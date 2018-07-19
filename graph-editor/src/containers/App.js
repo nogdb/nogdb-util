@@ -184,7 +184,6 @@ class App extends Component {
   handleAddNodeButton() {
     let newNode = [
       {
-        id: "c",
         label: this.state.textValue,
         group: this.state.group,
         date: document.getElementById("myTime").value,
