@@ -182,24 +182,30 @@ class App extends Component {
   }
 
   handleAddNodeButton() {
-    let newNode = [
+    let newNodeDB = [
       {
-        id: "c",
         label: this.state.textValue,
         group: this.state.group,
         date: document.getElementById("myTime").value,
         time: document.getElementById("myDate").value
       }
     ];
-    this.props.addNodeToDatabaseActionCreator(newNode);
-    this.props.addNodeToCanvasActionCreator(newNode);
+    this.props.addNodeToDatabaseActionCreator(newNodeDB);
+    console.log(this.props.graph.nodeID_DB)
+    // let newNodeCanvas = [
+    //   {
+    //     // id: graph.graphSetting.nodeID_DB,
+    //     label: this.state.textValue,
+    //     group: this.state.group,
+    //     date: document.getElementById("myTime").value,
+    //     time: document.getElementById("myDate").value
+    //   }
+    // ];
+    // this.props.addNodeToCanvasActionCreator(newNodeCanvas);
     this.setState({
       textValue: ""
     });
-    // this.AddNodeToDatabase(newNode);
-    // this.AddNodeToCanvas(newNode, this.state.graph.edges);
-    //  console.log(document.getElementById("myTime").value)
-    //  console.log(document.getElementById("myDate").value)
+    
     this.setModalAddNodeFalse();
   }
   setModalAddNodeTrue = () => {

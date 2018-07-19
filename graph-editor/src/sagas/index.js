@@ -9,6 +9,7 @@ import {
   sendAllNodeClassToGraphCanvasReducer,
   sendNodeIDToCanvas
 } from "../actions/databaseAction";
+import {addNodeToCanvas} from "../actions/mainButtonAction";
 
 const SQL_RESULT_TYPE = {
   RESULT_SET: "s"
@@ -48,10 +49,20 @@ function* addNodeToDB(newNode) {
         "name": newNode.payload[0].label,
         "date" : newNode.payload[0].date,
         "time": newNode.payload[0].time,
+        
       }
     });
-    yield put(sendNodeIDToCanvas(response.data.rid));
-    console.log(response);
+    let newNodeCanvas = [
+      {
+        id: JSON.stringify(response.data.rid),
+        label: JSON.stringify(newNode.payload[0].label),
+        group: JSON.stringify(newNode.payload[0].group),
+        date: JSON.stringify(newNode.payload[0].date),
+        time: JSON.stringify(newNode.payload[0].time),
+      }
+    ];
+     yield put(addNodeToCanvas(newNodeCanvas));
+    console.log(response.data.rid);
    
   } catch (error) {
     //    yield put(addNodeToDBError(error));

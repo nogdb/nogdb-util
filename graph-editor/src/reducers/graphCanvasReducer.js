@@ -48,7 +48,7 @@ const graphSetting = {
   ID: [],
   name: [],
   classes: [],
-  nodeIDDB: ""
+  nodeID_DB: "ccccc"
 };
 
 const graphCanvasReducer = (state = graphSetting, action) => {
@@ -259,12 +259,16 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         src.push(action.payload[i].from);
         dst.push(action.payload[i].to);
         edgeName.push(action.payload[i].data.record.name);
+        //////////////////////////////////////////////////////////////
+    /// check same Edge before adding to backupEdge (graphcanvas State ) Here !!!
+        ///////////////////////////////////////////////////////////////
         backupEdge.push({
           id: JSON.stringify(edgeID[i]),
           from: JSON.stringify(src[i]),
           to: JSON.stringify(dst[i]),
           label: JSON.stringify(edgeName[i])
         });
+      
       }
       console.log(backupEdge);
       return {
@@ -278,7 +282,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     case "SEND_NODE_ID_TO_CANVAS":{
       return{
         ...state,
-        nodeIDDB:action.payload
+        nodeID_DB:action.payload
       }
     }
 
