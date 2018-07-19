@@ -19,7 +19,7 @@ import {
   showEdgeMenu,
   hideEdgeMenu
 } from "../actions/nodeEdgesMenu";
-import { deleteNodeFromDB } from "../actions/databaseAction";
+import { deleteNodeFromDB,getNodeInEdge } from "../actions/databaseAction";
 import { removeNode, removeEdgeCanvas } from "../actions/menuAction";
 import { Modal, Button } from "reactstrap";
 
@@ -78,6 +78,9 @@ const mapDispatchToProps = dispatch => {
 
     deleteNodeFromDB: nodeID => {
       dispatch(deleteNodeFromDB(nodeID));
+    },
+    getNodeInEdgeActionCreator: nodeID=>{
+      dispatch(getNodeInEdge(nodeID));
     }
   };
 };
@@ -147,6 +150,7 @@ class Canvas extends Component {
     this.getOutRelationNode = this.getOutRelationNode.bind(this);
     this.setDisplayFormat = this.setDisplayFormat.bind(this);
     this.handleDeleteRelation = this.handleDeleteRelation.bind(this);
+    this.handleIncomingButton = this.handleIncomingButton.bind(this);
   }
   handleNodeID(nodeIDs) {
     this.props.getNodeIDActionCreator(nodeIDs[0]);
@@ -262,6 +266,10 @@ class Canvas extends Component {
     this.toggleDeleteRelationModal();
   };
 
+  handleIncomingButton = () => {
+    this.props.getNodeInEdgeActionCreator(this.props.data.nodeID)
+  }
+
   // handleRemoveRelation = () => {
   //   let BackupNode = this.state.graph.edges.slice();
   //   let BackupEdges = this.state.graph.edges.slice();
@@ -291,14 +299,15 @@ class Canvas extends Component {
             <button
               id="Incoming-button"
               title="Incoming Relationship"
-              //    onClick={this.handleIncoming}
+               onClick={this.handleIncomingButton}
+              //  onClick={this.props.getNodeInEdgeActionCreator(data.nodeID)}
             >
               Incoming
             </button>
             <button
               id="Outcoming-button"
               title="Outcoming Relationship"
-              //    onClick={this.handleOutcoming}
+              onClick={this.handleOutcoming}
             >
               Outcoming
             </button>

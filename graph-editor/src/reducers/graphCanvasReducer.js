@@ -226,6 +226,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         backupNode.push({ id: JSON.stringify(nodeID[i]), label: nodeName[i] });
         // node[i] = {id:JSON.stringify(nodeID[i]),label :nodeName[i]}
       }
+      console.log(backupNode)
       return {
         ...state,
         graphCanvas: {
@@ -234,11 +235,10 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           nodes: backupNode
         }
       };
+    
       break;
     }
     case "GET_ALL_CLASS": //get all class from getschema index.js
-      console.log("graphreduce");
-      console.log(action.payload);
       let className = [];
       for (let i = 0; i < action.payload.length; i++) {
         className.push(action.payload[i].name);
@@ -260,7 +260,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         dst.push(action.payload[i].to);
         edgeName.push(action.payload[i].data.record.name);
         //////////////////////////////////////////////////////////////
-    /// check same Edge before adding to backupEdge (graphcanvas State ) Here !!!
+    /// check same Edge before adding to backupEdge (graphcanvas State ) Here
         ///////////////////////////////////////////////////////////////
         backupEdge.push({
           id: JSON.stringify(edgeID[i]),
@@ -279,10 +279,31 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
     }
+
     case "SEND_NODE_ID_TO_CANVAS":{
       return{
         ...state,
         nodeID_DB:action.payload
+      }
+    }
+    case 'ADD_INCOMING_NODE_EDGE':{
+      
+      for(let ele in action.payloadNode){
+        backupNode.push(action.payloadNode[ele])
+      }
+      for(let ele in action.payloadEdge){
+        backupEdge.push(action.payloadEdge[ele])
+      }
+       console.log(backupNode)
+      // console.log(action.payloadNode,action.payloadEdge)
+      // backupNode.push(action.payloadnode)
+      // backupEdge.push(action.payloadEdge)
+      return{
+        ...state,
+        graphCanvas : {
+          nodes:backupNode,
+          edges:backupEdge
+        }
       }
     }
 

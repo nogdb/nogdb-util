@@ -7,7 +7,8 @@ import {
   addVertexConsole,
   addEdgeConsole,
   sendAllNodeClassToGraphCanvasReducer,
-  sendNodeIDToCanvas
+  sendNodeIDToCanvas,
+  addIncomingNodeEdge
 } from "../actions/databaseAction";
 import {addNodeToCanvas} from "../actions/mainButtonAction";
 
@@ -29,6 +30,7 @@ function* rootSaga() {
     takeEvery("GET_EDGE_SRC_DST", getSrcDst),
     takeEvery("GET_ALL_CLASS_FOR_ADDNODE_BUTTON", getAllClassForAddNodeButton),
     takeEvery("ADD_NODE_TO_DB", addNodeToDB),
+    takeEvery('GET_IN_EDGE_FOR_NODE',getInEdgeForNode),
     // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
     // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
     // takeEvery('GET_EDGES_FROM_DB', getEdgesFromDB),
@@ -41,7 +43,6 @@ function* rootSaga() {
 
 function* addNodeToDB(newNode) {
   console.log(">addNodetoDB");
-  console.log(newNode.payload);
   try {
     const response = yield call(post, "http://localhost:3000/Vertex/create", {
       "className": newNode.payload[0].group,
@@ -86,7 +87,7 @@ function* addConsoletoDB(sqlStr) {
         "http://localhost:3000/Db/getSchema",
         {}
       );
-      console.log(resp);
+     
       let hash = {};
       for (let ele in classdescriptor.data) {
         hash[classdescriptor.data[ele].id] = classdescriptor.data[ele].type;
@@ -233,18 +234,66 @@ function* getAllClassForAddNodeButton() {
   }
 }
 
-// function* addEdgeToDB(newEdge) {
+function* getInEdgeForNode (selectNode) {
+  console.log(">get InEdge for Node");
+  let nodes = [];
+  let edges = [];
+  let nodeID = JSON.parse(selectNode.payload)
+  try {
 
-// }
+    //// Input NodeID To get incomming Edge(ID)
+    const incommingEdge = yield call(
+      post,
+      "http://localhost:3000/Vertex/getInEdge",
+      {
+        "recordDescriptor" : {
+          "rid": nodeID
+        }
+      }
+    );
+  
+      for(let ele in incommingEdge.data){
+        // console.log(incommingEdge.data[ele].descriptor.rid)
+      
 
-// function* getNodesFromDB() {
-//     try{
-//     // const response = yield call (get,'http://google/co.th'/nodes)
-//     } catch(error) {
+        //// Input EdgeID to get Src Node
+      const nodeSrcResult = yield call(
+        post,
+        "http://localhost:3000/Edge/getSrc",
+        {
+          "recordDescriptor" : {
+            "rid": incommingEdge.data[ele].descriptor.rid
+          }
+        }
+      );
+      //  console.log(nodeSrcResult.data)
+    
+      nodes.push({
+        id : JSON.stringify(nodeSrcResult.data.descriptor.rid),
+        label : JSON.stringify(nodeSrcResult.data.record.name)
+      })
+      
+      edges.push({
+        id: JSON.stringify(incommingEdge.data[ele].descriptor.rid),
+        from:JSON.stringify(nodeSrcResult.data.descriptor.rid),
+        to:JSON.stringify(nodeID) ,
+        label:JSON.stringify(incommingEdge.data[ele].record.name)
+      })
 
-//     }
-//     yield
-// }
+      // console.log(edges)
+    }
+
+    
+    yield put(addIncomingNodeEdge(nodes,edges));
+    
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
 
 // function* getEdgesFromDB() {
 
@@ -258,19 +307,7 @@ function* getAllClassForAddNodeButton() {
 
 // }
 
-// function* deleteNodeFromDB() {
-//     try {
-//           yield call(post, 'http://google.co.th/Vertex/destroy',
-//            {
-//                "recordDescriptor": nodeid,
-//                }
-//            );
-//            yield put(addNode(newNode));
-//        } catch(error) {
-//             yield put(addNodeToDBError(error));
-//        }
 
-// }
 
 // function* deleteEdgeFromDB() {
 

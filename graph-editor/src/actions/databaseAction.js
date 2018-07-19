@@ -41,6 +41,15 @@ const sendNodeIDToCanvas = nodeID =>({
   type : "SEND_NODE_ID_TO_CANVAS",
   payload: nodeID
 })
+const getNodeInEdge = (selectNodeID) => ({
+  type : "GET_IN_EDGE_FOR_NODE",
+  payload : selectNodeID
+})
+const addIncomingNodeEdge = (nodes,edges) => ({
+  type : 'ADD_INCOMING_NODE_EDGE',
+  payloadNode:nodes,
+  payloadEdge:edges
+})
 
 export {
   executeConsole,
@@ -52,5 +61,7 @@ export {
   sendAllNodeClassToGraphCanvasReducer,
   getAllNodeClassForAddNodeButton,
   deleteNodeFromDB,
-  sendNodeIDToCanvas
+  sendNodeIDToCanvas,
+  getNodeInEdge,
+  addIncomingNodeEdge
 };

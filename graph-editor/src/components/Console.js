@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {
   executeConsole,
   getAllClassFromDatabase,
-  getSrcDstEdge
+  getSrcDstEdge,
 } from "../actions/databaseAction.js";
 
 const mapStateToProps = state => {
@@ -18,7 +18,6 @@ const mapDispatchToProps = dispatch => {
   return {
     executeConsoleActionCreater: SQL => {
       const action = executeConsole(SQL);
-      console.log("#####", action);
       dispatch(action);
     },
     getAllClassFromDatabaseActionCreator: () => {
@@ -26,7 +25,8 @@ const mapDispatchToProps = dispatch => {
     },
     getSrcDstEdgeActionCreator: edgeID => {
       dispatch(getSrcDstEdge(edgeID));
-    }
+    },
+   
   };
 };
 
@@ -59,7 +59,7 @@ class Console extends Component {
         >
           Compile
         </button>
-        {/* <button onClick={() => this.props.getSrcDstEdgeActionCreator()}>Get EdgeSrcDst</button> */}
+        {/* <button onClick={() => this.props.getNodeInEdgeActionCreator()}>GetAllgraph</button> */}
       </div>
     );
   }
