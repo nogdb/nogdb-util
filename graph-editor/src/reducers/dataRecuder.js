@@ -1,5 +1,6 @@
 const data = {
   nodeID: null,
+  nodeID2:null,
   nodeClass: null,
   nodeName: null,
   edgeID: null,
@@ -15,9 +16,20 @@ const dataReducer = (state = data, action) => {
         ...state,
         nodeID: action.payload
       };
-      return state;
 
+      console.log(state.nodeID)
+      console.log(state.nodeID2)
+      return state;
+    case "GET_NODE_ID_2":
+
+      state={
+        ...state,
+        nodeID2: action.payload,
+      }
+      console.log(state.nodeID)
+      console.log(state.nodeID2)
     case "GET_EDGE_ID":
+    //console.log(action.payload)
       state = {
         ...state,
         edgeID: action.payload

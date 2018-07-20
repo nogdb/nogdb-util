@@ -3,6 +3,7 @@ import Graph from "react-graph-vis";
 import { connect } from "react-redux";
 import {
   getNodeID,
+  getNodeID2,
   getNodeClass,
   getNodename,
   getEdgeID,
@@ -35,6 +36,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getNodeIDActionCreator: nodeID => {
       dispatch(getNodeID(nodeID));
+    },
+    getNodeID2ActionCreator: nodeID => {
+      dispatch(getNodeID2(nodeID));
     },
     getEdgeIDActionCreator: edgeID => {
       dispatch(getEdgeID(edgeID));
@@ -139,7 +143,10 @@ class Canvas extends Component {
     super(props);
     this.state = {
       isDeleteNodeActivate: false,
-      isDeleteRelationActivate: false
+      isDeleteRelationActivate: false,
+      createEdgeMode: false,
+
+      
     };
     this.handleNodeID = this.handleNodeID.bind(this);
     this.handleGetNodeName = this.handleGetNodeName.bind(this);
@@ -147,11 +154,26 @@ class Canvas extends Component {
     this.getOutRelationNode = this.getOutRelationNode.bind(this);
     this.setDisplayFormat = this.setDisplayFormat.bind(this);
     this.handleDeleteRelation = this.handleDeleteRelation.bind(this);
+    this.handleNodeID2 = this.handleNodeID2.bind(this);
+
   }
   handleNodeID(nodeIDs) {
     this.props.getNodeIDActionCreator(nodeIDs[0]);
   }
-
+    handleNodeID2 = nodeIDs => {
+    this.props.getNodeID2ActionCreator(nodeIDs[0])
+    // this.setState(prevState => ({
+    //   nodeID: nodeIDs[0],
+    //   prevNodeID: prevState.nodeID
+    // }));
+    // console.log();
+  };
+    handleCreateRelation = () => {
+      this.setState({
+              createEdgeMode: true
+            });
+    
+  };
   handleGetNodeName = () => {
     for (let ele in this.props.graph.graphCanvas.nodes) {
       if (
@@ -357,7 +379,7 @@ class Canvas extends Component {
             <button
               id="createRelation-button"
               title="create relationship"
-              //    onClick={this.handleCreateRelation}
+              onClick={this.handleCreateRelation}
             >
               CreateRelation
             </button>
@@ -514,20 +536,22 @@ class Canvas extends Component {
           options={graphOptions}
           events={{
             selectNode: function(event) {
-              // if (this.state.createEdgeMode === false) {
-              //   this.handleNodeID(event.nodes);
-              // } else {
-              //   this.handleNodeID2(event.nodes);
-              // }
+              if (this.state.createEdgeMode === false) {
+                this.handleNodeID(event.nodes);
+              } else {
+                
+                this.handleNodeID2(event.nodes);
+              }
 
-              // if (this.state.createEdgeMode === true) {
-              //   const src = this.state.prevNodeID.toString();
-              //   const dest = this.state.nodeID.toString();
-              //   this.setSrcEdge(src);
-              //   this.setDecEdge(dest);
-              //   this.toggleCreateRelationModalTrue();
-              //   this.state.createEdgeMode = false;
-              // }
+              if (this.state.createEdgeMode === true) {
+                const src = this.props.data.nodeID
+                const dest = this.props.data.nodeID2
+                console.log(src,dest)
+                //this.setSrcEdge(src);
+                //this.setDecEdge(dest);
+                //this.toggleCreateRelationModalTrue();
+                this.state.createEdgeMode = false;
+              }
 
               this.handleNodeID(event.nodes);
               this.props.showNodeMenuActionCreator();

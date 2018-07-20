@@ -224,6 +224,7 @@ class App extends Component {
         break;
       }
     }
+    console.log(this.props.graph.selectGroup)
     this.setState({
       page: 2,
       group: selectGroup

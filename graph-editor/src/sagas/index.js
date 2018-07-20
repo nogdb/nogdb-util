@@ -64,6 +64,7 @@ function* addConsoletoDB(sqlStr) {
     const resp = yield call(post, "http://localhost:3000/SQL/execute", {
       sql: sqlStr.payload
     });
+    console.log(resp);
 
     if (resp.data.type === "n") {
       console.log("There is no result");
@@ -73,19 +74,21 @@ function* addConsoletoDB(sqlStr) {
         "http://localhost:3000/Db/getSchema",
         {}
       );
-      console.log(resp);
+      //console.log(resp);
       let hash = {};
       for (let ele in classdescriptor.data) {
         hash[classdescriptor.data[ele].id] = classdescriptor.data[ele].type;
       }
       let classNameData = [];
+      console.log(classdescriptor.data);
       for (let ele in classdescriptor.data) {
         if (classdescriptor.data[ele].type === "v") {
           classNameData.push(classdescriptor.data[ele]);
         }
       }
+      console.log(classNameData)
       yield put(sendAllNodeClassToGraphCanvasReducer(classNameData));
-      console.log(classdescriptor.data);
+      
 
       let Nodes = [];
       let Edges = [];
@@ -102,7 +105,7 @@ function* addConsoletoDB(sqlStr) {
               recordDescriptor: { rid: resp.data.data[ele].descriptor.rid }
             }
           );
-          // console.log(recordDescriptor);
+          //console.log(recordDescriptor);
           // Edges.push(resp.data.data[ele])
           Edges.push({
             data: resp.data.data[ele],
@@ -171,9 +174,13 @@ function* deleteNodeFromDB(nodeID) {
 
 function* deleteEdgeFromDB(edgeID) {
   console.log(">deleteEdgefromDB");
+
+  console.log(JSON.parse(edgeID.payload))
   try {
     yield call(post, "http://localhost:3000/Edge/destroy", {
-      recordDescriptor: edgeID
+      recordDescriptor: {
+        rid: JSON.parse(edgeID.payload)
+      }
     });
 
     // yield put(addNode(newNode));

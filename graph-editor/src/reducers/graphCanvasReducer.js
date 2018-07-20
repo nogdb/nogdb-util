@@ -48,7 +48,8 @@ const graphSetting = {
   ID: [],
   name: [],
   classes: [],
-  nodeIDDB: ""
+  nodeIDDB: "",
+  selectClass:""
 };
 
 const graphCanvasReducer = (state = graphSetting, action) => {
@@ -110,6 +111,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     case "REMOVE_EDGE":
       //let backupNode = state.graphCanvas.nodes.slice();
       //let backupEdge = state.graphCanvas.edges.slice();
+      console.log(action.payload)
       for (let ele in backupEdge) {
         if (backupEdge[ele].id === action.payload) {
           backupEdge.splice(ele, 1);
@@ -224,18 +226,35 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       //ADDNODE
       let nodeID = [];
       let nodeName = [];
+        console.log(action)
+     // console.log(action.payload[0].record)
+
       for (let i = 0; i < action.payload.length; i++) {
-        console.log("hello");
         nodeID.push(action.payload[i].descriptor.rid);
         nodeName.push(action.payload[i].record.name);
-        backupNode.push({ id: JSON.stringify(nodeID[i]), label: nodeName[i] });
+       // backupNode.push({ id: JSON.stringify(nodeID[i]), label: nodeName[i] });
         // node[i] = {id:JSON.stringify(nodeID[i]),label :nodeName[i]}
       }
+      console.log(backupNode)
+
+      const backupID = nodeID.map(item => JSON.stringify(item));
+      for (let i in backupID) {
+        //console.log(a[i])
+        console.log(JSON.stringify(backupID[i]))
+        if (backupNode.map(item => item.id).includes(backupID[i]) === false) {
+        
+          console.log("dddd")
+          backupNode.push({
+            id: JSON.stringify(nodeID[i]),
+            label: nodeName[i]
+          });
+        }
+      }
+      console.log(backupNode)
       return {
         ...state,
         graphCanvas: {
           edges: backupEdge,
-          //  nodes:graphSetting.graphCanvas.nodes,
           nodes: backupNode
         }
       };

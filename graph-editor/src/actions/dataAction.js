@@ -2,6 +2,10 @@ const getNodeID = eventNodeID => ({
   type: "GET_NODE_ID",
   payload: eventNodeID
 });
+const getNodeID2 = nodeID => ({
+  type: "GET_NODE_ID_2",  
+  payload:nodeID
+})
 const getEdgeID = edgeID => ({
   type: "GET_EDGE_ID",
   payload: edgeID
@@ -44,6 +48,7 @@ const deleteEdgeFromDatabase = edgeID => ({
 
 export {
   getNodeID,
+  getNodeID2,
   getNodeClass,
   getEdgeID,
   getNodename,
