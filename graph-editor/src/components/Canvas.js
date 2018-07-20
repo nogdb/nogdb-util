@@ -19,7 +19,7 @@ import {
   showEdgeMenu,
   hideEdgeMenu
 } from "../actions/nodeEdgesMenu";
-import { deleteNodeFromDB,getNodeInEdge } from "../actions/databaseAction";
+import { deleteNodeFromDB,getNodeInEdge,getNodeOutEdge } from "../actions/databaseAction";
 import { removeNode, removeEdgeCanvas } from "../actions/menuAction";
 import { Modal, Button } from "reactstrap";
 
@@ -81,6 +81,9 @@ const mapDispatchToProps = dispatch => {
     },
     getNodeInEdgeActionCreator: nodeID=>{
       dispatch(getNodeInEdge(nodeID));
+    },
+    getNodeOutEdgeActionCreator: (nodeID) => {
+      dispatch(getNodeOutEdge(nodeID));
     }
   };
 };
@@ -142,7 +145,8 @@ class Canvas extends Component {
     super(props);
     this.state = {
       isDeleteNodeActivate: false,
-      isDeleteRelationActivate: false
+      isDeleteRelationActivate: false,
+      isEditNodeActive:false
     };
     this.handleNodeID = this.handleNodeID.bind(this);
     this.handleGetNodeName = this.handleGetNodeName.bind(this);
@@ -151,6 +155,7 @@ class Canvas extends Component {
     this.setDisplayFormat = this.setDisplayFormat.bind(this);
     this.handleDeleteRelation = this.handleDeleteRelation.bind(this);
     this.handleIncomingButton = this.handleIncomingButton.bind(this);
+    this.handleOutgoingButton = this.handleOutgoingButton.bind(this);
   }
   handleNodeID(nodeIDs) {
     this.props.getNodeIDActionCreator(nodeIDs[0]);
@@ -248,6 +253,12 @@ class Canvas extends Component {
     });
   };
 
+  toggleEditnodeModal = () => {
+    this.setState({
+      isEditNodeActive: !this.state.isEditNodeActive
+    });
+  };
+
   toggleDeleteRelationModal = () => {
     this.setState({
       isDeleteRelationActivate: !this.state.isDeleteRelationActivate
@@ -268,6 +279,9 @@ class Canvas extends Component {
 
   handleIncomingButton = () => {
     this.props.getNodeInEdgeActionCreator(this.props.data.nodeID)
+  }
+  handleOutgoingButton = () => {
+    this.props.getNodeOutEdgeActionCreator(this.props.data.nodeID)
   }
 
   // handleRemoveRelation = () => {
@@ -300,24 +314,23 @@ class Canvas extends Component {
               id="Incoming-button"
               title="Incoming Relationship"
                onClick={this.handleIncomingButton}
-              //  onClick={this.props.getNodeInEdgeActionCreator(data.nodeID)}
             >
               Incoming
             </button>
             <button
               id="Outcoming-button"
               title="Outcoming Relationship"
-              onClick={this.handleOutcoming}
+              onClick={this.handleOutgoingButton}
             >
-              Outcoming
+              Outgoing
             </button>
             <button
               id="Edit-button"
-              //  onClick={this.toggleEditnodeModal}
+              onClick={this.toggleEditnodeModal}
             >
               Edit node{data.nodeID}
             </button>
-            {/* <Modal
+            <Modal
                        isOpen={this.state.isEditNodeActive}
                        contentLabel="Node Editor"
                        onRequestClose={this.toggleEditnodeModal}
@@ -362,7 +375,7 @@ class Canvas extends Component {
                            Save Change
                          </button>
                        </div>
-                     </Modal> */}
+                     </Modal>
             <button
               id="createRelation-button"
               title="create relationship"

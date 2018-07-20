@@ -50,6 +50,15 @@ const addIncomingNodeEdge = (nodes,edges) => ({
   payloadNode:nodes,
   payloadEdge:edges
 })
+const getNodeOutEdge = (selectNodeID) => ({
+  type : 'GET_OUT_EDGE_FOR_NODE',
+  payload:selectNodeID
+})
+const addOutgoingNodeEdge = (nodes,edges) => ({
+  type :'Add_OUTGOING_NODE_EDGE',
+  payloadNode:nodes,
+  payloadEdge:edges
+})
 
 export {
   executeConsole,
@@ -63,5 +72,7 @@ export {
   deleteNodeFromDB,
   sendNodeIDToCanvas,
   getNodeInEdge,
-  addIncomingNodeEdge
+  addIncomingNodeEdge,
+  getNodeOutEdge,
+  addOutgoingNodeEdge
 };

@@ -307,6 +307,24 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       }
     }
 
+    case 'Add_OUTGOING_NODE_EDGE':{
+      
+      for(let ele in action.payloadNode){
+        backupNode.push(action.payloadNode[ele])
+      }
+      for(let ele in action.payloadEdge){
+        backupEdge.push(action.payloadEdge[ele])
+      }
+       
+      return{
+        ...state,
+        graphCanvas : {
+          nodes:backupNode,
+          edges:backupEdge
+        }
+      }
+    }
+
 
     default:
       state = {

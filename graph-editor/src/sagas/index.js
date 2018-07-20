@@ -8,7 +8,8 @@ import {
   addEdgeConsole,
   sendAllNodeClassToGraphCanvasReducer,
   sendNodeIDToCanvas,
-  addIncomingNodeEdge
+  addIncomingNodeEdge,
+  addOutgoingNodeEdge
 } from "../actions/databaseAction";
 import {addNodeToCanvas} from "../actions/mainButtonAction";
 
@@ -31,10 +32,11 @@ function* rootSaga() {
     takeEvery("GET_ALL_CLASS_FOR_ADDNODE_BUTTON", getAllClassForAddNodeButton),
     takeEvery("ADD_NODE_TO_DB", addNodeToDB),
     takeEvery('GET_IN_EDGE_FOR_NODE',getInEdgeForNode),
+    takeEvery('GET_OUT_EDGE_FOR_NODE',getOutEdgeForNode),
+    takeEvery('UPDATE_NODE_TO_DB', updateNodeToDB),
     // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
     // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
     // takeEvery('GET_EDGES_FROM_DB', getEdgesFromDB),
-    // takeEvery('UPDATE_NODE_TO_DB', updateNodeToDB),
     // takeEvery('UPDATE_EDGE_TO_DB', updateEdgeToDB),
     takeEvery("DELETE_NODE_TO_DB", deleteNodeFromDB)
     //  takeEvery('DELETE_EDGE_TO_DB', deleteEdgeFromDB)
@@ -266,8 +268,6 @@ function* getInEdgeForNode (selectNode) {
           }
         }
       );
-      //  console.log(nodeSrcResult.data)
-    
       nodes.push({
         id : JSON.stringify(nodeSrcResult.data.descriptor.rid),
         label : JSON.stringify(nodeSrcResult.data.record.name)
@@ -279,29 +279,72 @@ function* getInEdgeForNode (selectNode) {
         to:JSON.stringify(nodeID) ,
         label:JSON.stringify(incommingEdge.data[ele].record.name)
       })
-
-      // console.log(edges)
-    }
-
-    
+    } 
     yield put(addIncomingNodeEdge(nodes,edges));
-    
-
   } catch (error) {
     console.log(error);
   }
 }
 
 
+function* getOutEdgeForNode (selectNode) {
+  console.log(">get OutEdge for Node");
+  let nodes = [];
+  let edges = [];
+  let nodeID = JSON.parse(selectNode.payload)
+  // let nodeID = selectNode.payload
+  console.log(nodeID)
+  try {
 
+    //// Input NodeID To get outgoing Edge(ID)
+    const outgoingEdge = yield call(
+      post,
+      "http://localhost:3000/Vertex/getOutEdge",
+      {
+        "recordDescriptor" : {
+          "rid": nodeID
+        }
+      }
+    );
+  
+      for(let ele in outgoingEdge.data){
+        //// Input EdgeID to get Dst Node
+      const nodeDstResult = yield call(
+        post,
+        "http://localhost:3000/Edge/getDst",
+        {
+          "recordDescriptor" : {
+            "rid": outgoingEdge.data[ele].descriptor.rid
+          }
+        }
+      );
+      nodes.push({
+        id : JSON.stringify(nodeDstResult.data.descriptor.rid),
+        label : JSON.stringify(nodeDstResult.data.record.name)
+      })
+      JSON.stringify(nodeID) ,
+      edges.push({
+        id: JSON.stringify(outgoingEdge.data[ele].descriptor.rid),
+        from:JSON.stringify(nodeID),
+        to:JSON.stringify(nodeDstResult.data.descriptor.rid),
+        label:JSON.stringify(outgoingEdge.data[ele].record.name)
+      })
+    } 
+    yield put(addOutgoingNodeEdge(nodes,edges));
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-// function* getEdgesFromDB() {
+function* updateNodeToDB() {
+  
+  try{
 
-// }
+  }catch(error){
+    console.log(error)
+  }
 
-// function* updateNodeToDB() {
-
-// }
+}
 
 // function* updateEdgeToDB() {
 
