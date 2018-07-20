@@ -104,7 +104,8 @@ const mapDispatchToProps = dispatch => {
     },
     getAllNodeClassForAddNodeButtonActionCreator: () => {
       dispatch(getAllNodeClassForAddNodeButton());
-    }
+    },
+  
   };
 };
 
@@ -115,7 +116,6 @@ class App extends Component {
       textValue: " ",
       srcValue: " ",
       dscValue: " ",
-      editNodeName: " ",
       isAddNodeActive: false,
       isAddEdgeActive: false,
       isEditNodeActive: false,
@@ -136,7 +136,6 @@ class App extends Component {
     this.handleAddNodeButton = this.handleAddNodeButton.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleEditNodeName = this.handleEditNodeName.bind(this);
     this.handleClearCanvas = this.handleClearCanvas.bind(this);
     // this.handleSrcChange = this.handleSrcChange.bind(this);
     // this.handleDscChange = this.handleDscChange.bind(this);
@@ -182,26 +181,18 @@ class App extends Component {
   }
 
   handleAddNodeButton() {
+    
+   
     let newNodeDB = [
       {
         label: this.state.textValue,
         group: this.state.group,
-        date: document.getElementById("myTime").value,
-        time: document.getElementById("myDate").value
+        date: document.getElementById("myDate").value,
+        time: document.getElementById("myTime").value
       }
     ];
     this.props.addNodeToDatabaseActionCreator(newNodeDB);
     console.log(this.props.graph.nodeID_DB)
-    // let newNodeCanvas = [
-    //   {
-    //     // id: graph.graphSetting.nodeID_DB,
-    //     label: this.state.textValue,
-    //     group: this.state.group,
-    //     date: document.getElementById("myTime").value,
-    //     time: document.getElementById("myDate").value
-    //   }
-    // ];
-    // this.props.addNodeToCanvasActionCreator(newNodeCanvas);
     this.setState({
       textValue: ""
     });
@@ -257,12 +248,7 @@ class App extends Component {
       textValue: e.target.value
     });
   }
-  handleEditNodeName(e) {
-    this.setState({
-      editNodeName: e.target.value
-    });
-  }
-
+ 
   handleClearCanvas() {
     let nullGraph = {
       nodes: [],
@@ -747,12 +733,7 @@ export default connect(
 //       };
 //     });
 //   };
-//   updateNodeName() {
-//     this.setNewNodeName(this.state.nodeID, this.state.editNodeName);
-//     console.log(this.state.graph.nodes);
-//     this.toggleEditnodeModal();
-//     this.handleAlertTrue();
-//   }
+  
 //   setFlagtoAddDatabase = () => {
 //     this.setState({
 //       flagIsAddToCanvas: false
@@ -851,11 +832,7 @@ export default connect(
 //     }
 //   }
 
-//   toggleEditnodeModal = () => {
-//     this.setState({
-//       isEditNodeActive: !this.state.isEditNodeActive
-//     });
-//   };
+ 
 
 //   toggleEditRelationModal = () => {
 //     this.setState({
@@ -1288,158 +1265,7 @@ export default connect(
 //       alertcreateRelationmsg = null;
 //     }
 
-//     let commandbox;
-//     if (this.state.showMenu === true) {
-//       commandbox = (
-//         <div id="command-div">
-//           <div id="history-div">
-//             Command Menu : {(NodeValue = this.state.nodeID)}
-//             <button
-//               id="Incoming-button"
-//               title="Incoming Relationship"
-//               onClick={this.handleIncoming}
-//             >Incoming</button>
-//             {/* <button title="Incoming Relationship" onClick={this.handleIncoming(NodeValue)}> Incoming </button> */}
-//             <button
-//               id="Outcoming-button"
-//               title="Outcoming Relationship"
-//               onClick={this.handleOutcoming}
-//             >Outcoming</button>
-//             <button id="Edit-button" onClick={this.toggleEditnodeModal}>Edit node{this.state.nodeID}</button>
-//             <Modal
-//               isOpen={this.state.isEditNodeActive}
-//               contentLabel="Node Editor"
-//               onRequestClose={this.toggleEditnodeModal}
-//               style={customCreateEdgeModal}
-//             >
-//               <div id="edit-top-div"> Edit Node : {this.state.nodeID}</div>
-//               <div id="edit-middle-div"> Classname : {this.state.nodeClass} <br />
-//                 <div id="inside-editmid-div">
-//                   <br />
-//                   <h5 id="Editnode-classname">name </h5>
-//                   <input
-//                     type="node-edit"
-//                     placeholder="Edit...."
-//                     className="Node-editor"
-//                     onChange={this.handleEditNodeName}
-//                   />
-//                   <select id="select-nodetype">
-//                     <option value="String">String </option>
-//                     <option value="Integer">Integer </option>
-//                     <option value="etc">Etc </option>
-//                   </select>
-//                   <br />
-//                   {/* <h5 id='CreateDate'>CreateDate</h5> */}
-//                   <form action="/action_page.php">
-//                     CreateDate: <input type="date" name="bday" />{" "}
-//                     <input type="submit" />
-//                     <input type="time" id="myTime" value="22:15:00" />
-//                     <select id="select-nodetype">
-//                       <option value="String">String </option>
-//                       <option value="Integer">Integer </option>
-//                       <option value="etc">Etc </option>
-//                     </select>
-//                   </form>
-//                 </div>
-//               </div>
-//               <div id="edge-bottom-div">
-//                 <br />
-//                 <button id="cancel-edge" onClick={this.toggleEditnodeModal}>
-//                   Cancel{" "}
-//                 </button>
-//                 <button id="Edge-button" onClick={this.updateNodeName}>
-//                   Save Change
-//                 </button>
-//               </div>
-//             </Modal>
-//             {/* </section> */}
-//             <button
-//               id="createRelation-button"
-//               title="create relationship"
-//               onClick={this.handleCreateRelation}
-//             >
-//               CreateRelation
-//             </button>
-//             <Modal
-//               isOpen={this.state.isCreateRelationActive}
-//               contentLabel="CreateRelation Modal"
-//               onRequestClose={this.state.toggleCreateRelationModalFalse}
-//               style={customStyle}
-//             >
-//               <div id="Modal-header">Create Relationship from #inNodeID to #outNodeID
-//                 <button id="hidemodal-button" onClick={this.toggleCreateRelationModalFalse}>Hide Modal</button>
-//               </div>
-//               {this.state.page === 1 ? (
-//                 <div id="modal-middle-div">
-//                 Class :   <select id="select-id"> {this.selectBoxList()} </select>
-//                 </div>
-//               ) : (
-//                 <div id="modal-middle-div">
-//                   Relation Classname : <hr />
-//                   <div id="inside-box"> This relationship require no attribute</div>
-//                 </div>
-//               )}
-//               {this.state.page === 1 ? (
-//                 <div id="modal-bottom-div">
-//                   Bottom modal 1 <hr />
-//                   <button id="modal-cancel-button" onClick={this.toggleCreateRelationModalFalse}>Cancel</button>
-//                   <button id="modal-next-button" onClick={this.handleNextPage}>
-//                     Next
-//                   </button>
-//                 </div>
-//               ) : (
-//                 <div id="modal-bottom-div">
 
-//                   Bottom modal 2 <hr />
-//                   <button onClick={this.InitializePage}> Back </button>
-//                   <button id="modal-cancel-button" onClick={this.toggleCreateRelationModalFalse} > Cancel</button>
-//                   <button id="Addedge-button" onClick={this.handleCreateRelationbutton}>Create Relation</button>
-//                 </div>
-//               )}
-//             </Modal>
-//             <button
-//               id="removeNode-button"
-//               title="remove node from canvas"
-//               onClick={this.handleRemoveNode}
-//             >
-
-//               Remove
-//             </button>
-//             <button
-//               id="deleteNode-button"
-//               title="delete node from Database"
-//               onClick={this.toggleDeletenodeModal}
-//             >
-
-//               Delete
-//             </button>
-//             <Modal
-//               isOpen={this.state.isDeleteNodeActivate}
-//               contentLabel="DeleteNodeModal"
-//               onRequestClose={this.toggleDeletenodeModal}
-//               style={customCreateEdgeModal}
-//             >
-//               <div id="top-deletenode-div"> DeleteNode </div>
-//               <div id="middle-deletenode-div">
-//                 Deleting node {this.state.nodeID} will permanantly be removed
-//                 from your Database
-//               </div>
-//               <div id="bottom-deletenode-div">
-//                 <button onClick={this.toggleDeletenodeModal}>
-//                   No,keep Node
-//                 </button>
-//                 <Button color="danger" onClick={this.handleDeleteNode}>
-
-//                   Yes,Delete Node!
-//                 </Button>
-//               </div>
-//             </Modal>
-//           </div>
-//         </div>
-//       );
-//     } else if (this.state.showMenu === false) {
-//       commandbox = null;
-//     }
 //     let relationbox;
 
 //     if (this.state.showRelationMenu === true) {
@@ -1597,74 +1423,3 @@ export default connect(
 //   }
 // }
 
-// export default App;
-
-// let Nodenumber;
-// let Relationnumber;
-// let NodeValue;
-
-//  let classListEdge = {
-//    groups : {
-//      AAA:{color:"Crimson"},
-//      BBB:{color:"Navy"},
-//      CCC:{color:"Magenta"},
-//      DDD:{color:"YellowGreen"}
-
-//    }
-//  }
-
-// let graphDB = {
-//   nodes: [
-//     { id: "1", label: "Bill", group: "A" },
-//     { id: "2", label: "Queen", group: "A" },
-//     { id: "3", label: "King", group: "A" },
-//     { id: "4", label: "Jack", group: "A" },
-//     { id: "5", label: "Barry", group: "A" },
-//     { id: "6", label: "Jane", group: "B" },
-//     { id: "7", label: "John", group: "B" },
-//     { id: "8", label: "Alex", group: "B" },
-//     { id: "9", label: "Bob", group: "B" },
-//     { id: "10", label: "Car", group: "B" },
-//     { id: "11", label: "Death", group: "C" },
-//     { id: "12", label: "Elf", group: "C" },
-//     { id: "13", label: "Frank", group: "C" },
-//     { id: "14", label: "Oliver", group: "C" },
-//     { id: "15", label: "Ryu", group: "C" },
-//     { id: "16", label: "Max", group: "D" },
-//     { id: "17", label: "Leon", group: "D" },
-//     { id: "18", label: "Chris", group: "D" },
-//     { id: "19", label: "Jill", group: "D" },
-//     { id: "20", label: "Herry", group: "D" }
-//   ],
-//   edges: [
-//     { id: "1", from: "1", to: "2", label: "AAA", color: { color: "Crimson" } },
-//     { from: "1", to: "4", label: "CCC", color: { color: "Magenta" } },
-//     { from: "1", to: "15", label: "BBB", color: { color: "Navy" } },
-//     { from: "1", to: "18", label: "DDD", color: { color: "YellowGreen" } },
-//     { from: "2", to: "7", label: "AAA", color: { color: "Crimson" } },
-//     { from: "2", to: "14", label: "CCC", color: { color: "Magenta" } },
-//     { from: "2", to: "19", label: "DDD", color: { color: "YellowGreen" } },
-//     { from: "3", to: "5", label: "BBB", color: { color: "Navy" } },
-//     { from: "4", to: "2", label: "DDD", color: { color: "YellowGreen" } },
-//     { from: "6", to: "10", label: "DDD", color: { color: "YellowGreen" } },
-//     { from: "6", to: "11", label: "CCC", color: { color: "Magenta" } },
-//     { from: "7", to: "8", label: "DDD", color: { color: "YellowGreen" } },
-//     { from: "7", to: "19", label: "AAA", color: { color: "Crimson" } },
-//     { from: "8", to: "2", label: "CCC", color: { color: "Magenta" } },
-//     { from: "8", to: "6", label: "BBB", color: { color: "Navy" } },
-//     { from: "9", to: "17", label: "CCC", color: { color: "Magenta" } },
-//     { from: "10", to: "1", label: "CCC", color: { color: "Magenta" } },
-//     { from: "10", to: "8", label: "BBB", color: { color: "Navy" } },
-//     { from: "12", to: "5", label: "BBB", color: { color: "Navy" } },
-//     { from: "12", to: "11", label: "DDD", color: { color: "YellowGreen" } },
-//     { from: "12", to: "15", label: "AAA", color: { color: "Crimson" } },
-//     { from: "13", to: "17", label: "BBB", color: { color: "Navy" } },
-//     { from: "14", to: "20", label: "CCC", color: { color: "Magenta" } },
-//     { from: "16", to: "3", label: "CCC", color: { color: "Magenta" } },
-//     { from: "16", to: "7", label: "BBB", color: { color: "Navy" } },
-//     { from: "17", to: "19", label: "CCC", color: { color: "Magenta" } },
-//     { from: "18", to: "20", label: "AAA", color: { color: "Crimson" } },
-//     { from: "19", to: "4", label: "DDD", color: { color: "YellowGreen" } },
-//     { from: "20", to: "1", label: "CCC", color: { color: "Magenta" } }
-//   ]
-// };

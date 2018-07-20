@@ -55,9 +55,13 @@ const getNodeOutEdge = (selectNodeID) => ({
   payload:selectNodeID
 })
 const addOutgoingNodeEdge = (nodes,edges) => ({
-  type :'Add_OUTGOING_NODE_EDGE',
+  type :'ADD_OUTGOING_NODE_EDGE',
   payloadNode:nodes,
   payloadEdge:edges
+})
+const addUpdateNodeToDatabase = (updateNode) => ({
+  type : 'ADD_UPDATE_NODE_TO_DB',
+  payload:updateNode
 })
 
 export {
@@ -74,5 +78,6 @@ export {
   getNodeInEdge,
   addIncomingNodeEdge,
   getNodeOutEdge,
-  addOutgoingNodeEdge
+  addOutgoingNodeEdge,
+  addUpdateNodeToDatabase
 };

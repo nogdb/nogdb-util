@@ -33,7 +33,7 @@ function* rootSaga() {
     takeEvery("ADD_NODE_TO_DB", addNodeToDB),
     takeEvery('GET_IN_EDGE_FOR_NODE',getInEdgeForNode),
     takeEvery('GET_OUT_EDGE_FOR_NODE',getOutEdgeForNode),
-    takeEvery('UPDATE_NODE_TO_DB', updateNodeToDB),
+    takeEvery('ADD_UPDATE_NODE_TO_DB', updateNodeToDB),
     // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
     // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
     // takeEvery('GET_EDGES_FROM_DB', getEdgesFromDB),
@@ -58,10 +58,10 @@ function* addNodeToDB(newNode) {
     let newNodeCanvas = [
       {
         id: JSON.stringify(response.data.rid),
-        label: JSON.stringify(newNode.payload[0].label),
-        group: JSON.stringify(newNode.payload[0].group),
-        date: JSON.stringify(newNode.payload[0].date),
-        time: JSON.stringify(newNode.payload[0].time),
+        label: newNode.payload[0].label,
+        group: newNode.payload[0].group,
+        date:  newNode.payload[0].date,
+        time: newNode.payload[0].time,
       }
     ];
      yield put(addNodeToCanvas(newNodeCanvas));
@@ -101,16 +101,13 @@ function* addConsoletoDB(sqlStr) {
         }
       }
       yield put(sendAllNodeClassToGraphCanvasReducer(classNameData));
-      console.log(classdescriptor.data);
 
       let Nodes = [];
       let Edges = [];
       for (let ele in resp.data.data) {
         if (hash[resp.data.data[ele].descriptor.rid[0]] === "v") {
           Nodes.push(resp.data.data[ele]);
-          console.log("node");
         } else if (hash[resp.data.data[ele].descriptor.rid[0]] === "e") {
-          console.log("edge");
           const recordDescriptor = yield call(
             post,
             "http://localhost:3000/Edge/getSrcDst",
@@ -336,9 +333,38 @@ function* getOutEdgeForNode (selectNode) {
   }
 }
 
-function* updateNodeToDB() {
+function* updateNodeToDB(updateNode) {
+   console.log(">>editNodetoDB")
+   console.log(updateNode.payload[0].id)
+   console.log(updateNode)
+    let updateNodeID = JSON.parse(updateNode.payload[0].id)
+  //  let updateNodeObj = JSON.parse(updateNode.payload[0])
   
+ 
   try{
+       yield call(post, "http://localhost:3000/Vertex/update", {
+      "recordDescriptor": {
+        "rid": updateNodeID,
+      },
+      "record": {
+        "name": updateNode.payload[0].label,
+         "date" : updateNode.payload[0].date,
+         "time": updateNode.payload[0].time,
+      }
+      
+    });
+  
+    let newNodeCanvas = [
+      {
+          id: JSON.stringify(updateNodeID),
+          label: updateNode.payload[0].label,
+          group: updateNode.payload[0].group,
+          date: updateNode.payload[0].date,
+          time: updateNode.payload[0].time,
+      }
+    ];
+    // console.log(newNodeCanvas.time)
+       yield put(addNodeToCanvas(newNodeCanvas));
 
   }catch(error){
     console.log(error)
@@ -350,10 +376,5 @@ function* updateNodeToDB() {
 
 // }
 
-
-
-// function* deleteEdgeFromDB() {
-
-// }
 
 export { rootSaga };

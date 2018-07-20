@@ -6,7 +6,9 @@ const data = {
   edgeClass: null,
   edgeIn: null,
   edgeOut: null,
-  selectId: null
+  selectId: null,
+  nodeDate:null,
+  nodeTime:null
 };
 const dataReducer = (state = data, action) => {
   switch (action.type) {
@@ -64,6 +66,16 @@ const dataReducer = (state = data, action) => {
         edgeOut: action.payload
       };
       return state;
+
+     case "STORE_DATE_TIME_VALUE":
+
+        return{
+           ...state,
+            nodeDate: action.date,
+            nodeTime: action.time
+           }
+      
+
 
     default:
       state = {

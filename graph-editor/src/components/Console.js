@@ -34,7 +34,7 @@ class Console extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      textAreaValue: ""
+      textAreaValue: "",
     };
     this.handleTextArea = this.handleTextArea.bind(this);
   }

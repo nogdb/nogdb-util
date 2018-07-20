@@ -42,6 +42,8 @@ const deleteEdgeFromDatabase = edgeID => ({
   payload: edgeID
 });
 
+
+
 export {
   getNodeID,
   getNodeClass,
@@ -52,5 +54,5 @@ export {
   getOutRelation,
   updateGraph,
   dedeteNodeInDatabase,
-  deleteEdgeFromDatabase
+  deleteEdgeFromDatabase,
 };

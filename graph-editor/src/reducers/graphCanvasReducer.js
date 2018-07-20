@@ -61,7 +61,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     case "ADD_NODE_ACTION":
       //const newGraphNodeCanvas = state.graphCanvas.nodes.slice();
       //const newGraphEdgeCanvas = state.graphCanvas.edges.slice();
-
+    
       for (let ele in action.payload) {
         if (
           JSON.stringify(backupNode).includes(
@@ -71,6 +71,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           backupNode.push(action.payload[ele]);
         }
       }
+      console.log(backupNode)
       return {
         ...state,
         graphCanvas: {
@@ -220,13 +221,12 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       let nodeID = [];
       let nodeName = [];
       for (let i = 0; i < action.payload.length; i++) {
-        console.log("hello");
         nodeID.push(action.payload[i].descriptor.rid);
         nodeName.push(action.payload[i].record.name);
         backupNode.push({ id: JSON.stringify(nodeID[i]), label: nodeName[i] });
         // node[i] = {id:JSON.stringify(nodeID[i]),label :nodeName[i]}
       }
-      console.log(backupNode)
+     
       return {
         ...state,
         graphCanvas: {
@@ -270,7 +270,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         });
       
       }
-      console.log(backupEdge);
+     
       return {
         ...state,
         graphCanvas: {
@@ -307,7 +307,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       }
     }
 
-    case 'Add_OUTGOING_NODE_EDGE':{
+    case 'ADD_OUTGOING_NODE_EDGE':{
       
       for(let ele in action.payloadNode){
         backupNode.push(action.payloadNode[ele])

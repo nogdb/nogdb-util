@@ -6,7 +6,7 @@ import {
   getNodeClass,
   getNodename,
   getEdgeID,
-  deleteEdgeFromDatabase
+  deleteEdgeFromDatabase,
 } from "../actions/dataAction.js";
 import {
   getEdgeClass,
@@ -19,7 +19,7 @@ import {
   showEdgeMenu,
   hideEdgeMenu
 } from "../actions/nodeEdgesMenu";
-import { deleteNodeFromDB,getNodeInEdge,getNodeOutEdge } from "../actions/databaseAction";
+import { deleteNodeFromDB,getNodeInEdge,getNodeOutEdge,addUpdateNodeToDatabase } from "../actions/databaseAction";
 import { removeNode, removeEdgeCanvas } from "../actions/menuAction";
 import { Modal, Button } from "reactstrap";
 
@@ -84,7 +84,10 @@ const mapDispatchToProps = dispatch => {
     },
     getNodeOutEdgeActionCreator: (nodeID) => {
       dispatch(getNodeOutEdge(nodeID));
-    }
+    },
+    addUpdateNodeToDatabaseActionCreator: (nodeID) => {
+      dispatch(addUpdateNodeToDatabase(nodeID));
+    },
   };
 };
 // const customStyle = {
@@ -133,9 +136,9 @@ const customCreateEdgeModal = {
     left: "40px",
     right: "40px",
     bottom: "40px",
-    marginRight: "15%",
-    marginLeft: "15%",
-    marginTop: "15%",
+    marginRight: "10%",
+    marginLeft: "10%",
+    marginTop: "30%",
     marginBottom: "15%"
   }
 };
@@ -144,6 +147,7 @@ class Canvas extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      editNodeText: "",
       isDeleteNodeActivate: false,
       isDeleteRelationActivate: false,
       isEditNodeActive:false
@@ -156,6 +160,8 @@ class Canvas extends Component {
     this.handleDeleteRelation = this.handleDeleteRelation.bind(this);
     this.handleIncomingButton = this.handleIncomingButton.bind(this);
     this.handleOutgoingButton = this.handleOutgoingButton.bind(this);
+    this.onChangeNodeName = this.onChangeNodeName.bind(this);
+    this.handleEditNodeButton = this.handleEditNodeButton.bind(this);
   }
   handleNodeID(nodeIDs) {
     this.props.getNodeIDActionCreator(nodeIDs[0]);
@@ -253,11 +259,16 @@ class Canvas extends Component {
     });
   };
 
-  toggleEditnodeModal = () => {
+  setEditNodeModalTrue = () => {
     this.setState({
-      isEditNodeActive: !this.state.isEditNodeActive
+      isEditNodeActive:true
     });
   };
+  setEditNodeModalFalse = () => {
+    this.setState({
+      isEditNodeActive:false
+    })
+  }
 
   toggleDeleteRelationModal = () => {
     this.setState({
@@ -284,6 +295,40 @@ class Canvas extends Component {
     this.props.getNodeOutEdgeActionCreator(this.props.data.nodeID)
   }
 
+  onChangeNodeName(e) {
+    this.setState({
+      editNodeText: e.target.value
+    });
+  }
+
+  handleEditNodeButton() {
+    
+  
+  
+    let updateNodeDB = [
+      { 
+        id:this.props.data.nodeID,
+        group: this.state.group,
+        label: this.state.editNodeText,
+        date: document.getElementById("myEditNodeDate").value,
+        time: document.getElementById("myEditNodeTime").value
+      }
+    ];
+    this.props.addUpdateNodeToDatabaseActionCreator(updateNodeDB);
+    this.setState({
+      editNodeText: " "
+    });
+    
+    this.setEditNodeModalFalse();
+  }
+
+
+    // this.setNewNodeName(this.state.nodeID, this.state.editNodeName);
+    // console.log(this.state.graph.nodes);
+    // this.toggleEditnodeModal();
+    // this.handleAlertTrue();
+  
+  
   // handleRemoveRelation = () => {
   //   let BackupNode = this.state.graph.edges.slice();
   //   let BackupEdges = this.state.graph.edges.slice();
@@ -326,26 +371,30 @@ class Canvas extends Component {
             </button>
             <button
               id="Edit-button"
-              onClick={this.toggleEditnodeModal}
+              onClick={this.setEditNodeModalTrue}
             >
               Edit node{data.nodeID}
             </button>
             <Modal
                        isOpen={this.state.isEditNodeActive}
-                       contentLabel="Node Editor"
-                       onRequestClose={this.toggleEditnodeModal}
+                       contentlabel="Node Editor"
+                       onRequestClose={this.setEditNodeModalFalse}
                        style={customCreateEdgeModal}
                      >
-                       <div id="edit-top-div"> Edit Node : {this.state.nodeID}</div>
-                       <div id="edit-middle-div"> Classname : {this.state.nodeClass} <br />
+                       <div id="edit-top-div"> Edit Node : {data.nodeID}</div>
+                       <div id="edit-middle-div"> Classname : {data.nodeClass} <br />
                          <div id="inside-editmid-div">
                            <br />
                            <h5 id="Editnode-classname">name </h5>
+
+
+
                            <input
-                             type="node-edit"
+                             type="text"
                              placeholder="Edit...."
                              className="Node-editor"
-                             onChange={this.handleEditNodeName}
+                            //  value="hello"
+                             onChange={this.onChangeNodeName}
                            />
                            <select id="select-nodetype">
                              <option value="String">String </option>
@@ -355,9 +404,8 @@ class Canvas extends Component {
                            <br />
                           
                            <form action="/action_page.php">
-                             CreateDate: <input type="date" name="bday" />
-                             <input type="submit" />
-                             <input type="time" id="myTime" value="22:15:00" />
+                             CreateDate: <input type="date" name="day" id="myEditNodeDate" />
+                             <input type="time" id="myEditNodeTime" />
                              <select id="select-nodetype">       
                                <option value="String">String </option>
                                <option value="Integer">Integer </option>
@@ -368,10 +416,10 @@ class Canvas extends Component {
                        </div>
                        <div id="edge-bottom-div">
                          <br />
-                         <button id="cancel-edge" onClick={this.toggleEditnodeModal}>
+                         <button id="cancel-edge" onClick={this.setEditNodeModalFalse}>
                            Cancel
                          </button>
-                         <button id="Edge-button" onClick={this.updateNodeName}>
+                         <button id="Edge-button" onClick={this.handleEditNodeButton}>
                            Save Change
                          </button>
                        </div>
@@ -436,7 +484,7 @@ class Canvas extends Component {
             </button>
             <Modal
               isOpen={this.state.isDeleteNodeActivate}
-              contentLabel="DeleteNodeModal"
+              contentlabel="DeleteNodeModal"
               onRequestClose={this.toggleDeletenodeModal}
               style={customCreateEdgeModal}
             >
@@ -502,7 +550,7 @@ class Canvas extends Component {
           </button>
           <Modal
             isOpen={this.state.isDeleteRelationActivate}
-            contentLabel="DeleteRelationModal"
+            contentlabel="DeleteRelationModal"
             onRequestClose={this.toggleDeleteRelationModal}
             style={customCreateEdgeModal}
           >
