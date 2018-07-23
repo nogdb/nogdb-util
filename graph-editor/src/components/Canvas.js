@@ -85,45 +85,7 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
-// const customStyle = {
-//   content: {
-//     posittion: "absolute",
-//     top: "20px",
-//     left: "40px",
-//     right: "40px",
-//     bottom: "40px",
-//     marginRight: "15%",
-//     marginLeft: "15%",
-//     marginTop: "15%",
-//     marginBottom: "15%"
-//   }
-// };
-// const customAddNodeStyle = {
-//   content: {
-//     posittion: "absolute",
-//     top: "20px",
-//     left: "40px",
-//     right: "40px",
-//     bottom: "40px",
-//     marginRight: "15%",
-//     marginLeft: "15%",
-//     marginTop: "10%",
-//     marginBottom: "10%"
-//   }
-// };
-// const customEditRStyle = {
-//   content: {
-//     posittion: "absolute",
-//     top: "20px",
-//     left: "40px",
-//     right: "40px",
-//     bottom: "40px",
-//     marginRight: "15%",
-//     marginLeft: "15%",
-//     marginTop: "10%",
-//     marginBottom: "10%"
-//   }
-// };
+
 const customCreateEdgeModal = {
   content: {
     position: "absolute",
@@ -322,7 +284,7 @@ class Canvas extends Component {
               title="Outcoming Relationship"
               //    onClick={this.handleOutcoming}
             >
-              Outcoming
+              Outgoing
             </button>
             <button
               id="Edit-button"
@@ -467,7 +429,7 @@ class Canvas extends Component {
         <div id="relationMenu-div">
           Relationship Menu :
           {/* {this.state.relationID} */}
-          <button
+          <button id ="editRelationship"
           // onClick={this.toggleEditRelationModal}
           >
             Edit Relationship
@@ -497,7 +459,7 @@ class Canvas extends Component {
         
                        
                      </Modal> */}
-          <button onClick={this.toggleDeleteRelationModal}>
+          <button id="deleteRelationship"onClick={this.toggleDeleteRelationModal}>
             Delete Relationship
           </button>
           <Modal
@@ -546,7 +508,7 @@ class Canvas extends Component {
               if (this.state.createEdgeMode === true) {
                 const src = this.props.data.nodeID
                 const dest = this.props.data.nodeID2
-                console.log(src,dest)
+                //console.log(src,dest)
                 //this.setSrcEdge(src);
                 //this.setDecEdge(dest);
                 //this.toggleCreateRelationModalTrue();

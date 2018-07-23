@@ -1,6 +1,7 @@
 const data = {
   nodeID: null,
   nodeID2:null,
+  //use nodeID2 when click create relationship
   nodeClass: null,
   nodeName: null,
   edgeID: null,
@@ -8,6 +9,7 @@ const data = {
   edgeIn: null,
   edgeOut: null,
   selectId: null
+  //
 };
 const dataReducer = (state = data, action) => {
   switch (action.type) {
@@ -18,7 +20,6 @@ const dataReducer = (state = data, action) => {
       };
 
       console.log(state.nodeID)
-      console.log(state.nodeID2)
       return state;
     case "GET_NODE_ID_2":
 

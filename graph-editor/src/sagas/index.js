@@ -69,35 +69,44 @@ function* addConsoletoDB(sqlStr) {
     if (resp.data.type === "n") {
       console.log("There is no result");
     } else if (resp.data.type === "s") {
+      console.log("RESULT_SET");
+      //select command
       const classdescriptor = yield call(
         post,
         "http://localhost:3000/Db/getSchema",
         {}
       );
-      //console.log(resp);
       let hash = {};
+      let hash2 = {};
       for (let ele in classdescriptor.data) {
         hash[classdescriptor.data[ele].id] = classdescriptor.data[ele].type;
+        hash2[classdescriptor.data[ele].id] = classdescriptor.data[ele].name;
       }
-      let classNameData = [];
-      console.log(classdescriptor.data);
-      for (let ele in classdescriptor.data) {
-        if (classdescriptor.data[ele].type === "v") {
-          classNameData.push(classdescriptor.data[ele]);
-        }
-      }
-      console.log(classNameData)
-      yield put(sendAllNodeClassToGraphCanvasReducer(classNameData));
-      
-
+      //[id,type], [id,name]
+   
+      //let classNameData = [];
+      //console.log(classdescriptor.data);
+      // for (let ele in classdescriptor.data) {
+      //   if (classdescriptor.data[ele].type === "v") {
+      //     classNameData.push(classdescriptor.data[ele]);
+      //   }
+      // }
+      // console.log(classNameData)
+      //yield put(sendAllNodeClassToGraphCanvasReducer(classNameData));
       let Nodes = [];
       let Edges = [];
       for (let ele in resp.data.data) {
         if (hash[resp.data.data[ele].descriptor.rid[0]] === "v") {
           Nodes.push(resp.data.data[ele]);
-          console.log("node");
+          // USE
+          // Nodes.push({
+          //   data: resp.data.data[ele],
+          //   group: hash2[resp.data.data[ele].descriptor.rid[0]]
+          // })  
+        
+            
+          // )
         } else if (hash[resp.data.data[ele].descriptor.rid[0]] === "e") {
-          console.log("edge");
           const recordDescriptor = yield call(
             post,
             "http://localhost:3000/Edge/getSrcDst",
@@ -111,16 +120,14 @@ function* addConsoletoDB(sqlStr) {
             data: resp.data.data[ele],
             from: recordDescriptor.data[0].descriptor.rid,
             to: recordDescriptor.data[1].descriptor.rid
-          });
+            //group: hash2[resp.data.data[ele].descriptor.rid[0]]
+        });
           // console.log(Edges)
         }
       }
-
       yield put(addVertexConsole(Nodes));
       yield put(addEdgeConsole(Edges));
 
-      //   yield put(getAllClassFromDatabase(resp.data.data[ele].descriptor.rid[0]))
-      console.log("RESULT_SET");
     } else if (resp.data.type === "c") {
       console.log("CLASS_DESCRIPTOR");
     } else if (resp.data.type === "p") {
@@ -217,6 +224,7 @@ function* getAllClassForAddNodeButton() {
     );
     let classNameData = [];
     for (let ele in classdescriptor.data) {
+      // if it is vertex class
       if (classdescriptor.data[ele].type === "v") {
         classNameData.push(classdescriptor.data[ele]);
       }

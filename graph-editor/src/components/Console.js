@@ -52,7 +52,7 @@ class Console extends Component {
           {" "}
         </textarea>
         {/* {console.log(this.state.textAreaValue)} */}
-        <button
+        <button id ="CompileButton"
           onClick={() =>
             this.props.executeConsoleActionCreater(this.state.textAreaValue)
           }

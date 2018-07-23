@@ -195,10 +195,6 @@ class App extends Component {
     this.setState({
       textValue: ""
     });
-    // this.AddNodeToDatabase(newNode);
-    // this.AddNodeToCanvas(newNode, this.state.graph.edges);
-    //  console.log(document.getElementById("myTime").value)
-    //  console.log(document.getElementById("myDate").value)
     this.setModalAddNodeFalse();
   }
   setModalAddNodeTrue = () => {
@@ -224,17 +220,15 @@ class App extends Component {
         break;
       }
     }
-    console.log(this.props.graph.selectGroup)
+    console.log(this.props.graph)
     this.setState({
       page: 2,
       group: selectGroup
     });
   };
 
-  // .graphSetting.graphCanvas.classes
   selectBoxList = graph => {
     let arr = [];
-    // console.log(graph.classes);
     //  const list =Object.keys(graph.classes)
     const list = graph.classes;
     for (let ele in list) {
@@ -263,42 +257,36 @@ class App extends Component {
       edges: []
     };
     this.props.clearCanvasActionCreator(nullGraph);
-    this.setState({ graph: { nodes: [], edges: [] } });
+    this.setState({ graph: nullGraph });
   }
 
   render() {
     const { graph, scale } = this.props;
     let pHeader;
+    let consoleBox;
+    let historyBox;
+    let nodeTabBars;
+    let edgeTabBars;
+
     if (scale.isFullscreen === true) {
       pHeader = null;
-    } else {
-      pHeader = <NogDBTitle />;
-    }
-    let consoleBox;
-    if (scale.isFullscreen === true) {
       consoleBox = null;
-    } else {
-      consoleBox = <Console />;
-    }
-    let historyBox;
-    if (scale.isFullscreen === true) {
       historyBox = null;
     } else {
+      pHeader = <NogDBTitle />;
+      consoleBox = <Console />;
       historyBox = <History />;
     }
-    let nodeTabBars;
     if (scale.nodeMenu === true) {
       nodeTabBars = <NodePropertyMenu />;
     } else if (scale.nodeMenu === false) {
       nodeTabBars = null;
     }
-    let edgeTabBars;
     if (scale.EdgeMenu === true) {
       edgeTabBars = <EdgePropertyMenu />;
     } else if (scale.EdgeMenu === false) {
       edgeTabBars = null;
     }
-
     return (
       <Container>
         {pHeader}
@@ -322,7 +310,7 @@ class App extends Component {
                 </button>
               ) : (
                 <button
-                  id="FullScreen-button"
+                  id="exitFullScreen-button"
                   onClick={this.props.exitFullscreenActionCreator}
                 >
                   Exit Fullscreen
@@ -339,6 +327,7 @@ class App extends Component {
         </Row>
         {/* <NodePropertyMenu/> */}
 
+        {/*Modal add node*/}
         <Modal
           isOpen={this.state.isAddNodeActive}
           contentLabel="addnode Modal"
@@ -352,9 +341,11 @@ class App extends Component {
             </button>
           </div>
           {this.state.page === 1 ? (
+            
             <div id="addnodemodal-middle-div">
               Hello middle 1 <hr />
               Class :{" "}
+              {/*select class node*/}
               <select id="select-id"> {this.selectBoxList(graph)} </select>
             </div>
           ) : (
@@ -366,6 +357,7 @@ class App extends Component {
                 <div id="inside-editmid-div">
                   <br />
                   <h5 id="Editnode-classname">name </h5>
+                  {/*fill node name*/}
                   <input
                     type="node-edit"
                     placeholder="Edit...."
@@ -374,14 +366,12 @@ class App extends Component {
                   />
                   <select id="select-nodetype">
                     <option value="String">String </option>
-                    <option value="Integer">Integer </option>
-                    <option value="etc">Etc </option>
                   </select>
                   <br />
 
                   <form action="/action_page.php">
                     CreateDate: <input type="date" name="day" id="myDate" />
-                    <input type="time" id="myTime" />
+                    Time: <input type="time" id="myTime" />
                     <select id="select-nodetype">
                       <option value="String">String </option>
                     </select>

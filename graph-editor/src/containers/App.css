@@ -53,12 +53,43 @@
   display:inline-block;
 }
 
+#CompileButton{
+  background-color: yellow
+}
+#showHideHistoryBar{
+  background-color: red
+}
+#Incoming-button{
+  background-color: rgb(50, 240, 50)
+}
+#Outcoming-button{
+  background-color: rgb(50, 240, 50)
+}
+#Edit-button{
+  background-color: yellow
+}
+#createRelation-button{
+  background-color: orange
+}
+#removeNode-button{
+  background-color: rgb(50, 240, 50)
+}
+#deleteNode-button{
+  background-color: yellow
+}
+#editRelationship{
+  background-color: orange
+}
+#deleteRelationship{
+  background-color: rgb(50, 240, 50)
+}
 #Addnode-button{
   align:right;
   font-size:medium;
 }
 #Addnode-modal{
   font-size:medium;
+  background-color: rgb(50, 240, 50)
 }
 #modal-next-button{
   align:right;
@@ -71,11 +102,14 @@
 #FullScreen-button{
   align:right;
   font-size:medium;
+  background-color: rgb(50, 240, 50)
 }
 #Clear-Canvas{
   align:right;
   font-size:medium;
   float:clear;
+  background-color: rgb(50, 240, 50)
+
 }
 #Edge-button{
   font-size:medium;
