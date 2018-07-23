@@ -3,9 +3,9 @@ const getNodeID = eventNodeID => ({
   payload: eventNodeID
 });
 const getNodeID2 = nodeID => ({
-  type: "GET_NODE_ID_2",  
-  payload:nodeID
-})
+  type: "GET_NODE_ID_2",
+  payload: nodeID
+});
 const getEdgeID = edgeID => ({
   type: "GET_EDGE_ID",
   payload: edgeID
@@ -33,10 +33,10 @@ const getOutRelation = outRelation => ({
 });
 const updateGraph = (newNode, newEdge) => ({
   type: "UPDATE_GRAPH",
-  payload1: newNode,
-  payload2: newEdge
+  payloadNode: newNode,
+  payloadEdge: newEdge
 });
-const dedeteNodeInDatabase = nodeID => ({
+const deleteNodeInDatabase = nodeID => ({
   type: "DELETE_NODE_FROM_DATABASE",
   payload: nodeID
 });
@@ -56,6 +56,6 @@ export {
   getInRelation,
   getOutRelation,
   updateGraph,
-  dedeteNodeInDatabase,
+  deleteNodeInDatabase,
   deleteEdgeFromDatabase
 };

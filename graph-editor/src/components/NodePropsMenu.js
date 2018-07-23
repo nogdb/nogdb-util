@@ -179,6 +179,7 @@ class NodePropertyMenu extends Component {
                 <button onClick={this.handleSize100}>100</button>
                 <p> display node size </p>
                 <p> Node Color </p>
+                {/*Hard Code*/}
                 <select id="select-nodecolor" onChange={this.selectedColor}>
                   <option value="red">Red</option>
                   <option value="orange">Orange</option>

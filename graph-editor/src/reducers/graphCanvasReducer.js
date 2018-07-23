@@ -5,6 +5,7 @@ const graphSetting = {
   },
   options: {
     groups: {
+      //Hard Code
       Person: { color: { background: "red", border: "red" }, size: 25 },
       School: { color: { background: "orange", border: "orange" }, size: 25 },
       C: { color: { background: "green", border: "green" }, size: 25 },
@@ -48,7 +49,7 @@ const graphSetting = {
   name: [],
   classes: [],
   nodeIDDB: "",
-  selectClass:"",
+  selectClass: "",
   label: [] //use to show label on graph
 };
 
@@ -104,7 +105,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };
 
     case "REMOVE_EDGE":
-      console.log(action.payload)
+      console.log(action.payload);
       for (let ele in backupEdge) {
         if (backupEdge[ele].id === action.payload) {
           backupEdge.splice(ele, 1);
@@ -125,6 +126,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           break;
         }
       }
+      //Hard Code
       switch (nodeGroup) {
         case "A":
           updateSize = { ...externalOption.A, size: action.size };
@@ -154,6 +156,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
+        default:
       }
       break;
     case "CHANGE_COLOR_NODE":
@@ -163,6 +166,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           break;
         }
       }
+      //Hard Code
       switch (nodeGroup) {
         case "A":
           updateColor = {
@@ -204,14 +208,15 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
+        default:
       }
       break;
     case "UPDATE_GRAPH":
       return {
         ...state,
         graphCanvas: {
-          nodes: action.payload1,
-          edges: action.payload2
+          nodes: action.payloadNode,
+          edges: action.payloadEdge
         }
       };
 
@@ -219,14 +224,13 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       //ADDNODE
       let nodeID = [];
       let nodeName = [];
-      //let nodeGroup = [];
-      console.log(action.payload[0])
-
       for (let i = 0; i < action.payload.length; i++) {
         nodeID.push(action.payload[i].descriptor.rid);
         nodeName.push(action.payload[i].record.name);
+        //nodeGroup.push(action.payload[i].record['name']);
+
         //default
-        //graphSetting.label.push(nodeName)
+        graphSetting.label.push(nodeName);
 
         // nodeID.push(action.payload[i].data.descriptor.rid);
         // nodeName.push(action.payload[i].data.record.name);
@@ -238,7 +242,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         if (backupNode.map(item => item.id).includes(backupID[i]) === false) {
           backupNode.push({
             id: JSON.stringify(nodeID[i]),
-            label: nodeName[i],
+            label: nodeName[i]
             //label: graphSetting.label[i],
             //group: nodeGroup[i]
           });
@@ -251,7 +255,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           nodes: backupNode
         }
       };
-      break;
     }
     case "GET_ALL_CLASS": //get all class from getschema index.js
       console.log(action.payload);
@@ -265,11 +268,10 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };
 
     case "ADD_EDGE_CONSOLE": {
-      //AddEDGE
       let edgeID = [];
       let src = [];
       let dst = [];
-      let edgeName = []; //label
+      let edgeName = [];
       for (let i = 0; i < action.payload.length; i++) {
         edgeID.push(action.payload[i].data.descriptor.rid);
         src.push(action.payload[i].from);

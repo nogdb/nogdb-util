@@ -1,18 +1,12 @@
 import { all, takeEvery, call, put } from "redux-saga/effects";
-import { get, post } from "../services/webService";
+import { post } from "../services/webService";
 import {
-  addRespondFromConsole,
   sendAllClassFromDatabaseToState,
-  getAllClassFromDatabase,
   addVertexConsole,
   addEdgeConsole,
   sendAllNodeClassToGraphCanvasReducer,
   sendNodeIDToCanvas
 } from "../actions/databaseAction";
-
-const SQL_RESULT_TYPE = {
-  RESULT_SET: "s"
-};
 
 // const SQL_RESULT_TYPE = {
 //     RESULT_SET: 's',
@@ -67,23 +61,26 @@ function* addConsoletoDB(sqlStr) {
     console.log(resp);
 
     if (resp.data.type === "n") {
+      //No result
       console.log("There is no result");
     } else if (resp.data.type === "s") {
-      console.log("RESULT_SET");
+      //Result set
       //select command
       const classdescriptor = yield call(
         post,
         "http://localhost:3000/Db/getSchema",
         {}
       );
-      let hash = {};
-      let hash2 = {};
+      let hashIDToType = {};
+      let hashIDToName = {};
       for (let ele in classdescriptor.data) {
-        hash[classdescriptor.data[ele].id] = classdescriptor.data[ele].type;
-        hash2[classdescriptor.data[ele].id] = classdescriptor.data[ele].name;
+        hashIDToType[classdescriptor.data[ele].id] =
+          classdescriptor.data[ele].type;
+        hashIDToName[classdescriptor.data[ele].id] =
+          classdescriptor.data[ele].name;
       }
       //[id,type], [id,name]
-   
+
       //let classNameData = [];
       //console.log(classdescriptor.data);
       // for (let ele in classdescriptor.data) {
@@ -96,17 +93,18 @@ function* addConsoletoDB(sqlStr) {
       let Nodes = [];
       let Edges = [];
       for (let ele in resp.data.data) {
-        if (hash[resp.data.data[ele].descriptor.rid[0]] === "v") {
+        if (hashIDToType[resp.data.data[ele].descriptor.rid[0]] === "v") {
           Nodes.push(resp.data.data[ele]);
           // USE
           // Nodes.push({
           //   data: resp.data.data[ele],
           //   group: hash2[resp.data.data[ele].descriptor.rid[0]]
-          // })  
-        
-            
+          // })
+
           // )
-        } else if (hash[resp.data.data[ele].descriptor.rid[0]] === "e") {
+        } else if (
+          hashIDToType[resp.data.data[ele].descriptor.rid[0]] === "e"
+        ) {
           const recordDescriptor = yield call(
             post,
             "http://localhost:3000/Edge/getSrcDst",
@@ -121,18 +119,20 @@ function* addConsoletoDB(sqlStr) {
             from: recordDescriptor.data[0].descriptor.rid,
             to: recordDescriptor.data[1].descriptor.rid
             //group: hash2[resp.data.data[ele].descriptor.rid[0]]
-        });
+          });
           // console.log(Edges)
         }
       }
       yield put(addVertexConsole(Nodes));
       yield put(addEdgeConsole(Edges));
-
     } else if (resp.data.type === "c") {
+      //Class descriptor
       console.log("CLASS_DESCRIPTOR");
     } else if (resp.data.type === "p") {
+      //Property descriptor
       console.log("PROPERTY_DESCRIPTOR");
     } else if (resp.data.type === "r") {
+      //Record descriptor
       console.log("RECORD_DESCRIPTORS");
       console.log(resp);
     }
@@ -162,9 +162,7 @@ function* getSrcDst() {
 }
 
 function* deleteNodeFromDB(nodeID) {
-  console.log(">deleteNodefromDB");
   const vertexID = JSON.parse(nodeID.payload);
-  console.log(typeof vertexID);
   console.log(vertexID);
   try {
     yield call(post, "http://localhost:3000/Vertex/destroy", {
@@ -182,7 +180,7 @@ function* deleteNodeFromDB(nodeID) {
 function* deleteEdgeFromDB(edgeID) {
   console.log(">deleteEdgefromDB");
 
-  console.log(JSON.parse(edgeID.payload))
+  console.log(JSON.parse(edgeID.payload));
   try {
     yield call(post, "http://localhost:3000/Edge/destroy", {
       recordDescriptor: {

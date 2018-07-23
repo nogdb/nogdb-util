@@ -136,8 +136,8 @@ class App extends Component {
     this.handleAddNodeButton = this.handleAddNodeButton.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleEditNodeName = this.handleEditNodeName.bind(this);
     this.handleClearCanvas = this.handleClearCanvas.bind(this);
+    //this.handleEditNodeName = this.handleEditNodeName.bind(this);
     // this.handleSrcChange = this.handleSrcChange.bind(this);
     // this.handleDscChange = this.handleDscChange.bind(this);
     // this.AddEdgeToCanvas = this.AddEdgeToCanvas.bind(this);
@@ -213,20 +213,18 @@ class App extends Component {
   handleNextPage = () => {
     let g = document.getElementById("select-id");
     let selectGroup;
-
     for (let i = 0; i < g.options.length; i++) {
       if (g.options[i].selected === true) {
         selectGroup = g.options[i].value;
         break;
       }
     }
-    console.log(this.props.graph)
     this.setState({
       page: 2,
       group: selectGroup
     });
   };
-
+  //Select class in add node modal
   selectBoxList = graph => {
     let arr = [];
     //  const list =Object.keys(graph.classes)
@@ -240,16 +238,17 @@ class App extends Component {
     }
     return arr;
   };
+
   handleChange(e) {
     this.setState({
       textValue: e.target.value
     });
   }
-  handleEditNodeName(e) {
-    this.setState({
-      editNodeName: e.target.value
-    });
-  }
+  // handleEditNodeName(e) {
+  //   this.setState({
+  //     editNodeName: e.target.value
+  //   });
+  // }
 
   handleClearCanvas() {
     let nullGraph = {
@@ -262,18 +261,18 @@ class App extends Component {
 
   render() {
     const { graph, scale } = this.props;
-    let pHeader;
+    let Title;
     let consoleBox;
     let historyBox;
     let nodeTabBars;
     let edgeTabBars;
 
     if (scale.isFullscreen === true) {
-      pHeader = null;
+      Title = null;
       consoleBox = null;
       historyBox = null;
     } else {
-      pHeader = <NogDBTitle />;
+      Title = <NogDBTitle />;
       consoleBox = <Console />;
       historyBox = <History />;
     }
@@ -289,7 +288,7 @@ class App extends Component {
     }
     return (
       <Container>
-        {pHeader}
+        {Title}
         <Row>
           <Col md={scale.nodeMenu || scale.EdgeMenu ? 3 : 0}>
             {nodeTabBars} {edgeTabBars}
@@ -310,7 +309,7 @@ class App extends Component {
                 </button>
               ) : (
                 <button
-                  id="exitFullScreen-button"
+                  id="FullScreen-button"
                   onClick={this.props.exitFullscreenActionCreator}
                 >
                   Exit Fullscreen
@@ -320,7 +319,6 @@ class App extends Component {
                 Clear Canvas
               </button>
             </div>
-
             <Canvas state={graph} />
             {historyBox}
           </Col>
@@ -341,11 +339,9 @@ class App extends Component {
             </button>
           </div>
           {this.state.page === 1 ? (
-            
             <div id="addnodemodal-middle-div">
               Hello middle 1 <hr />
-              Class :{" "}
-              {/*select class node*/}
+              Class : {/*select class node*/}
               <select id="select-id"> {this.selectBoxList(graph)} </select>
             </div>
           ) : (
@@ -356,6 +352,7 @@ class App extends Component {
                 <br />
                 <div id="inside-editmid-div">
                   <br />
+                  {/*Hard Code*/}
                   <h5 id="Editnode-classname">name </h5>
                   {/*fill node name*/}
                   <input
@@ -370,6 +367,7 @@ class App extends Component {
                   <br />
 
                   <form action="/action_page.php">
+                    {/*Hard Code*/}
                     CreateDate: <input type="date" name="day" id="myDate" />
                     Time: <input type="time" id="myTime" />
                     <select id="select-nodetype">
@@ -971,125 +969,8 @@ export default connect(
 //       NodeName: ""
 //     });
 //   };
-//   handleSize25 = () => {
-//     this.changeSize(25);
-//   };
-//   handleSize50 = () => {
-//     this.changeSize(50);
-//   };
-//   handleSize75 = () => {
-//     this.changeSize(75);
-//   };
-//   handleSize100 = () => {
-//     this.changeSize(100);
-//   };
-//   changeSize = size => {
-//     this.setState(prevState => {
-//       let externalOp = prevState.options.groups;
-//       let tempGroup;
-//       for (let ele in this.state.graph.nodes) {
-//         if (prevState.graph.nodes[ele].id === prevState.nodeID) {
-//           tempGroup = prevState.graph.nodes[ele].group;
-//           break;
-//         }
-//       }
-//       if (tempGroup === "A") {
-//         const updateSize = { ...externalOp.A, size: size };
-//         const updateGroup = { ...externalOp, A: updateSize };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (tempGroup === "B") {
-//         const updateSize = { ...externalOp.B, size: size };
-//         const updateGroup = { ...externalOp, B: updateSize };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (tempGroup === "C") {
-//         const updateSize = { ...externalOp.C, size: size };
-//         const updateGroup = { ...externalOp, C: updateSize };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (tempGroup === "D") {
-//         const updateSize = { ...externalOp.D, size: size };
-//         const updateGroup = { ...externalOp, D: updateSize };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       }
-//     });
-//   };
-//   selectedColor = () => {
-//     this.setState(prevState => {
-//       let externalOp = prevState.options.groups;
-//       let color = document.getElementById("select-nodecolor").value;
-//       let selectGroup;
-//       for (let ele in this.state.graph.nodes) {
-//         if (this.state.nodeID === this.state.graph.nodes[ele].id) {
-//           selectGroup = this.state.graph.nodes[ele].group;
-//         }
-//       }
-//       console.log(color);
-//       console.log(externalOp);
-//       console.log(selectGroup);
-//       if (selectGroup === "A") {
-//         const updateColor = {
-//           ...externalOp.A,
-//           color: { background: color, border: color }
-//         };
-//         const updateGroup = { ...externalOp, A: updateColor };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (selectGroup === "B") {
-//         const updateColor = {
-//           ...externalOp.B,
-//           color: { background: color, border: color }
-//         };
-//         const updateGroup = { ...externalOp, B: updateColor };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (selectGroup === "C") {
-//         const updateColor = {
-//           ...externalOp.C,
-//           color: { background: color, border: color }
-//         };
-//         const updateGroup = { ...externalOp, C: updateColor };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (selectGroup === "D") {
-//         const updateColor = {
-//           ...externalOp.D,
-//           color: { background: color, border: color }
-//         };
-//         const updateGroup = { ...externalOp, D: updateColor };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       }
-//     });
-//   };
-//   render() {
 
+//   render() {
 //     let tabbars;
 //     if (this.state.isPropertyDisplay === "nodeTrue") {
 //       tabbars = (
@@ -1272,23 +1153,7 @@ export default connect(
 //       alertcreateRelationmsg = null;
 //     }
 
-//     let commandbox;
-//     if (this.state.showMenu === true) {
-//       commandbox = (
-//         <div id="command-div">
-//           <div id="history-div">
-//             Command Menu : {(NodeValue = this.state.nodeID)}
-//             <button
-//               id="Incoming-button"
-//               title="Incoming Relationship"
-//               onClick={this.handleIncoming}
-//             >Incoming</button>
-//             {/* <button title="Incoming Relationship" onClick={this.handleIncoming(NodeValue)}> Incoming </button> */}
-//             <button
-//               id="Outcoming-button"
-//               title="Outcoming Relationship"
-//               onClick={this.handleOutcoming}
-//             >Outcoming</button>
+//
 //             <button id="Edit-button" onClick={this.toggleEditnodeModal}>Edit node{this.state.nodeID}</button>
 //             <Modal
 //               isOpen={this.state.isEditNodeActive}
@@ -1381,41 +1246,13 @@ export default connect(
 //                 </div>
 //               )}
 //             </Modal>
-//             <button
-//               id="removeNode-button"
-//               title="remove node from canvas"
-//               onClick={this.handleRemoveNode}
-//             >
-
-//               Remove
-//             </button>
+//
 //             <button
 //               id="deleteNode-button"
 //               title="delete node from Database"
 //               onClick={this.toggleDeletenodeModal}
 //             >
 
-//               Delete
-//             </button>
-//             <Modal
-//               isOpen={this.state.isDeleteNodeActivate}
-//               contentLabel="DeleteNodeModal"
-//               onRequestClose={this.toggleDeletenodeModal}
-//               style={customCreateEdgeModal}
-//             >
-//               <div id="top-deletenode-div"> DeleteNode </div>
-//               <div id="middle-deletenode-div">
-//                 Deleting node {this.state.nodeID} will permanantly be removed
-//                 from your Database
-//               </div>
-//               <div id="bottom-deletenode-div">
-//                 <button onClick={this.toggleDeletenodeModal}>
-//                   No,keep Node
-//                 </button>
-//                 <Button color="danger" onClick={this.handleDeleteNode}>
-
-//                   Yes,Delete Node!
-//                 </Button>
 //               </div>
 //             </Modal>
 //           </div>
@@ -1491,7 +1328,7 @@ export default connect(
 //     return (
 //       <div className="App">
 //         <header className="App-header" />
-//         {pHeader}
+//         {Title}
 //         {alertmsg}
 //         {alertcreateRelationmsg}
 //         {tabbars}
@@ -1573,15 +1410,10 @@ export default connect(
 // />
 //   </div>
 // )}
-//         <button id="his-button" onClick={this.toggleShowMenu}>
-//           Command
-//         </button>
 //       </div>
 //     );
 //   }
 // }
-
-// export default App;
 
 // let Nodenumber;
 // let Relationnumber;

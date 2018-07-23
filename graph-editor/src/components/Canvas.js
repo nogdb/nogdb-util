@@ -79,7 +79,6 @@ const mapDispatchToProps = dispatch => {
     removeEdgeCanvasActionCreator: edgeID => {
       dispatch(removeEdgeCanvas(edgeID));
     },
-
     deleteNodeFromDB: nodeID => {
       dispatch(deleteNodeFromDB(nodeID));
     }
@@ -106,9 +105,7 @@ class Canvas extends Component {
     this.state = {
       isDeleteNodeActivate: false,
       isDeleteRelationActivate: false,
-      createEdgeMode: false,
-
-      
+      createEdgeMode: false
     };
     this.handleNodeID = this.handleNodeID.bind(this);
     this.handleGetNodeName = this.handleGetNodeName.bind(this);
@@ -117,24 +114,17 @@ class Canvas extends Component {
     this.setDisplayFormat = this.setDisplayFormat.bind(this);
     this.handleDeleteRelation = this.handleDeleteRelation.bind(this);
     this.handleNodeID2 = this.handleNodeID2.bind(this);
-
   }
   handleNodeID(nodeIDs) {
     this.props.getNodeIDActionCreator(nodeIDs[0]);
   }
-    handleNodeID2 = nodeIDs => {
-    this.props.getNodeID2ActionCreator(nodeIDs[0])
-    // this.setState(prevState => ({
-    //   nodeID: nodeIDs[0],
-    //   prevNodeID: prevState.nodeID
-    // }));
-    // console.log();
+  handleNodeID2 = nodeIDs => {
+    this.props.getNodeID2ActionCreator(nodeIDs[0]);
   };
-    handleCreateRelation = () => {
-      this.setState({
-              createEdgeMode: true
-            });
-    
+  handleCreateRelation = () => {
+    this.setState({
+      createEdgeMode: true
+    });
   };
   handleGetNodeName = () => {
     for (let ele in this.props.graph.graphCanvas.nodes) {
@@ -152,20 +142,15 @@ class Canvas extends Component {
       if (
         this.props.graph.graphCanvas.nodes[ele].id === this.props.data.nodeID
       ) {
-        // this.setState({
-        //   nodeClass: this.state.graph.nodes[ele].group
-        // });
         this.props.getNodeClassActionCreator(
           this.props.graph.graphCanvas.nodes[ele].group
         );
       }
     }
   };
-
   handleRelationID = relaID => {
     this.props.getEdgeIDActionCreator(relaID[0]);
   };
-
   getInRelationNode = () => {
     for (let ele in this.props.graph.graphCanvas.edges) {
       if (
@@ -177,7 +162,6 @@ class Canvas extends Component {
       }
     }
   };
-
   getOutRelationNode = () => {
     for (let ele in this.props.graph.graphCanvas.edges) {
       if (
@@ -189,7 +173,6 @@ class Canvas extends Component {
       }
     }
   };
-
   setDisplayFormat = () => {
     let canvasNode = this.props.graph.graphCanvas.nodes.slice();
     let canvasEdge = this.props.graph.grapCanvas.edges.slice();
@@ -267,6 +250,7 @@ class Canvas extends Component {
       state.options
     );
     let commandBox;
+    //Show node menu when click node
     if (scale.nodeMenu === true) {
       commandBox = (
         <div id="command-div">
@@ -290,7 +274,7 @@ class Canvas extends Component {
               id="Edit-button"
               //  onClick={this.toggleEditnodeModal}
             >
-              Edit node{data.nodeID}
+              Edit node {data.nodeID}
             </button>
             {/* <Modal
                        isOpen={this.state.isEditNodeActive}
@@ -423,14 +407,14 @@ class Canvas extends Component {
       commandBox = null;
     }
     let relationBox;
-
     if (scale.edgeMenu === true) {
       relationBox = (
         <div id="relationMenu-div">
           Relationship Menu :
           {/* {this.state.relationID} */}
-          <button id ="editRelationship"
-          // onClick={this.toggleEditRelationModal}
+          <button
+            id="editRelationship"
+            // onClick={this.toggleEditRelationModal}
           >
             Edit Relationship
           </button>
@@ -459,7 +443,10 @@ class Canvas extends Component {
         
                        
                      </Modal> */}
-          <button id="deleteRelationship"onClick={this.toggleDeleteRelationModal}>
+          <button
+            id="deleteRelationship"
+            onClick={this.toggleDeleteRelationModal}
+          >
             Delete Relationship
           </button>
           <Modal
@@ -501,18 +488,19 @@ class Canvas extends Component {
               if (this.state.createEdgeMode === false) {
                 this.handleNodeID(event.nodes);
               } else {
-                
                 this.handleNodeID2(event.nodes);
               }
 
               if (this.state.createEdgeMode === true) {
-                const src = this.props.data.nodeID
-                const dest = this.props.data.nodeID2
+                const src = this.props.data.nodeID;
+                const dest = this.props.data.nodeID2;
                 //console.log(src,dest)
                 //this.setSrcEdge(src);
                 //this.setDecEdge(dest);
                 //this.toggleCreateRelationModalTrue();
-                this.state.createEdgeMode = false;
+                this.setState({
+                  createEdgeMode: false
+                });
               }
 
               this.handleNodeID(event.nodes);

@@ -1,6 +1,6 @@
 const data = {
   nodeID: null,
-  nodeID2:null,
+  nodeID2: null,
   //use nodeID2 when click create relationship
   nodeClass: null,
   nodeName: null,
@@ -9,7 +9,6 @@ const data = {
   edgeIn: null,
   edgeOut: null,
   selectId: null
-  //
 };
 const dataReducer = (state = data, action) => {
   switch (action.type) {
@@ -19,18 +18,18 @@ const dataReducer = (state = data, action) => {
         nodeID: action.payload
       };
 
-      console.log(state.nodeID)
+      console.log(state.nodeID);
       return state;
     case "GET_NODE_ID_2":
-
-      state={
+      state = {
         ...state,
-        nodeID2: action.payload,
-      }
-      console.log(state.nodeID)
-      console.log(state.nodeID2)
+        nodeID2: action.payload
+      };
+      console.log(state.nodeID);
+      console.log(state.nodeID2);
+      break;
     case "GET_EDGE_ID":
-    //console.log(action.payload)
+      //console.log(action.payload)
       state = {
         ...state,
         edgeID: action.payload
@@ -44,17 +43,17 @@ const dataReducer = (state = data, action) => {
       };
       return state;
 
-    case "GET_NODE_NAME":
-      state = {
-        ...state,
-        nodeName: action.payload
-      };
-      return state;
-
     case "GET_EDGE_CLASS":
       state = {
         ...state,
         edgeClass: action.payload
+      };
+      return state;
+
+    case "GET_NODE_NAME":
+      state = {
+        ...state,
+        nodeName: action.payload
       };
       return state;
 
@@ -65,12 +64,6 @@ const dataReducer = (state = data, action) => {
       };
       return state;
 
-    case "SEND_SELECT_ID":
-      state = {
-        ...state,
-        selectId: action.payload
-      };
-      break;
     case "GET_OUT_RELATION":
       state = {
         ...state,
@@ -78,6 +71,12 @@ const dataReducer = (state = data, action) => {
       };
       return state;
 
+    case "SEND_SELECT_ID":
+      state = {
+        ...state,
+        selectId: action.payload
+      };
+      break;
     default:
       state = {
         ...state
