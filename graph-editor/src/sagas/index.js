@@ -16,7 +16,7 @@ import {
 function* rootSaga() {
   yield all([
     takeEvery("EXECUTE", addConsoletoDB),
-    takeEvery("DELETE_NODE_FROM_DATABASE", deleteNodeFromDB),
+    //takeEvery("DELETE_NODE_FROM_DATABASE", deleteNodeFromDB),
     takeEvery("DELETE_EDGE_FROM_DATABASE", deleteEdgeFromDB),
     takeEvery("GET_ALL_CLASS_FROM_DATABASE", checkClassEdgeNode),
     takeEvery("GET_EDGE_SRC_DST", getSrcDst),
@@ -31,7 +31,7 @@ function* rootSaga() {
     //  takeEvery('DELETE_EDGE_TO_DB', deleteEdgeFromDB)
   ]);
 }
-
+//add node button
 function* addNodeToDB(newNode) {
   console.log(">addNodetoDB");
   /// console.log(newNode.payload);
@@ -50,7 +50,7 @@ function* addNodeToDB(newNode) {
     console.log(error);
   }
 }
-
+//sql command in console
 function* addConsoletoDB(sqlStr) {
   console.log(">>>ConsoleToDB");
 

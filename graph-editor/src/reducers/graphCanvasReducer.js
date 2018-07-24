@@ -50,7 +50,10 @@ const graphSetting = {
   classes: [],
   nodeIDDB: "",
   selectClass: "",
-  label: [] //use to show label on graph
+  label: {
+    id:[],
+    label:[]
+  } //use to show label on graph
 };
 
 const graphCanvasReducer = (state = graphSetting, action) => {
@@ -60,6 +63,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
   let backupEdge = state.graphCanvas.edges.slice();
   let updateColor, updateGroup, updateSize;
   switch (action.type) {
+    //add node button render
     case "ADD_NODE_ACTION":
       //console.log(action.payload);
       //console.log(graphSetting.nodeIDDB);
@@ -219,35 +223,40 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           edges: action.payloadEdge
         }
       };
-
+    //add node via console
     case "ADD_VERTEX_CONSOLE": {
       //ADDNODE
       let nodeID = [];
       let nodeName = [];
+      let nodeGroup = [];
+      //console.log(action.payload);
       for (let i = 0; i < action.payload.length; i++) {
         nodeID.push(action.payload[i].descriptor.rid);
         nodeName.push(action.payload[i].record.name);
-        //nodeGroup.push(action.payload[i].record['name']);
+        nodeGroup.push(action.payload[i].record["@className"]);
 
         //default
-        graphSetting.label.push(nodeName);
-
-        // nodeID.push(action.payload[i].data.descriptor.rid);
-        // nodeName.push(action.payload[i].data.record.name);
-        // nodeGroup.push(action.payload[i].group)
+        //use label to store what node or edge name render
+        graphSetting.label.id.push(nodeID[i])
+        graphSetting.label.label.push(nodeName[i]);
       }
-
+      // hash node id to label of node
+      let hashIDToLabel ={}
+      for(let ele in graphSetting.label.id){
+        hashIDToLabel[JSON.stringify(graphSetting.label.id[ele])] = graphSetting.label.label[ele]
+      }
+      
       const backupID = nodeID.map(item => JSON.stringify(item));
       for (let i in backupID) {
         if (backupNode.map(item => item.id).includes(backupID[i]) === false) {
           backupNode.push({
             id: JSON.stringify(nodeID[i]),
-            label: nodeName[i]
-            //label: graphSetting.label[i],
-            //group: nodeGroup[i]
+            label: hashIDToLabel[JSON.stringify(nodeID[i])],
+            group: nodeGroup[i]
           });
         }
       }
+     // console.log(backupNode);
       return {
         ...state,
         graphCanvas: {
@@ -266,7 +275,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         ...state,
         classes: className
       };
-
+    //add edge via console
     case "ADD_EDGE_CONSOLE": {
       let edgeID = [];
       let src = [];
