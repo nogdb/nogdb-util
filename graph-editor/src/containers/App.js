@@ -8,7 +8,6 @@ import Canvas from "../components/Canvas";
 import History from "../components/History";
 import { connect } from "react-redux";
 import {
-  addNodeToCanvas,
   addNodeToDatabase,
   clearCanvas,
   fullscreen,

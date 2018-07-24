@@ -34,7 +34,6 @@ function* rootSaga() {
 //add node button
 function* addNodeToDB(newNode) {
   console.log(">addNodetoDB");
-  /// console.log(newNode.payload);
   try {
     const response = yield call(post, "http://localhost:3000/Vertex/create", {
       className: newNode.payload[0].group,
@@ -44,6 +43,7 @@ function* addNodeToDB(newNode) {
         time: newNode.payload[0].time
       }
     });
+    //send to render graph canvas
     const nodeData = {
       id: JSON.stringify(response.data.rid),
       label: newNode.payload[0].label,

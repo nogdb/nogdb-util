@@ -4,8 +4,9 @@ const graphSetting = {
     edges: []
   },
   options: {
+    //Hard Code
+
     groups: {
-      //Hard Code
       Person: { color: { background: "red", border: "red" }, size: 25 },
       School: { color: { background: "orange", border: "orange" }, size: 25 },
       C: { color: { background: "green", border: "green" }, size: 25 },
@@ -57,20 +58,19 @@ const graphSetting = {
 };
 
 const graphCanvasReducer = (state = graphSetting, action) => {
-  let nodeGroup;
+  let nodeGroup = null;
   let externalOption = state.options.groups;
   let backupNode = state.graphCanvas.nodes.slice();
   let backupEdge = state.graphCanvas.edges.slice();
   let updateColor, updateGroup, updateSize;
+  let hashIDToClass = {};
+  for (let i in backupNode) {
+    hashIDToClass[JSON.parse(backupNode[i].id)[0]] = backupNode[i].group;
+  }
   switch (action.type) {
     //add node button render
     case "ADD_NODE_ACTION":
-      //console.log(action.payload);
-      //console.log(graphSetting.nodeIDDB);
-      //console.log(action.payload);
-      console.log(state.nodeIDDB);
       action.payload[0].id = state.nodeIDDB;
-      console.log(action.payload);
 
       for (let ele in action.payload) {
         if (
@@ -113,6 +113,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
 
     case "REMOVE_EDGE":
       console.log(action.payload);
+
       for (let ele in backupEdge) {
         if (backupEdge[ele].id === action.payload) {
           backupEdge.splice(ele, 1);
@@ -127,24 +128,20 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };
 
     case "EDIT_SIZE":
-      for (let ele in backupNode) {
-        if (backupNode[ele].id === action.nodeID) {
-          nodeGroup = backupNode[ele].group;
-          break;
-        }
-      }
-      //Hard Code
+      nodeGroup = hashIDToClass[JSON.parse(action.nodeID)[0]];
+
+      //Hard Code node class name
       switch (nodeGroup) {
-        case "A":
-          updateSize = { ...externalOption.A, size: action.size };
-          updateGroup = { ...externalOption, A: updateSize };
+        case "Person":
+          updateSize = { ...externalOption.Person, size: action.size };
+          updateGroup = { ...externalOption, Person: updateSize };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
-        case "B":
-          updateSize = { ...externalOption.B, size: action.size };
-          updateGroup = { ...externalOption, B: updateSize };
+        case "School":
+          updateSize = { ...externalOption.School, size: action.size };
+          updateGroup = { ...externalOption, School: updateSize };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
@@ -167,34 +164,32 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       }
       break;
     case "CHANGE_COLOR_NODE":
-      for (let ele in backupNode) {
-        if (backupNode[ele].id === action.nodeID) {
-          nodeGroup = backupNode[ele].group;
-          break;
-        }
-      }
-      //Hard Code
+      nodeGroup = hashIDToClass[JSON.parse(action.nodeID)[0]];
+      console.log(action);
+      //Hard Code node class name
       switch (nodeGroup) {
-        case "A":
+        case "Person":
           updateColor = {
-            ...externalOption.A,
+            ...externalOption.Person,
             color: { background: action.color, border: action.color }
           };
-          updateGroup = { ...externalOption, A: updateColor };
+          updateGroup = { ...externalOption, Person: updateColor };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
-        case "B":
+
+        case "School":
           updateColor = {
-            ...externalOption.B,
+            ...externalOption.School,
             color: { background: action.color, border: action.color }
           };
-          updateGroup = { ...externalOption, B: updateSize };
+          updateGroup = { ...externalOption, School: updateColor };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
+
         case "C":
           updateColor = {
             ...externalOption.C,
