@@ -84,9 +84,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addNodeToCanvasActionCreator: newNode => {
-      dispatch(addNodeToCanvas(newNode));
-    },
+    // addNodeToCanvasActionCreator: newNode => {
+    //   dispatch(addNodeToCanvas(newNode));
+    // },
     addNodeToDatabaseActionCreator: newNode => {
       dispatch(addNodeToDatabase(newNode));
     },
@@ -191,7 +191,8 @@ class App extends Component {
       }
     ];
     this.props.addNodeToDatabaseActionCreator(newNode);
-    this.props.addNodeToCanvasActionCreator(newNode);
+    //this.props.addNodeToCanvasActionCreator(newNode);
+
     this.setState({
       textValue: ""
     });

@@ -49,10 +49,10 @@ const graphSetting = {
   name: [],
   classes: [],
   nodeIDDB: "",
-  selectClass: "",
+  selectClass: " ",
   label: {
-    id:[],
-    label:[]
+    id: [],
+    label: []
   } //use to show label on graph
 };
 
@@ -67,7 +67,9 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     case "ADD_NODE_ACTION":
       //console.log(action.payload);
       //console.log(graphSetting.nodeIDDB);
-      action.payload[0].id = graphSetting.nodeIDDB;
+      //console.log(action.payload);
+      console.log(state.nodeIDDB);
+      action.payload[0].id = state.nodeIDDB;
       console.log(action.payload);
 
       for (let ele in action.payload) {
@@ -79,6 +81,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           backupNode.push(action.payload[ele]);
         }
       }
+      console.log(backupNode);
       return {
         ...state,
         graphCanvas: {
@@ -237,16 +240,18 @@ const graphCanvasReducer = (state = graphSetting, action) => {
 
         //default
         //use label to store what node or edge name render
-        graphSetting.label.id.push(nodeID[i])
+        graphSetting.label.id.push(nodeID[i]);
         graphSetting.label.label.push(nodeName[i]);
       }
       // hash node id to label of node
-      let hashIDToLabel ={}
-      for(let ele in graphSetting.label.id){
-        hashIDToLabel[JSON.stringify(graphSetting.label.id[ele])] = graphSetting.label.label[ele]
+      let hashIDToLabel = {};
+      for (let ele in graphSetting.label.id) {
+        hashIDToLabel[JSON.stringify(graphSetting.label.id[ele])] =
+          graphSetting.label.label[ele];
       }
-      
+
       const backupID = nodeID.map(item => JSON.stringify(item));
+
       for (let i in backupID) {
         if (backupNode.map(item => item.id).includes(backupID[i]) === false) {
           backupNode.push({
@@ -256,7 +261,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           });
         }
       }
-     // console.log(backupNode);
+      // console.log(backupNode);
       return {
         ...state,
         graphCanvas: {
@@ -307,10 +312,14 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };
     }
 
-    case "SEND_NODE_ID_TO_CANVAS": {
+    case "ADD_NODE_RENDER": {
+      backupNode.push(action.payload);
       return {
         ...state,
-        nodeIDDB: action.payload
+        graphCanvas: {
+          edges: backupEdge,
+          nodes: backupNode
+        }
       };
     }
 

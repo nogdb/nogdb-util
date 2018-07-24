@@ -37,10 +37,10 @@ const deleteNodeFromDB = NodeID => ({
   type: "DELETE_NODE_TO_DB",
   payload: NodeID
 });
-const sendNodeIDToCanvas = nodeID =>({
-  type : "SEND_NODE_ID_TO_CANVAS",
-  payload: nodeID
-})
+const addNodeRender = data => ({
+  type: "ADD_NODE_RENDER",
+  payload: data
+});
 
 export {
   executeConsole,
@@ -52,5 +52,5 @@ export {
   sendAllNodeClassToGraphCanvasReducer,
   getAllNodeClassForAddNodeButton,
   deleteNodeFromDB,
-  sendNodeIDToCanvas
+  addNodeRender
 };

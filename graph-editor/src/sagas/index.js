@@ -5,7 +5,7 @@ import {
   addVertexConsole,
   addEdgeConsole,
   sendAllNodeClassToGraphCanvasReducer,
-  sendNodeIDToCanvas
+  addNodeRender
 } from "../actions/databaseAction";
 
 // const SQL_RESULT_TYPE = {
@@ -44,7 +44,14 @@ function* addNodeToDB(newNode) {
         time: newNode.payload[0].time
       }
     });
-    yield put(sendNodeIDToCanvas(response.data.rid));
+    const nodeData = {
+      id: JSON.stringify(response.data.rid),
+      label: newNode.payload[0].label,
+      group: newNode.payload[0].group,
+      date: newNode.payload[0].date,
+      time: newNode.payload[0].time
+    };
+    yield put(addNodeRender(nodeData));
   } catch (error) {
     //    yield put(addNodeToDBError(error));
     console.log(error);
