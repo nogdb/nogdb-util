@@ -1,21 +1,18 @@
 import { all, takeEvery, call, put } from "redux-saga/effects";
-import { get, post } from "../services/webService";
+import { post } from "../services/webService";
 import {
-  addRespondFromConsole,
   sendAllClassFromDatabaseToState,
-  getAllClassFromDatabase,
   addVertexConsole,
   addEdgeConsole,
   sendAllNodeClassToGraphCanvasReducer,
   sendNodeIDToCanvas,
   addIncomingNodeEdge,
-  addOutgoingNodeEdge
+  addOutgoingNodeEdge,
+  addNodeRender,
+  getAllNodeProperties,
+  sendAllNodePropertyToDataReducer
 } from "../actions/databaseAction";
-import {addNodeToCanvas} from "../actions/mainButtonAction";
-
-const SQL_RESULT_TYPE = {
-  RESULT_SET: "s"
-};
+import { addNodeToCanvas } from "../actions/mainButtonAction";
 
 // const SQL_RESULT_TYPE = {
 //     RESULT_SET: 's',
@@ -25,15 +22,16 @@ const SQL_RESULT_TYPE = {
 function* rootSaga() {
   yield all([
     takeEvery("EXECUTE", addConsoletoDB),
-    takeEvery("DELETE_NODE_FROM_DATABASE", deleteNodeFromDB),
+    //takeEvery("DELETE_NODE_FROM_DATABASE", deleteNodeFromDB),
     takeEvery("DELETE_EDGE_FROM_DATABASE", deleteEdgeFromDB),
     takeEvery("GET_ALL_CLASS_FROM_DATABASE", checkClassEdgeNode),
     takeEvery("GET_EDGE_SRC_DST", getSrcDst),
     takeEvery("GET_ALL_CLASS_FOR_ADDNODE_BUTTON", getAllClassForAddNodeButton),
     takeEvery("ADD_NODE_TO_DB", addNodeToDB),
-    takeEvery('GET_IN_EDGE_FOR_NODE',getInEdgeForNode),
-    takeEvery('GET_OUT_EDGE_FOR_NODE',getOutEdgeForNode),
-    takeEvery('ADD_UPDATE_NODE_TO_DB', updateNodeToDB),
+    takeEvery("GET_IN_EDGE_FOR_NODE", getInEdgeForNode),
+    takeEvery("GET_OUT_EDGE_FOR_NODE", getOutEdgeForNode),
+    takeEvery("ADD_UPDATE_NODE_TO_DB", updateNodeToDB),
+    takeEvery("GET_NODE_PROPERTY", getallnodePropertyDB),
     // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
     // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
     // takeEvery('GET_EDGES_FROM_DB', getEdgesFromDB),
@@ -42,37 +40,33 @@ function* rootSaga() {
     //  takeEvery('DELETE_EDGE_TO_DB', deleteEdgeFromDB)
   ]);
 }
-
+//add node button
 function* addNodeToDB(newNode) {
   console.log(">addNodetoDB");
   try {
     const response = yield call(post, "http://localhost:3000/Vertex/create", {
-      "className": newNode.payload[0].group,
-      "record": {
-        "name": newNode.payload[0].label,
-        "date" : newNode.payload[0].date,
-        "time": newNode.payload[0].time,
-        
+      className: newNode.payload[0].group,
+      record: {
+        name: newNode.payload[0].label,
+        date: newNode.payload[0].date,
+        time: newNode.payload[0].time
       }
     });
-    let newNodeCanvas = [
-      {
-        id: JSON.stringify(response.data.rid),
-        label: newNode.payload[0].label,
-        group: newNode.payload[0].group,
-        date:  newNode.payload[0].date,
-        time: newNode.payload[0].time,
-      }
-    ];
-     yield put(addNodeToCanvas(newNodeCanvas));
-    console.log(response.data.rid);
-   
+    //send to render graph canvas
+    const nodeData = {
+      id: JSON.stringify(response.data.rid),
+      label: newNode.payload[0].label,
+      group: newNode.payload[0].group,
+      date: newNode.payload[0].date,
+      time: newNode.payload[0].time
+    };
+    yield put(addNodeRender(nodeData));
   } catch (error) {
     //    yield put(addNodeToDBError(error));
     console.log(error);
   }
 }
-
+//sql command in console
 function* addConsoletoDB(sqlStr) {
   console.log(">>>ConsoleToDB");
 
@@ -80,34 +74,53 @@ function* addConsoletoDB(sqlStr) {
     const resp = yield call(post, "http://localhost:3000/SQL/execute", {
       sql: sqlStr.payload
     });
+    console.log(resp);
 
     if (resp.data.type === "n") {
+      //No result
       console.log("There is no result");
     } else if (resp.data.type === "s") {
+      //Result set
+      //select command
       const classdescriptor = yield call(
         post,
         "http://localhost:3000/Db/getSchema",
         {}
       );
-     
-      let hash = {};
+      let hashIDToType = {};
+      let hashIDToName = {};
       for (let ele in classdescriptor.data) {
-        hash[classdescriptor.data[ele].id] = classdescriptor.data[ele].type;
+        hashIDToType[classdescriptor.data[ele].id] =
+          classdescriptor.data[ele].type;
+        hashIDToName[classdescriptor.data[ele].id] =
+          classdescriptor.data[ele].name;
       }
-      let classNameData = [];
-      for (let ele in classdescriptor.data) {
-        if (classdescriptor.data[ele].type === "v") {
-          classNameData.push(classdescriptor.data[ele]);
-        }
-      }
-      yield put(sendAllNodeClassToGraphCanvasReducer(classNameData));
+      //[id,type], [id,name]
 
+      //let classNameData = [];
+      //console.log(classdescriptor.data);
+      // for (let ele in classdescriptor.data) {
+      //   if (classdescriptor.data[ele].type === "v") {
+      //     classNameData.push(classdescriptor.data[ele]);
+      //   }
+      // }
+      // console.log(classNameData)
+      //yield put(sendAllNodeClassToGraphCanvasReducer(classNameData));
       let Nodes = [];
       let Edges = [];
       for (let ele in resp.data.data) {
-        if (hash[resp.data.data[ele].descriptor.rid[0]] === "v") {
+        if (hashIDToType[resp.data.data[ele].descriptor.rid[0]] === "v") {
           Nodes.push(resp.data.data[ele]);
-        } else if (hash[resp.data.data[ele].descriptor.rid[0]] === "e") {
+          // USE
+          // Nodes.push({
+          //   data: resp.data.data[ele],
+          //   group: hash2[resp.data.data[ele].descriptor.rid[0]]
+          // })
+
+          // )
+        } else if (
+          hashIDToType[resp.data.data[ele].descriptor.rid[0]] === "e"
+        ) {
           const recordDescriptor = yield call(
             post,
             "http://localhost:3000/Edge/getSrcDst",
@@ -115,27 +128,27 @@ function* addConsoletoDB(sqlStr) {
               recordDescriptor: { rid: resp.data.data[ele].descriptor.rid }
             }
           );
-          // console.log(recordDescriptor);
+          //console.log(recordDescriptor);
           // Edges.push(resp.data.data[ele])
           Edges.push({
             data: resp.data.data[ele],
             from: recordDescriptor.data[0].descriptor.rid,
             to: recordDescriptor.data[1].descriptor.rid
+            //group: hash2[resp.data.data[ele].descriptor.rid[0]]
           });
           // console.log(Edges)
         }
       }
-
       yield put(addVertexConsole(Nodes));
       yield put(addEdgeConsole(Edges));
-
-      //   yield put(getAllClassFromDatabase(resp.data.data[ele].descriptor.rid[0]))
-      console.log("RESULT_SET");
     } else if (resp.data.type === "c") {
+      //Class descriptor
       console.log("CLASS_DESCRIPTOR");
     } else if (resp.data.type === "p") {
+      //Property descriptor
       console.log("PROPERTY_DESCRIPTOR");
     } else if (resp.data.type === "r") {
+      //Record descriptor
       console.log("RECORD_DESCRIPTORS");
       console.log(resp);
     }
@@ -165,9 +178,7 @@ function* getSrcDst() {
 }
 
 function* deleteNodeFromDB(nodeID) {
-  console.log(">deleteNodefromDB");
   const vertexID = JSON.parse(nodeID.payload);
-  console.log(typeof vertexID);
   console.log(vertexID);
   try {
     yield call(post, "http://localhost:3000/Vertex/destroy", {
@@ -184,9 +195,13 @@ function* deleteNodeFromDB(nodeID) {
 
 function* deleteEdgeFromDB(edgeID) {
   console.log(">deleteEdgefromDB");
+
+  console.log(JSON.parse(edgeID.payload));
   try {
     yield call(post, "http://localhost:3000/Edge/destroy", {
-      recordDescriptor: edgeID
+      recordDescriptor: {
+        rid: JSON.parse(edgeID.payload)
+      }
     });
 
     // yield put(addNode(newNode));
@@ -223,6 +238,7 @@ function* getAllClassForAddNodeButton() {
     );
     let classNameData = [];
     for (let ele in classdescriptor.data) {
+      // if it is vertex class
       if (classdescriptor.data[ele].type === "v") {
         classNameData.push(classdescriptor.data[ele]);
       }
@@ -233,148 +249,155 @@ function* getAllClassForAddNodeButton() {
   }
 }
 
-function* getInEdgeForNode (selectNode) {
+function* getInEdgeForNode(selectNode) {
   console.log(">get InEdge for Node");
   let nodes = [];
   let edges = [];
-  let nodeID = JSON.parse(selectNode.payload)
+  let nodeID = JSON.parse(selectNode.payload);
   try {
-
     //// Input NodeID To get incomming Edge(ID)
     const incommingEdge = yield call(
       post,
       "http://localhost:3000/Vertex/getInEdge",
       {
-        "recordDescriptor" : {
-          "rid": nodeID
+        recordDescriptor: {
+          rid: nodeID
         }
       }
     );
-  
-      for(let ele in incommingEdge.data){
-        // console.log(incommingEdge.data[ele].descriptor.rid)
-      
 
-        //// Input EdgeID to get Src Node
+    for (let ele in incommingEdge.data) {
+      // console.log(incommingEdge.data[ele].descriptor.rid)
+
+      //// Input EdgeID to get Src Node
       const nodeSrcResult = yield call(
         post,
         "http://localhost:3000/Edge/getSrc",
         {
-          "recordDescriptor" : {
-            "rid": incommingEdge.data[ele].descriptor.rid
+          recordDescriptor: {
+            rid: incommingEdge.data[ele].descriptor.rid
           }
         }
       );
       nodes.push({
-        id : JSON.stringify(nodeSrcResult.data.descriptor.rid),
-        label : JSON.stringify(nodeSrcResult.data.record.name)
-      })
-      
+        id: JSON.stringify(nodeSrcResult.data.descriptor.rid),
+        label: JSON.stringify(nodeSrcResult.data.record.name)
+      });
+
       edges.push({
         id: JSON.stringify(incommingEdge.data[ele].descriptor.rid),
-        from:JSON.stringify(nodeSrcResult.data.descriptor.rid),
-        to:JSON.stringify(nodeID) ,
-        label:JSON.stringify(incommingEdge.data[ele].record.name)
-      })
-    } 
-    yield put(addIncomingNodeEdge(nodes,edges));
+        from: JSON.stringify(nodeSrcResult.data.descriptor.rid),
+        to: JSON.stringify(nodeID),
+        label: JSON.stringify(incommingEdge.data[ele].record.name)
+      });
+    }
+    yield put(addIncomingNodeEdge(nodes, edges));
   } catch (error) {
     console.log(error);
   }
 }
 
-
-function* getOutEdgeForNode (selectNode) {
+function* getOutEdgeForNode(selectNode) {
   console.log(">get OutEdge for Node");
   let nodes = [];
   let edges = [];
-  let nodeID = JSON.parse(selectNode.payload)
+  let nodeID = JSON.parse(selectNode.payload);
   // let nodeID = selectNode.payload
-  console.log(nodeID)
+  console.log(nodeID);
   try {
-
     //// Input NodeID To get outgoing Edge(ID)
     const outgoingEdge = yield call(
       post,
       "http://localhost:3000/Vertex/getOutEdge",
       {
-        "recordDescriptor" : {
-          "rid": nodeID
+        recordDescriptor: {
+          rid: nodeID
         }
       }
     );
-  
-      for(let ele in outgoingEdge.data){
-        //// Input EdgeID to get Dst Node
+
+    for (let ele in outgoingEdge.data) {
+      //// Input EdgeID to get Dst Node
       const nodeDstResult = yield call(
         post,
         "http://localhost:3000/Edge/getDst",
         {
-          "recordDescriptor" : {
-            "rid": outgoingEdge.data[ele].descriptor.rid
+          recordDescriptor: {
+            rid: outgoingEdge.data[ele].descriptor.rid
           }
         }
       );
       nodes.push({
-        id : JSON.stringify(nodeDstResult.data.descriptor.rid),
-        label : JSON.stringify(nodeDstResult.data.record.name)
-      })
-      JSON.stringify(nodeID) ,
-      edges.push({
-        id: JSON.stringify(outgoingEdge.data[ele].descriptor.rid),
-        from:JSON.stringify(nodeID),
-        to:JSON.stringify(nodeDstResult.data.descriptor.rid),
-        label:JSON.stringify(outgoingEdge.data[ele].record.name)
-      })
-    } 
-    yield put(addOutgoingNodeEdge(nodes,edges));
+        id: JSON.stringify(nodeDstResult.data.descriptor.rid),
+        label: JSON.stringify(nodeDstResult.data.record.name)
+      });
+      JSON.stringify(nodeID),
+        edges.push({
+          id: JSON.stringify(outgoingEdge.data[ele].descriptor.rid),
+          from: JSON.stringify(nodeID),
+          to: JSON.stringify(nodeDstResult.data.descriptor.rid),
+          label: JSON.stringify(outgoingEdge.data[ele].record.name)
+        });
+    }
+    yield put(addOutgoingNodeEdge(nodes, edges));
   } catch (error) {
     console.log(error);
   }
 }
 
 function* updateNodeToDB(updateNode) {
-   console.log(">>editNodetoDB")
-   console.log(updateNode.payload[0].id)
-   console.log(updateNode)
-    let updateNodeID = JSON.parse(updateNode.payload[0].id)
+  console.log(">>editNodetoDB");
+  console.log(updateNode.payload[0].id);
+  console.log(updateNode);
+  let updateNodeID = JSON.parse(updateNode.payload[0].id);
   //  let updateNodeObj = JSON.parse(updateNode.payload[0])
-  
- 
-  try{
-       yield call(post, "http://localhost:3000/Vertex/update", {
-      "recordDescriptor": {
-        "rid": updateNodeID,
+
+  try {
+    yield call(post, "http://localhost:3000/Vertex/update", {
+      recordDescriptor: {
+        rid: updateNodeID
       },
-      "record": {
-        "name": updateNode.payload[0].label,
-         "date" : updateNode.payload[0].date,
-         "time": updateNode.payload[0].time,
+      record: {
+        name: updateNode.payload[0].label,
+        date: updateNode.payload[0].date,
+        time: updateNode.payload[0].time
       }
-      
     });
-  
+
     let newNodeCanvas = [
       {
-          id: JSON.stringify(updateNodeID),
-          label: updateNode.payload[0].label,
-          group: updateNode.payload[0].group,
-          date: updateNode.payload[0].date,
-          time: updateNode.payload[0].time,
+        id: JSON.stringify(updateNodeID),
+        label: updateNode.payload[0].label,
+        group: updateNode.payload[0].group,
+        date: updateNode.payload[0].date,
+        time: updateNode.payload[0].time
       }
     ];
     // console.log(newNodeCanvas.time)
-       yield put(addNodeToCanvas(newNodeCanvas));
-
-  }catch(error){
-    console.log(error)
+    yield put(addNodeToCanvas(newNodeCanvas));
+  } catch (error) {
+    console.log(error);
   }
-
 }
 
-// function* updateEdgeToDB() {
+function* getallnodePropertyDB(nodeID) {
+  console.log(">>> getallNodeProperties");
+  let objNodeID = JSON.parse(nodeID.payload);
+  try {
+    const nodeProperty = yield call(
+      post,
+      "http://localhost:3000/Db/getRecord",
+      {
+        recordDescriptor: {
+          rid: objNodeID
+        }
+      }
+    );
 
-// }
-
+    yield put(sendAllNodePropertyToDataReducer(nodeProperty));
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export { rootSaga };

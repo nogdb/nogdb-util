@@ -63,6 +63,19 @@ const addUpdateNodeToDatabase = (updateNode) => ({
   type : 'ADD_UPDATE_NODE_TO_DB',
   payload:updateNode
 })
+const addNodeRender = data => ({
+  type: "ADD_NODE_RENDER",
+  payload: data
+});
+
+const getAllNodeProperties =(nodeID) => ({
+  type : 'GET_NODE_PROPERTY',
+  payload:nodeID
+})
+const sendAllNodePropertyToDataReducer = (nodeProperty) => ({
+  type : 'SEND_NODE_PERPERTY_TO_DATA_REDUCER',
+  payload : nodeProperty
+})
 
 export {
   executeConsole,
@@ -79,5 +92,8 @@ export {
   addIncomingNodeEdge,
   getNodeOutEdge,
   addOutgoingNodeEdge,
-  addUpdateNodeToDatabase
+  addUpdateNodeToDatabase,
+  addNodeRender,
+  getAllNodeProperties,
+  sendAllNodePropertyToDataReducer
 };

@@ -2,6 +2,10 @@ const getNodeID = eventNodeID => ({
   type: "GET_NODE_ID",
   payload: eventNodeID
 });
+const getNodeID2 = eventNodeID => ({
+  type: "GET_NODE_ID_2",
+  payload: eventNodeID
+});
 const getEdgeID = edgeID => ({
   type: "GET_EDGE_ID",
   payload: edgeID
@@ -41,11 +45,30 @@ const deleteEdgeFromDatabase = edgeID => ({
   type: "DELETE_EDGE_FROM_DATABASE",
   payload: edgeID
 });
+const storeEditName = (name) => ({
+  type:'STORE_EDIT_NODENAME_VALUE',
+  name:name,
+  // date:date,
+  // time:time
+})
+const storeEditNodeDateTime = (dateTime) => ({
+  type:'STORE_NODE_DATE_VALUE',
+  dateTime:dateTime
+})
 
+// const storeEditTime = (time) => ({
+//   type:'STORE_TIME_VALUE',
+//   time:time
+// })
 
+// const storeEditTime = (time) => ({
+//   type:'STORE_TIME_VALUE',
+//   time:time
+// })
 
 export {
   getNodeID,
+  getNodeID2,
   getNodeClass,
   getEdgeID,
   getNodename,
@@ -55,4 +78,8 @@ export {
   updateGraph,
   dedeteNodeInDatabase,
   deleteEdgeFromDatabase,
+  storeEditName,
+  storeEditNodeDateTime,
+  
+
 };

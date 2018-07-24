@@ -150,8 +150,8 @@ class NodePropertyMenu extends Component {
               <Col sm="12">
                 <h4>Tab 1 Contents</h4>
                 @rid : {data.nodeID} <br />
-                @class : {data.nodeClass} <br />
-                CreatedDate : {this.state.createDate} <br />
+                @class : {this.props.data.nodeClass} <br />
+                {/* CreatedDate : {this.props.data.nodeDateTime} <br /> */}
                 name : {data.nodeName} <br />
               </Col>
             </Row>
@@ -179,6 +179,7 @@ class NodePropertyMenu extends Component {
                 <button onClick={this.handleSize100}>100</button>
                 <p> display node size </p>
                 <p> Node Color </p>
+                {/*Hard Code*/}
                 <select id="select-nodecolor" onChange={this.selectedColor}>
                   <option value="red">Red</option>
                   <option value="orange">Orange</option>

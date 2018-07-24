@@ -8,7 +8,6 @@ import Canvas from "../components/Canvas";
 import History from "../components/History";
 import { connect } from "react-redux";
 import {
-  addNodeToCanvas,
   addNodeToDatabase,
   clearCanvas,
   fullscreen,
@@ -21,19 +20,6 @@ import {
   getAllNodeClassForAddNodeButton
 } from "../actions/databaseAction";
 
-// const customStyle = {
-//   content: {
-//     posittion: "absolute",
-//     top: "20px",
-//     left: "40px",
-//     right: "40px",
-//     bottom: "40px",
-//     marginRight: "15%",
-//     marginLeft: "15%",
-//     marginTop: "15%",
-//     marginBottom: "15%"
-//   }
-// };
 const customAddNodeStyle = {
   content: {
     posittion: "absolute",
@@ -84,9 +70,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addNodeToCanvasActionCreator: newNode => {
-      dispatch(addNodeToCanvas(newNode));
-    },
+    // addNodeToCanvasActionCreator: newNode => {
+    //   dispatch(addNodeToCanvas(newNode));
+    // },
     addNodeToDatabaseActionCreator: newNode => {
       dispatch(addNodeToDatabase(newNode));
     },
@@ -104,8 +90,7 @@ const mapDispatchToProps = dispatch => {
     },
     getAllNodeClassForAddNodeButtonActionCreator: () => {
       dispatch(getAllNodeClassForAddNodeButton());
-    },
-  
+    }
   };
 };
 
@@ -121,7 +106,6 @@ class App extends Component {
       isEditNodeActive: false,
       isDeleteNodeActivate: false,
       isDeleteRelationActivate: false,
-      isCreateRelationActive: false,
       isEditRelationActive: false,
       page: 1,
       prevNodeID: " ",
@@ -181,8 +165,6 @@ class App extends Component {
   }
 
   handleAddNodeButton() {
-    
-   
     let newNodeDB = [
       {
         label: this.state.textValue,
@@ -192,11 +174,11 @@ class App extends Component {
       }
     ];
     this.props.addNodeToDatabaseActionCreator(newNodeDB);
-    console.log(this.props.graph.nodeID_DB)
+    console.log(this.props.graph.nodeID_DB);
     this.setState({
       textValue: ""
     });
-    
+
     this.setModalAddNodeFalse();
   }
   setModalAddNodeTrue = () => {
@@ -228,10 +210,8 @@ class App extends Component {
     });
   };
 
-  // .graphSetting.graphCanvas.classes
   selectBoxList = graph => {
     let arr = [];
-    // console.log(graph.classes);
     //  const list =Object.keys(graph.classes)
     const list = graph.classes;
     for (let ele in list) {
@@ -248,43 +228,38 @@ class App extends Component {
       textValue: e.target.value
     });
   }
- 
+
   handleClearCanvas() {
     let nullGraph = {
       nodes: [],
       edges: []
     };
     this.props.clearCanvasActionCreator(nullGraph);
-    this.setState({ graph: { nodes: [], edges: [] } });
+    this.setState({ graph: nullGraph });
   }
 
   render() {
     const { graph, scale } = this.props;
-    let pHeader;
-    if (scale.isFullscreen === true) {
-      pHeader = null;
-    } else {
-      pHeader = <NogDBTitle />;
-    }
+    let Title;
     let consoleBox;
-    if (scale.isFullscreen === true) {
-      consoleBox = null;
-    } else {
-      consoleBox = <Console />;
-    }
     let historyBox;
+    let nodeTabBars;
+    let edgeTabBars;
+
     if (scale.isFullscreen === true) {
+      Title = null;
+      consoleBox = null;
       historyBox = null;
     } else {
+      Title = <NogDBTitle />;
+      consoleBox = <Console />;
       historyBox = <History />;
     }
-    let nodeTabBars;
     if (scale.nodeMenu === true) {
       nodeTabBars = <NodePropertyMenu />;
     } else if (scale.nodeMenu === false) {
       nodeTabBars = null;
     }
-    let edgeTabBars;
     if (scale.EdgeMenu === true) {
       edgeTabBars = <EdgePropertyMenu />;
     } else if (scale.EdgeMenu === false) {
@@ -293,7 +268,7 @@ class App extends Component {
 
     return (
       <Container>
-        {pHeader}
+        {Title}
         <Row>
           <Col md={scale.nodeMenu || scale.EdgeMenu ? 3 : 0}>
             {nodeTabBars} {edgeTabBars}
@@ -331,6 +306,7 @@ class App extends Component {
         </Row>
         {/* <NodePropertyMenu/> */}
 
+        {/*Modal add node*/}
         <Modal
           isOpen={this.state.isAddNodeActive}
           contentLabel="addnode Modal"
@@ -346,7 +322,7 @@ class App extends Component {
           {this.state.page === 1 ? (
             <div id="addnodemodal-middle-div">
               Hello middle 1 <hr />
-              Class :{" "}
+              Class : {/*select class node*/}
               <select id="select-id"> {this.selectBoxList(graph)} </select>
             </div>
           ) : (
@@ -356,8 +332,10 @@ class App extends Component {
                 Group : {this.state.nodeClass} <br />
                 <br />
                 <div id="inside-editmid-div">
-                  <br />
+                  <br />                 
+                  {/*Hard Code*/}
                   <h5 id="Editnode-classname">name </h5>
+                  {/*fill node name*/}
                   <input
                     type="node-edit"
                     placeholder="Edit...."
@@ -733,7 +711,7 @@ export default connect(
 //       };
 //     });
 //   };
-  
+
 //   setFlagtoAddDatabase = () => {
 //     this.setState({
 //       flagIsAddToCanvas: false
@@ -831,8 +809,6 @@ export default connect(
 //       }
 //     }
 //   }
-
- 
 
 //   toggleEditRelationModal = () => {
 //     this.setState({
@@ -964,124 +940,6 @@ export default connect(
 //       NodeName: ""
 //     });
 //   };
-//   handleSize25 = () => {
-//     this.changeSize(25);
-//   };
-//   handleSize50 = () => {
-//     this.changeSize(50);
-//   };
-//   handleSize75 = () => {
-//     this.changeSize(75);
-//   };
-//   handleSize100 = () => {
-//     this.changeSize(100);
-//   };
-//   changeSize = size => {
-//     this.setState(prevState => {
-//       let externalOp = prevState.options.groups;
-//       let tempGroup;
-//       for (let ele in this.state.graph.nodes) {
-//         if (prevState.graph.nodes[ele].id === prevState.nodeID) {
-//           tempGroup = prevState.graph.nodes[ele].group;
-//           break;
-//         }
-//       }
-//       if (tempGroup === "A") {
-//         const updateSize = { ...externalOp.A, size: size };
-//         const updateGroup = { ...externalOp, A: updateSize };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (tempGroup === "B") {
-//         const updateSize = { ...externalOp.B, size: size };
-//         const updateGroup = { ...externalOp, B: updateSize };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (tempGroup === "C") {
-//         const updateSize = { ...externalOp.C, size: size };
-//         const updateGroup = { ...externalOp, C: updateSize };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (tempGroup === "D") {
-//         const updateSize = { ...externalOp.D, size: size };
-//         const updateGroup = { ...externalOp, D: updateSize };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       }
-//     });
-//   };
-//   selectedColor = () => {
-//     this.setState(prevState => {
-//       let externalOp = prevState.options.groups;
-//       let color = document.getElementById("select-nodecolor").value;
-//       let selectGroup;
-//       for (let ele in this.state.graph.nodes) {
-//         if (this.state.nodeID === this.state.graph.nodes[ele].id) {
-//           selectGroup = this.state.graph.nodes[ele].group;
-//         }
-//       }
-//       console.log(color);
-//       console.log(externalOp);
-//       console.log(selectGroup);
-//       if (selectGroup === "A") {
-//         const updateColor = {
-//           ...externalOp.A,
-//           color: { background: color, border: color }
-//         };
-//         const updateGroup = { ...externalOp, A: updateColor };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (selectGroup === "B") {
-//         const updateColor = {
-//           ...externalOp.B,
-//           color: { background: color, border: color }
-//         };
-//         const updateGroup = { ...externalOp, B: updateColor };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (selectGroup === "C") {
-//         const updateColor = {
-//           ...externalOp.C,
-//           color: { background: color, border: color }
-//         };
-//         const updateGroup = { ...externalOp, C: updateColor };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       } else if (selectGroup === "D") {
-//         const updateColor = {
-//           ...externalOp.D,
-//           color: { background: color, border: color }
-//         };
-//         const updateGroup = { ...externalOp, D: updateColor };
-//         return {
-//           options: {
-//             groups: updateGroup
-//           }
-//         };
-//       }
-//     });
-//   };
-//   render() {
 
 //     let tabbars;
 //     if (this.state.isPropertyDisplay === "nodeTrue") {
@@ -1265,7 +1123,6 @@ export default connect(
 //       alertcreateRelationmsg = null;
 //     }
 
-
 //     let relationbox;
 
 //     if (this.state.showRelationMenu === true) {
@@ -1333,7 +1190,7 @@ export default connect(
 //     return (
 //       <div className="App">
 //         <header className="App-header" />
-//         {pHeader}
+//         {Title}
 //         {alertmsg}
 //         {alertcreateRelationmsg}
 //         {tabbars}
@@ -1422,4 +1279,3 @@ export default connect(
 //     );
 //   }
 // }
-
