@@ -51,10 +51,6 @@ namespace nogdb {
                 && lhs.sub == rhs.sub);
     }
 
-    inline bool operator==(const RecordDescriptor &lhs, const RecordDescriptor &rhs) {
-        return lhs.rid == rhs.rid;
-    }
-
     inline bool operator==(const Bytes &lhs, const Bytes &rhs) {
         return lhs.size() == rhs.size() && memcmp(lhs.getRaw(), rhs.getRaw(), lhs.size()) == 0;
     }
