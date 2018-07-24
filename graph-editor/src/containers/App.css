@@ -7,308 +7,304 @@
   height: 80px;
 }
 
-
 .App-title {
   font-size: 1.5em;
 }
 
 .App-intro {
-  font-size:70%;
-  text-align:left;
-  padding:1%;
-  border:1px solid black;
-  margin:0;
+  font-size: 70%;
+  text-align: left;
+  padding: 1%;
+  border: 1px solid black;
+  margin: 0;
 }
 .History-box {
-  font-size:70%;
-  text-align:left;
-  padding:1%;
-  border:1px solid black;
-  margin:0;
+  font-size: 70%;
+  text-align: left;
+  padding: 1%;
+  border: 1px solid black;
+  margin: 0;
 }
 .History-body {
-  font-size:70%;
-  text-align:left;
-  padding:1%;
-  border:1px solid black;
-  margin:0;
-  height:200px;
+  font-size: 70%;
+  text-align: left;
+  padding: 1%;
+  border: 1px solid black;
+  margin: 0;
+  height: 200px;
 }
 .Top-Box {
-  height:70px;
-  border:1px solid black;
-  margin:0;
+  height: 70px;
+  border: 1px solid black;
+  margin: 0;
   position: relative;
-  
 }
 .Left-tab {
-  height:600px;
-  border:1px solid black;
-  
+  height: 600px;
+  border: 1px solid black;
 }
 .Display-msg {
-  float:left;
-  font-size:70%;
-  margin:2%;
-  display:inline-block;
+  float: left;
+  font-size: 70%;
+  margin: 2%;
+  display: inline-block;
 }
 
-#CompileButton{
-  background-color: yellow
+#CompileButton {
+  background-color: yellow;
 }
-#showHideHistoryBar{
-  background-color: red
+#showHideHistoryBar {
+  background-color: red;
 }
-#Incoming-button{
-  background-color: rgb(50, 240, 50)
+#Incoming-button {
+  background-color: rgb(50, 240, 50);
 }
-#Outcoming-button{
-  background-color: rgb(50, 240, 50)
+#Outcoming-button {
+  background-color: rgb(50, 240, 50);
 }
-#Edit-button{
-  background-color: yellow
+#Edit-button {
+  background-color: yellow;
 }
-#createRelation-button{
-  background-color: orange
+#createRelation-button {
+  background-color: orange;
 }
-#removeNode-button{
-  background-color: rgb(50, 240, 50)
+#removeNode-button {
+  background-color: rgb(50, 240, 50);
 }
-#deleteNode-button{
-  background-color: yellow
+#deleteNode-button {
+  background-color: yellow;
 }
-#editRelationship{
-  background-color: orange
+#editRelationship {
+  background-color: orange;
 }
-#deleteRelationship{
-  background-color: rgb(50, 240, 50)
+#deleteRelationship {
+  background-color: rgb(50, 240, 50);
 }
-#Addnode-button{
-  align:right;
-  font-size:medium;
+#Addnode-button {
+  align: right;
+  font-size: medium;
 }
-#Addnode-modal{
-  font-size:medium;
-  background-color: rgb(50, 240, 50)
+#Addnode-modal {
+  font-size: medium;
+  background-color: rgb(50, 240, 50);
 }
-#modal-next-button{
-  align:right;
-  font-size:medium;
+#modal-next-button {
+  align: right;
+  font-size: medium;
 }
-#modal-cancel-button{
-  align:right;
-  font-size:medium;
+#modal-cancel-button {
+  align: right;
+  font-size: medium;
 }
-#FullScreen-button{
-  align:right;
-  font-size:medium;
-  background-color: rgb(50, 240, 50)
+#FullScreen-button {
+  align: right;
+  font-size: medium;
+  background-color: rgb(50, 240, 50);
 }
-#Clear-Canvas{
-  align:right;
-  font-size:medium;
-  float:clear;
-  background-color: rgb(50, 240, 50)
-
+#Clear-Canvas {
+  align: right;
+  font-size: medium;
+  float: clear;
+  background-color: rgb(50, 240, 50);
 }
-#Edge-button{
-  font-size:medium;
+#Edge-button {
+  font-size: medium;
 }
-#cancel-edge{
-  font-size:medium;
+#cancel-edge {
+  font-size: medium;
 }
-#Edge-modal{
-  font-size:medium;
+#Edge-modal {
+  font-size: medium;
 }
 .Canvas {
-  text-align:center;
-  height:400px;
-  border:1px solid black;
+  text-align: center;
+  height: 400px;
+  border: 1px solid black;
   position: relative;
 
-  margin-bottom:40;
+  margin-bottom: 40;
 }
-#inside-box{
-  border:1px solid black;
+#inside-box {
+  border: 1px solid black;
 }
 #command-div {
-  width:100%;
+  width: 100%;
 }
 #relationMenu-div {
-  width:100%;
-  height:10%;
-  border:1px solid black;
+  width: 100%;
+  height: 10%;
+  border: 1px solid black;
 }
 .CanvasFullScreen {
-  test-align:center;
-  height:800px;
-  border:1px solid black;
+  test-align: center;
+  height: 800px;
+  border: 1px solid black;
 }
 #his-button {
-  font-size:medium;
+  font-size: medium;
 }
 #history-div {
-  margin:0;
-  height:100%;
-  width :100%;
-  border:1px solid black;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
 }
-#Modal-header{
-  position:relative;
-  top:-9%;
-  height:40%;
-  margin-right:0;
-  border:1px solid black;
+#Modal-header {
+  position: relative;
+  top: -9%;
+  height: 40%;
+  margin-right: 0;
+  border: 1px solid black;
 }
-#addnodeModal-header{
-  position:relative;
-  top:0%;
-  height:20%;
-  margin-right:0;
-  border:1px solid black;
+#addnodeModal-header {
+  position: relative;
+  top: 0%;
+  height: 20%;
+  margin-right: 0;
+  border: 1px solid black;
 }
-#hidemodal-button{
+#hidemodal-button {
   float: right;
 }
-#modal-middle-div{
-  position:relative;
-  height:40%;
-  top:-10%;
-  border:1px solid black;
+#modal-middle-div {
+  position: relative;
+  height: 40%;
+  top: -10%;
+  border: 1px solid black;
 }
-#addnodemodal-middle-div{
-  position:relative;
-  height:70%;
-  top:10%;
-  border:1px solid black;
+#addnodemodal-middle-div {
+  position: relative;
+  height: 70%;
+  top: 10%;
+  border: 1px solid black;
 }
 #ineditRmodal-middle-div {
-  height:80%;
-  top:-10%;
-  border:1px solid black;
+  height: 80%;
+  top: -10%;
+  border: 1px solid black;
 }
 .msgTxt {
-  width:70%;
-  height:30%;
+  width: 70%;
+  height: 30%;
 }
-#editRmodal-bottom-div{
-  height:20%;
-  top:-30%;
+#editRmodal-bottom-div {
+  height: 20%;
+  top: -30%;
 }
-#editRmodal-middle-div{
-  position:relative;
-  height:70%;
-  
-  border:1px solid black;
+#editRmodal-middle-div {
+  position: relative;
+  height: 70%;
+
+  border: 1px solid black;
 }
-#modal-bottom-div{
-  position:relative;
-  height:35%;
-  top:-10%;
-  border:1px solid black;
+#modal-bottom-div {
+  position: relative;
+  height: 35%;
+  top: -10%;
+  border: 1px solid black;
 }
-#addnodemodal-bottom-div{
-  position:relative;
-  height:10%;
-  top:10%;
-  border:1px solid black;
+#addnodemodal-bottom-div {
+  position: relative;
+  height: 10%;
+  top: 10%;
+  border: 1px solid black;
 }
 #edge-top-div {
-  position:relative;
-  top:-9%;
-  height:40%;
-  margin-right:0;
-  border:1px solid black;
+  position: relative;
+  top: -9%;
+  height: 40%;
+  margin-right: 0;
+  border: 1px solid black;
 }
 #edit-top-div {
-  position:relative;
-  top:-9%;
-  height:20%;
-  margin-right:0;
-  border:1px solid black;
+  position: relative;
+  top: -9%;
+  height: 20%;
+  margin-right: 0;
+  border: 1px solid black;
 }
 #edge-middle-div {
-  position:relative;
-  height:40%;
-  top:-10%;
-  border:1px solid black;
+  position: relative;
+  height: 40%;
+  top: -10%;
+  border: 1px solid black;
 }
 #edit-middle-div {
-  position:relative;
-  height:90%;
-  top:-10%;
-  border:1px solid black;
+  position: relative;
+  height: 90%;
+  top: -10%;
+  border: 1px solid black;
 }
 #edge-bottom-div {
-  position:relative;
-  height:35%;
-  top:-10%;
-  border:1px solid black;
+  position: relative;
+  height: 35%;
+  top: -10%;
+  border: 1px solid black;
 }
-#select-id{
-  width:70%;
-  padding-left:5%;
-  padding-top:5%;
+#select-id {
+  width: 70%;
+  padding-left: 5%;
+  padding-top: 5%;
 }
 .Nodetext {
-  width:70%;
+  width: 70%;
 }
 #section {
-  float:right;
+  float: right;
 }
-#inside-editmid-div{
-  margin-top:2%;
-  margin-bottom:2%;
-  height:60%;
-  border:1px solid black;
+#inside-editmid-div {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  height: 60%;
+  border: 1px solid black;
 }
-#Editnode-classname{
-  display:inline-block;
-  margin-top:0%;
-  margin-right:10%;
-  margin-left:3%;
-  font-size:small;
+#Editnode-classname {
+  display: inline-block;
+  margin-top: 0%;
+  margin-right: 10%;
+  margin-left: 3%;
+  font-size: small;
 }
 #select-nodetype {
-  display :inline-block;
-  margin-left:3%;
+  display: inline-block;
+  margin-left: 3%;
 }
 .Node-editor {
-  width:60%;
+  width: 60%;
 }
-#CreateDate{
-  margin-top:0%;
-  margin-left:3%;
-  margin-right:3%;
-  font-size:small;
+#CreateDate {
+  margin-top: 0%;
+  margin-left: 3%;
+  margin-right: 3%;
+  font-size: small;
 }
 #top-deletenode-div {
-  position:relative;
-  top:-9%;
-  height:20%;
-  margin-right:0;
-  border:1px solid black;
+  position: relative;
+  top: -9%;
+  height: 20%;
+  margin-right: 0;
+  border: 1px solid black;
 }
 #middle-deletenode-div {
-  position:relative;
-  height:60%;
-  top:-10%;
-  border:1px solid black;
+  position: relative;
+  height: 60%;
+  top: -10%;
+  border: 1px solid black;
 }
 #topbar-prop {
-  height:5%;
-  border:1px solid black;
+  height: 5%;
+  border: 1px solid black;
 }
 #properties-prop {
-  width:50%;
-  border:1px solid black;
-  float:left;
+  width: 50%;
+  border: 1px solid black;
+  float: left;
 }
 #setting-prop {
-  border:1px solid black;
-  float:clear;
+  border: 1px solid black;
+  float: clear;
 }
 #alertmsg {
-  width:100%;
-  height:5%;
+  width: 100%;
+  height: 5%;
 }

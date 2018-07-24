@@ -18,16 +18,16 @@ const dataReducer = (state = data, action) => {
         nodeID: action.payload
       };
 
-      console.log(state.nodeID);
+      //console.log(state.nodeID);
       return state;
     case "GET_NODE_ID_2":
       state = {
         ...state,
         nodeID2: action.payload
       };
-      console.log(state.nodeID);
-      console.log(state.nodeID2);
-      break;
+      console.log("from ", state.nodeID);
+      console.log("to ", state.nodeID2);
+      return state;
     case "GET_EDGE_ID":
       //console.log(action.payload)
       state = {

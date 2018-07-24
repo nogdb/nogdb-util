@@ -20,19 +20,6 @@ import {
   getAllNodeClassForAddNodeButton
 } from "../actions/databaseAction";
 
-// const customStyle = {
-//   content: {
-//     posittion: "absolute",
-//     top: "20px",
-//     left: "40px",
-//     right: "40px",
-//     bottom: "40px",
-//     marginRight: "15%",
-//     marginLeft: "15%",
-//     marginTop: "15%",
-//     marginBottom: "15%"
-//   }
-// };
 const customAddNodeStyle = {
   content: {
     posittion: "absolute",
@@ -120,7 +107,6 @@ class App extends Component {
       isEditNodeActive: false,
       isDeleteNodeActivate: false,
       isDeleteRelationActivate: false,
-      isCreateRelationActive: false,
       isEditRelationActive: false,
       page: 1,
       prevNodeID: " ",

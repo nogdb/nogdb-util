@@ -84,6 +84,19 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
+const customStyle = {
+  content: {
+    posittion: "absolute",
+    top: "20px",
+    left: "40px",
+    right: "40px",
+    bottom: "40px",
+    marginRight: "15%",
+    marginLeft: "15%",
+    marginTop: "15%",
+    marginBottom: "15%"
+  }
+};
 
 const customCreateEdgeModal = {
   content: {
@@ -105,7 +118,8 @@ class Canvas extends Component {
     this.state = {
       isDeleteNodeActivate: false,
       isDeleteRelationActivate: false,
-      createEdgeMode: false
+      createEdgeMode: false,
+      isCreateRelationActive: false
     };
     this.handleNodeID = this.handleNodeID.bind(this);
     this.handleGetNodeName = this.handleGetNodeName.bind(this);
@@ -120,12 +134,26 @@ class Canvas extends Component {
   }
   handleNodeID2 = nodeIDs => {
     this.props.getNodeID2ActionCreator(nodeIDs[0]);
+    this.setCreateEdgeModalTrue();
   };
   handleCreateRelation = () => {
     this.setState({
       createEdgeMode: true
     });
   };
+
+  setCreateEdgeModalTrue = () => {
+    this.setState({
+      isCreateRelationActive: true
+    });
+  };
+
+  setCreateEdgeModalFalse = () => {
+    this.setState({
+      isCreateRelationActive: false
+    });
+  };
+
   handleGetNodeName = () => {
     for (let ele in this.props.graph.graphCanvas.nodes) {
       if (
@@ -329,43 +357,73 @@ class Canvas extends Component {
             >
               CreateRelation
             </button>
-            {/* <Modal
-                       isOpen={this.state.isCreateRelationActive}
-                       contentLabel="CreateRelation Modal"
-                       onRequestClose={this.state.toggleCreateRelationModalFalse}
-                       style={customStyle}
-                     >  
-                       <div id="Modal-header">Create Relationship from #inNodeID to #outNodeID 
-                         <button id="hidemodal-button" onClick={this.toggleCreateRelationModalFalse}>Hide Modal</button>
-                       </div>
-                       {this.state.page === 1 ? (
-                         <div id="modal-middle-div">
-                         Class :   <select id="select-id"> {this.selectBoxList()} </select>
-                         </div>
-                       ) : (
-                         <div id="modal-middle-div">
-                           Relation Classname : <hr />
-                           <div id="inside-box"> This relationship require no attribute</div>
-                         </div>
-                       )}
-                       {this.state.page === 1 ? (
-                         <div id="modal-bottom-div"> 
-                           Bottom modal 1 <hr />
-                           <button id="modal-cancel-button" onClick={this.toggleCreateRelationModalFalse}>Cancel</button>
-                           <button id="modal-next-button" onClick={this.handleNextPage}>
-                             Next
-                           </button>
-                         </div>
-                       ) : (
-                         <div id="modal-bottom-div">
-                          
-                           Bottom modal 2 <hr />
-                           <button onClick={this.InitializePage}> Back </button>
-                           <button id="modal-cancel-button" onClick={this.toggleCreateRelationModalFalse} > Cancel</button>
-                           <button id="Addedge-button" onClick={this.handleCreateRelationbutton}>Create Relation</button>
-                         </div>
-                       )}
-                     </Modal> */}
+            {
+              <Modal
+                isOpen={this.state.isCreateRelationActive}
+                contentLabel="CreateRelation Modal"
+                onRequestClose={this.state.toggleCreateRelationModalFalse}
+                style={customStyle}
+              >
+                <div id="Modal-header">
+                  Create Relationship from #inNodeID to #outNodeID
+                  <button
+                    id="hidemodal-button"
+                    onClick={this.toggleCreateRelationModalFalse}
+                  >
+                    Hide Modal
+                  </button>
+                </div>
+                {this.state.page === 1 ? (
+                  <div id="modal-middle-div">
+                    Class :{" "}
+                    <select id="select-id"> {this.selectBoxList()} </select>
+                  </div>
+                ) : (
+                  <div id="modal-middle-div">
+                    Relation Classname : <hr />
+                    <div id="inside-box">
+                      {" "}
+                      This relationship require no attribute
+                    </div>
+                  </div>
+                )}
+                {this.state.page === 1 ? (
+                  <div id="modal-bottom-div">
+                    Bottom modal 1 <hr />
+                    <button
+                      id="modal-cancel-button"
+                      onClick={this.toggleCreateRelationModalFalse}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      id="modal-next-button"
+                      onClick={this.handleNextPage}
+                    >
+                      Next
+                    </button>
+                  </div>
+                ) : (
+                  <div id="modal-bottom-div">
+                    Bottom modal 2 <hr />
+                    <button onClick={this.InitializePage}> Back </button>
+                    <button
+                      id="modal-cancel-button"
+                      onClick={this.toggleCreateRelationModalFalse}
+                    >
+                      {" "}
+                      Cancel
+                    </button>
+                    <button
+                      id="Addedge-button"
+                      onClick={this.handleCreateRelationbutton}
+                    >
+                      Create Relation
+                    </button>
+                  </div>
+                )}
+              </Modal>
+            }
             <button
               id="removeNode-button"
               title="remove node from canvas"
