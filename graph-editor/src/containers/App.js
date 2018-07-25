@@ -301,7 +301,7 @@ class App extends Component {
             </div>
 
             <Canvas state={graph} />
-            {historyBox}
+            {/* {historyBox} */}
           </Col>
         </Row>
         {/* <NodePropertyMenu/> */}
@@ -321,7 +321,7 @@ class App extends Component {
           </div>
           {this.state.page === 1 ? (
             <div id="addnodemodal-middle-div">
-              Hello middle 1 <hr />
+              <hr />
               Class : {/*select class node*/}
               <select id="select-id"> {this.selectBoxList(graph)} </select>
             </div>
@@ -329,7 +329,7 @@ class App extends Component {
             <div id="addnodemodal-middle-div">
               <div id="edit-middle-div">
                 {" "}
-                Group : {this.state.nodeClass} <br />
+                {/* Group : {this.state.nodeClass} <br /> */}
                 <br />
                 <div id="inside-editmid-div">
                   <br />                 
@@ -344,8 +344,7 @@ class App extends Component {
                   />
                   <select id="select-nodetype">
                     <option value="String">String </option>
-                    <option value="Integer">Integer </option>
-                    <option value="etc">Etc </option>
+                   
                   </select>
                   <br />
 
@@ -358,13 +357,12 @@ class App extends Component {
                   </form>
                 </div>
               </div>
-              Hello middle 2
               {/* <input type="text" placeholder="Node name...." className="Nodetext" onChange={this.handleChange}/> */}
             </div>
           )}
           {this.state.page === 1 ? (
             <div id="addnodemodal-top-div">
-              Bottom modal 1 <br />
+             <br />
               <br />
               <button
                 id="modal-cancel-button"
@@ -378,7 +376,7 @@ class App extends Component {
             </div>
           ) : (
             <div id="addnodemodal-bottom-div">
-              Bottom modal 2
+              
               <button
                 id="modal-cancel-button"
                 onClick={this.setModalAddNodeFalse}

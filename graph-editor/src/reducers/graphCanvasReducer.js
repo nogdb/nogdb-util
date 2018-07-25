@@ -70,9 +70,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
   switch (action.type) {
     //add node button render
     case "ADD_NODE_ACTION":
-      //const newGraphNodeCanvas = state.graphCanvas.nodes.slice();
-      //const newGraphEdgeCanvas = state.graphCanvas.edges.slice();
-
+      console.log(action.payload)
       action.payload[0].id = state.nodeIDDB;
       for (let ele in action.payload) {
         if (

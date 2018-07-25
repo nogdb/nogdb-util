@@ -347,13 +347,14 @@ function* getOutEdgeForNode(selectNode) {
 
 function* updateNodeToDB(updateNode) {
   console.log(">>editNodetoDB");
-  console.log(updateNode.payload[0].id);
-  console.log(updateNode);
-  let updateNodeID = JSON.parse(updateNode.payload[0].id);
+ // console.log(updateNode.payload);
+  
   //  let updateNodeObj = JSON.parse(updateNode.payload[0])
 
   try {
-    yield call(post, "http://localhost:3000/Vertex/update", {
+    
+    let updateNodeID = JSON.parse(updateNode.payload[0].id);
+      yield call(post, "http://localhost:3000/Vertex/update", {
       recordDescriptor: {
         rid: updateNodeID
       },
@@ -363,18 +364,18 @@ function* updateNodeToDB(updateNode) {
         time: updateNode.payload[0].time
       }
     });
+    const newNodeCanvas={
+      id: updateNode.payload[0].id,
+      label: updateNode.payload[0].label,
+      group: updateNode.payload[0].group,
+      date: updateNode.payload[0].date,
+      time: updateNode.payload[0].time
+    }
+    console.log(newNodeCanvas)
 
-    let newNodeCanvas = [
-      {
-        id: JSON.stringify(updateNodeID),
-        label: updateNode.payload[0].label,
-        group: updateNode.payload[0].group,
-        date: updateNode.payload[0].date,
-        time: updateNode.payload[0].time
-      }
-    ];
-    // console.log(newNodeCanvas.time)
-    yield put(addNodeToCanvas(newNodeCanvas));
+    const arr= [newNodeCanvas]   
+      
+    yield put(addNodeToCanvas(arr));
   } catch (error) {
     console.log(error);
   }

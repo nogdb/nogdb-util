@@ -324,19 +324,18 @@ class Canvas extends Component {
   // }
 
   handleEditNodeButton() {
-    
     console.log(this.props.data.nodeProperty)
-  
     let updateNodeDB = [
       { 
         id:this.props.data.nodeID,
-        group: this.state.group,
+        group: this.props.data.nodeProperty['@className'],
         label: this.props.data.editNodeName,
         // date: this.props.data.nodeDateTime
         date: this.props.data.nodeDateTime
         // time: document.getElementById("myEditNodeTime").value
       }
     ];
+    //console.log(updateNodeDB)
     this.props.addUpdateNodeToDatabaseActionCreator(updateNodeDB);
     // this.setState({
     //   editNodeText: " "
@@ -378,7 +377,6 @@ class Canvas extends Component {
       commandBox = (
         <div id="command-div">
           <div id="history-div">
-            Command Menu : {data.nodeID}
             <button
               id="Incoming-button"
               title="Incoming Relationship"
@@ -397,7 +395,7 @@ class Canvas extends Component {
               id="Edit-button"
               onClick={this.setEditNodeModalTrue}
             >
-              Edit node {data.nodeID}
+              Edit node 
             </button>
             <Modal
                        isOpen={this.state.isEditNodeActive}
@@ -410,9 +408,6 @@ class Canvas extends Component {
                          <div id="inside-editmid-div">
                            <br />
                            <h5 id="Editnode-classname">name </h5>
-
-
-
                            <input
                              type="text"
                              placeholder="Edit...."
@@ -426,13 +421,11 @@ class Canvas extends Component {
                            <br />
                           
                            <form action="/action_page.php">
-                          
                              CreateDate : <Datetime value={this.props.data.nodeDateTime} onChange={this.onChangeNodeDateTime} viewMode={'days'}/>
                              {/* CreateDate: <input type="date" name="day" id="myEditNodeDate" /> */}
                              {/* <input type="time" id="myEditNodeTime" /> */}
                              <select id="select-nodetype">       
                                <option value="String">String </option>
-  
                              </select>
                            </form>
                          </div>
@@ -486,7 +479,6 @@ class Canvas extends Component {
                 )}
                 {this.state.page === 1 ? (
                   <div id="modal-bottom-div">
-                    Bottom modal 1 <hr />
                     <button
                       id="modal-cancel-button"
                       onClick={this.toggleCreateRelationModalFalse}
@@ -502,7 +494,6 @@ class Canvas extends Component {
                   </div>
                 ) : (
                   <div id="modal-bottom-div">
-                    Bottom modal 2 <hr />
                     <button onClick={this.InitializePage}> Back </button>
                     <button
                       id="modal-cancel-button"
@@ -567,8 +558,6 @@ class Canvas extends Component {
     if (scale.edgeMenu === true) {
       relationBox = (
         <div id="relationMenu-div">
-          Relationship Menu :
-          {/* {this.state.relationID} */}
           <button
             id="editRelationship"
             // onClick={this.toggleEditRelationModal}
