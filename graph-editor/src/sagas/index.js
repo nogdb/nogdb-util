@@ -364,6 +364,7 @@ function* updateNodeToDB(updateNode) {
         time: updateNode.payload[0].time
       }
     });
+    console.log(typeof updateNode.payload[0].id)
     const newNodeCanvas={
       id: updateNode.payload[0].id,
       label: updateNode.payload[0].label,
@@ -373,8 +374,9 @@ function* updateNodeToDB(updateNode) {
     }
     console.log(newNodeCanvas)
 
-    const arr= [newNodeCanvas]   
-      
+    const arr= []   
+    arr.push(newNodeCanvas)
+    console.log(arr)
     yield put(addNodeToCanvas(arr));
   } catch (error) {
     console.log(error);

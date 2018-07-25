@@ -70,8 +70,8 @@ const graphCanvasReducer = (state = graphSetting, action) => {
   switch (action.type) {
     //add node button render
     case "ADD_NODE_ACTION":
-      console.log(action.payload)
-      action.payload[0].id = state.nodeIDDB;
+      console.log(state.nodeIDDB)
+      //action.payload[0].id = state.nodeIDDB;
       for (let ele in action.payload) {
         if (
           JSON.stringify(backupNode).includes(
