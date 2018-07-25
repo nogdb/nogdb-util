@@ -268,6 +268,11 @@ td.rdtYear:hover {
   height: 600px;
   border: 1px solid black;
 }
+/* .Left-tab {
+  height: 600px;
+  width:20%;
+  border: 1px solid black;
+} */
 .Display-msg {
   float: left;
   font-size: 70%;
@@ -532,4 +537,20 @@ td.rdtYear:hover {
 #alertmsg {
   width: 100%;
   height: 5%;
+}
+
+#hide-nodeprops-button {
+  float:right;
+}
+#alertTest {
+  position: fixed;
+  top:0;
+  width:100%;
+}
+#close-editnode-alert{
+  float:right;
+  margin-right:10%;
+}
+#edge-hide-button {
+  float:right;
 }

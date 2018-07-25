@@ -7,12 +7,15 @@ const data = {
   edgeIn: null,
   edgeOut: null,
   selectId: null,
-
+  edgeProperty:null,
   editNodeName: null,
   nodeDateTime: null,
   // nodeTime:null,
+  nodeProperty: null,
 
-  nodeProperty: null
+  inRelation:null,
+  outRelation:null,
+  message:null,
 };
 const dataReducer = (state = data, action) => {
   switch (action.type) {
@@ -91,6 +94,23 @@ const dataReducer = (state = data, action) => {
         nodeDateTime: action.dateTime
       };
 
+      case "STORE_EDGE_INRELATION":
+      return {
+        ...state,
+        inRelation: action.dateTime
+      };  
+
+      case "STORE_EDGE_OUTRELATION":
+      return {
+        ...state,
+        outRelation: action.dateTime
+      };
+
+      case "STORE_EDGE_MESSAGE":
+      return {
+        ...state,
+        message: action.dateTime
+      };
     // case 'STORE_EDIT_NODETIME_VALUE':
 
     //      return {
@@ -99,7 +119,7 @@ const dataReducer = (state = data, action) => {
     //      }
     case "SEND_NODE_PERPERTY_TO_DATA_REDUCER":
       // console.log(state.nodeProperty)
-      console.log(action.payload);
+      // console.log(action.payload);
       return {
         ...state,
         nodeProperty: action.payload.data,
@@ -107,9 +127,19 @@ const dataReducer = (state = data, action) => {
         nodeDateTime: action.payload.data.date,
         // nodeTime:action.payload.data.time,
         // nodeClass:action.payload.data.className
-        nodeClass: "Person"
+         nodeClass: action.payload.data['@className']
       };
 
+    case 'SEND_EDGE_PROPERTY_TO_DATA_REDUCER' :
+    console.log(action.payload.data)
+    console.log(action.payload.data)
+    return {
+      ...state,
+      edgeProperty: action.payload.data,
+      inRelation:action.payload.data.inRelation,
+      message:action.payload.data.message,
+      outRelation:action.payload.data.outRelation,
+    }
     default:
       state = {
         ...state

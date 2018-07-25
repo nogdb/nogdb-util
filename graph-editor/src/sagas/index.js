@@ -10,7 +10,8 @@ import {
   addOutgoingNodeEdge,
   addNodeRender,
   getAllNodeProperties,
-  sendAllNodePropertyToDataReducer
+  sendAllNodePropertyToDataReducer,
+  sendAllEdgePropertyToDataReducer
 } from "../actions/databaseAction";
 import { addNodeToCanvas } from "../actions/mainButtonAction";
 
@@ -31,7 +32,9 @@ function* rootSaga() {
     takeEvery("GET_IN_EDGE_FOR_NODE", getInEdgeForNode),
     takeEvery("GET_OUT_EDGE_FOR_NODE", getOutEdgeForNode),
     takeEvery("ADD_UPDATE_NODE_TO_DB", updateNodeToDB),
+    takeEvery('ADD_UPDATE_EDGE_TO_DB',updateEdgeToDB),
     takeEvery("GET_NODE_PROPERTY", getallnodePropertyDB),
+    takeEvery('GET_EDGE_PROPERTY',getAllEdgePropertyDB),
     // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
     // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
     // takeEvery('GET_EDGES_FROM_DB', getEdgesFromDB),
@@ -74,7 +77,7 @@ function* addConsoletoDB(sqlStr) {
     const resp = yield call(post, "http://localhost:3000/SQL/execute", {
       sql: sqlStr.payload
     });
-    console.log(resp);
+    
 
     if (resp.data.type === "n") {
       //No result
@@ -347,10 +350,6 @@ function* getOutEdgeForNode(selectNode) {
 
 function* updateNodeToDB(updateNode) {
   console.log(">>editNodetoDB");
- // console.log(updateNode.payload);
-  
-  //  let updateNodeObj = JSON.parse(updateNode.payload[0])
-
   try {
     
     let updateNodeID = JSON.parse(updateNode.payload[0].id);
@@ -364,7 +363,7 @@ function* updateNodeToDB(updateNode) {
         time: updateNode.payload[0].time
       }
     });
-    console.log(typeof updateNode.payload[0].id)
+    // console.log(typeof updateNode.payload[0].id)
     const newNodeCanvas={
       id: updateNode.payload[0].id,
       label: updateNode.payload[0].label,
@@ -376,8 +375,45 @@ function* updateNodeToDB(updateNode) {
 
     const arr= []   
     arr.push(newNodeCanvas)
-    console.log(arr)
     yield put(addNodeToCanvas(arr));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* updateEdgeToDB(updateEdge) {
+  console.log(">>editEdgetoDB");
+  console.log(updateEdge.payload);
+  try {
+    
+    let updateEdgeID = JSON.parse(updateEdge.payload[0].id);
+      yield call(post, "http://localhost:3000/Edge/update", {
+      recordDescriptor: {
+        rid: updateEdgeID
+      },
+      record: {
+        name:updateEdge.payload[0].label,
+        inRelation: updateEdge.payload[0].inRelation,
+        message: updateEdge.payload[0].message,
+        outRelation: updateEdge.payload[0].outRelation,
+      }
+    });
+    console.log(typeof updateEdge.payload[0].id)
+
+    const newEdgeCanvas={
+      id: updateEdge.payload[0].id,
+      label: updateEdge.payload[0].label,
+      group: updateEdge.payload[0].group,
+      inRelation : updateEdge.payload[0].inRelation,
+      message: updateEdge.payload[0].message,
+      outRelation : updateEdge.payload[0].outRelation,
+     
+    }
+    console.log(newEdgeCanvas)
+
+     const arrayEdge= []   
+     arrayEdge.push(newEdgeCanvas)
+     yield put(addNodeToCanvas(arrayEdge));
   } catch (error) {
     console.log(error);
   }
@@ -396,8 +432,29 @@ function* getallnodePropertyDB(nodeID) {
         }
       }
     );
+    console.log(nodeProperty)
 
     yield put(sendAllNodePropertyToDataReducer(nodeProperty));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* getAllEdgePropertyDB(edgeID) {
+  console.log(">>> getallEdgeProperties");
+  let objEdgeID = JSON.parse(edgeID.payload);
+  try {
+    const edgeProperty = yield call(
+      post,
+      "http://localhost:3000/Db/getRecord",
+      {
+        recordDescriptor: {
+          rid: objEdgeID
+        }
+      }
+    );
+      console.log(edgeProperty)
+     yield put(sendAllEdgePropertyToDataReducer(edgeProperty));
   } catch (error) {
     console.log(error);
   }

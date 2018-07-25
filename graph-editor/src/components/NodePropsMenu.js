@@ -60,7 +60,9 @@ const mapDispatchToProps = dispatch => {
 class NodePropertyMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      activeTab:"1"
+    };
     this.toggle = this.toggle.bind(this);
     this.setDisplayFormat = this.setDisplayFormat.bind(this);
   }
@@ -119,7 +121,7 @@ class NodePropertyMenu extends Component {
       <div className="Left-tab">
         <div id="topbar-prop">
           Node{" "}
-          <button onClick={this.props.hideNodeMenuActionCreator}>Hide </button>
+          <button id="hide-nodeprops-button" onClick={this.props.hideNodeMenuActionCreator}>X</button>
         </div>
 
         <Nav tabs>

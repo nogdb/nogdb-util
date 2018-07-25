@@ -81,8 +81,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           backupNode.push(action.payload[ele]);
         }
       }
-      console.log(backupNode)
-      console.log(backupNode);
+
       return {
         ...state,
         graphCanvas: {

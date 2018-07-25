@@ -72,11 +72,23 @@ const getAllNodeProperties =(nodeID) => ({
   type : 'GET_NODE_PROPERTY',
   payload:nodeID
 })
+const getAllEdgeProperties = (edgeID) => ({
+  type : 'GET_EDGE_PROPERTY',
+  payload:edgeID
+})
 const sendAllNodePropertyToDataReducer = (nodeProperty) => ({
   type : 'SEND_NODE_PERPERTY_TO_DATA_REDUCER',
   payload : nodeProperty
 })
 
+const sendAllEdgePropertyToDataReducer = (edgeProperty) => ({
+  type : 'SEND_EDGE_PROPERTY_TO_DATA_REDUCER',
+  payload : edgeProperty
+})
+const addUpdateEdgeToDatabase = (updateEdgeDB) => ({
+  type : 'ADD_UPDATE_EDGE_TO_DB',
+  payload : updateEdgeDB
+})
 export {
   executeConsole,
   addVertexConsole,
@@ -95,5 +107,8 @@ export {
   addUpdateNodeToDatabase,
   addNodeRender,
   getAllNodeProperties,
-  sendAllNodePropertyToDataReducer
+  sendAllNodePropertyToDataReducer,
+  getAllEdgeProperties,
+  sendAllEdgePropertyToDataReducer,
+  addUpdateEdgeToDatabase
 };

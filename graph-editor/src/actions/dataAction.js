@@ -56,6 +56,21 @@ const storeEditNodeDateTime = (dateTime) => ({
   dateTime:dateTime
 })
 
+const storeEditInRelation = (inRelation) => ({
+  type :'STORE_EDGE_INRELATION',
+  payload:inRelation
+})
+
+const storeEditOutRelation =(outRelation) => ({
+  type : 'STORE_EDGE_OUTRELATION',
+  payload: outRelation
+})
+
+const storeEditMessage = (Message) => ({
+  type :'STORE_EDGE_MESSAGE',
+  payload : Message
+})
+
 // const storeEditTime = (time) => ({
 //   type:'STORE_TIME_VALUE',
 //   time:time
@@ -80,6 +95,10 @@ export {
   deleteEdgeFromDatabase,
   storeEditName,
   storeEditNodeDateTime,
+  storeEditInRelation,
+  storeEditOutRelation,
+  storeEditMessage
   
+
 
 };

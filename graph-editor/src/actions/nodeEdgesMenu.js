@@ -20,6 +20,13 @@ const changeColorNode = (nodeID, color) => ({
   nodeID: nodeID,
   color: color
 });
+const setEditNodeAlertTrue = () => ({
+  type : 'ALERT_EDIT_MESSAGE_TRUE',
+
+})
+const setEditNodeAlertFalse = () => ({
+  type : 'ALERT_EDIT_MESSAGE_FALSE'
+})
 
 export {
   showNodeMenu,
@@ -27,5 +34,8 @@ export {
   showEdgeMenu,
   hideEdgeMenu,
   changeSizes,
-  changeColorNode
+  changeColorNode,
+  setEditNodeAlertTrue,
+  setEditNodeAlertFalse
+
 };

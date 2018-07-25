@@ -6,6 +6,7 @@ import NogDBTitle from "../components/Title";
 import Console from "../components/Console";
 import Canvas from "../components/Canvas";
 import History from "../components/History";
+import { Alert } from 'reactstrap';
 import { connect } from "react-redux";
 import {
   addNodeToDatabase,
@@ -19,6 +20,7 @@ import {
   getAllClassFromDatabase,
   getAllNodeClassForAddNodeButton
 } from "../actions/databaseAction";
+import {setEditNodeAlertFalse} from "../actions/nodeEdgesMenu";
 
 const customAddNodeStyle = {
   content: {
@@ -33,19 +35,7 @@ const customAddNodeStyle = {
     marginBottom: "10%"
   }
 };
-// const customEditRStyle = {
-//   content : {
-//     posittion:'absolute',
-//     top    : '20px',
-//     left   : '40px',
-//     right  : '40px',
-//     bottom : '40px',
-//     marginRight  : '15%',
-//     marginLeft   : '15%',
-//     marginTop    : '10%',
-//     marginBottom : '10%'
-//   }
-// } ;
+
 // const customCreateEdgeModal = {
 //   content: {
 //     position: "absolute",
@@ -90,6 +80,9 @@ const mapDispatchToProps = dispatch => {
     },
     getAllNodeClassForAddNodeButtonActionCreator: () => {
       dispatch(getAllNodeClassForAddNodeButton());
+    },
+    setEditNodeAlertFalseActionCreator: () => {
+      dispatch(setEditNodeAlertFalse())
     }
   };
 };
@@ -106,7 +99,6 @@ class App extends Component {
       isEditNodeActive: false,
       isDeleteNodeActivate: false,
       isDeleteRelationActivate: false,
-      isEditRelationActive: false,
       page: 1,
       prevNodeID: " ",
       flagIsAddToCanvas: true,
@@ -245,6 +237,13 @@ class App extends Component {
     let historyBox;
     let nodeTabBars;
     let edgeTabBars;
+    let editNodeAlert;
+    if(scale.editAlert === true){
+      editNodeAlert =  <Alert id='alertTest' color="success"> Edit node successfully.
+       <button id='close-editnode-alert' onClick={this.props.setEditNodeAlertFalseActionCreator}>X</button></Alert> 
+    } else {
+      editNodeAlert = null
+    }
 
     if (scale.isFullscreen === true) {
       Title = null;
@@ -260,9 +259,10 @@ class App extends Component {
     } else if (scale.nodeMenu === false) {
       nodeTabBars = null;
     }
-    if (scale.EdgeMenu === true) {
+    if (scale.edgeMenu === true) {
       edgeTabBars = <EdgePropertyMenu />;
-    } else if (scale.EdgeMenu === false) {
+  
+    } else if (scale.edgeMenu === false) {
       edgeTabBars = null;
     }
 
@@ -271,7 +271,7 @@ class App extends Component {
         {Title}
         <Row>
           <Col md={scale.nodeMenu || scale.EdgeMenu ? 3 : 0}>
-            {nodeTabBars} {edgeTabBars}
+          {edgeTabBars} {nodeTabBars} 
           </Col>
           <Col md={scale.nodeMenu || scale.EdgeMenu ? 9 : 12}>
             {consoleBox}
@@ -389,6 +389,7 @@ class App extends Component {
             </div>
           )}
         </Modal>
+          {editNodeAlert}
       </Container>
     );
   }
@@ -781,43 +782,6 @@ export default connect(
 //       }
 //     }
 //     console.log(graphDB);
-//   };
-
-//   toggleFullScreen() {
-//     if (
-//       (document.fullScreenElement && document.fullScreenElement !== null) ||
-//       (!document.mozFullScreen && !document.webkitIsFullScreen)
-//     ) {
-//       if (document.documentElement.requestFullScreen) {
-//         document.documentElement.requestFullScreen();
-//       } else if (document.documentElement.mozRequestFullScreen) {
-//         document.documentElement.mozRequestFullScreen();
-//       } else if (document.documentElement.webkitRequestFullScreen) {
-//         document.documentElement.webkitRequestFullScreen(
-//           Element.ALLOW_KEYBOARD_INPUT
-//         );
-//       }
-//     } else {
-//       if (document.cancelFullScreen) {
-//         document.cancelFullScreen();
-//       } else if (document.mozCancelFullScreen) {
-//         document.mozCancelFullScreen();
-//       } else if (document.webkitCancelFullScreen) {
-//         document.webkitCancelFullScreen();
-//       }
-//     }
-//   }
-
-//   toggleEditRelationModal = () => {
-//     this.setState({
-//       isEditRelationActive:!this.state.isEditRelationActive
-//     })
-//   }
-
-//   toggleShowMenu = () => {
-//     this.setState(prevState => ({
-//       showMenu: !prevState.showMenu
-//     }));
 //   };
 
 // handleNodeID(nodeIDs) {
