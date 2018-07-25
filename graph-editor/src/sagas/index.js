@@ -139,6 +139,7 @@ function* addConsoletoDB(sqlStr) {
           // console.log(Edges)
         }
       }
+      console.log(Nodes)
       yield put(addVertexConsole(Nodes));
       yield put(addEdgeConsole(Edges));
     } else if (resp.data.type === "c") {
