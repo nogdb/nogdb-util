@@ -289,18 +289,20 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           backupNode.map(item => item.id).includes(backupID[i]) === true &&
           hashIDToLabel[backupID[i]] !== hashIDBackupNode[backupID[i]]
         ) {
-          
           const index = backupNode
             .map(item => item.label)
             .indexOf(hashIDBackupNode[backupID[i]]);
           //backupNode[index].label = hashIDToLabel[backupID[i]];
-          a = backupNode[index]
-          const update = {...backupNode[index],label:hashIDToLabel[backupID[i]]}
-          backupNode[index] = update
+          a = backupNode[index];
+          const update = {
+            ...backupNode[index],
+            label: hashIDToLabel[backupID[i]]
+          };
+          backupNode[index] = update;
         }
       }
 
-      console.log(backupNode)
+      console.log(backupNode);
       return {
         ...state,
         graphCanvas: {

@@ -22,7 +22,7 @@ const dataReducer = (state = data, action) => {
         nodeID: action.payload
       };
       return state;
-      case "GET_NODE_ID_2":
+    case "GET_NODE_ID_2":
       state = {
         ...state,
         nodeID2: action.payload

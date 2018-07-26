@@ -139,7 +139,7 @@ function* addConsoletoDB(sqlStr) {
           // console.log(Edges)
         }
       }
-      console.log(Nodes)
+      console.log(Nodes);
       yield put(addVertexConsole(Nodes));
       yield put(addEdgeConsole(Edges));
     } else if (resp.data.type === "c") {
@@ -252,7 +252,7 @@ function* getAllClassForAddNodeButton() {
 
 function* getInEdgeForNode(selectNode) {
   console.log(">get InEdge for Node");
-  console.log(selectNode)
+  console.log(selectNode);
   let nodes = [];
   let edges = [];
   let nodeID = JSON.parse(selectNode.payload);
@@ -281,11 +281,11 @@ function* getInEdgeForNode(selectNode) {
           }
         }
       );
-      console.log(nodeSrcResult)
+      console.log(nodeSrcResult);
       nodes.push({
         id: JSON.stringify(nodeSrcResult.data.descriptor.rid),
         label: nodeSrcResult.data.record.name,
-        group: nodeSrcResult.data.record['@className']
+        group: nodeSrcResult.data.record["@className"]
       });
 
       edges.push({
@@ -334,14 +334,14 @@ function* getOutEdgeForNode(selectNode) {
       nodes.push({
         id: JSON.stringify(nodeDstResult.data.descriptor.rid),
         label: nodeDstResult.data.record.name,
-        group: nodeDstResult.data.record['@className']
+        group: nodeDstResult.data.record["@className"]
       });
-        edges.push({
-          id: JSON.stringify(outgoingEdge.data[ele].descriptor.rid),
-          from: JSON.stringify(nodeID),
-          to: JSON.stringify(nodeDstResult.data.descriptor.rid),
-          label:outgoingEdge.data[ele].record.name
-        });
+      edges.push({
+        id: JSON.stringify(outgoingEdge.data[ele].descriptor.rid),
+        from: JSON.stringify(nodeID),
+        to: JSON.stringify(nodeDstResult.data.descriptor.rid),
+        label: outgoingEdge.data[ele].record.name
+      });
     }
     yield put(addOutgoingNodeEdge(nodes, edges));
   } catch (error) {
@@ -351,14 +351,13 @@ function* getOutEdgeForNode(selectNode) {
 
 function* updateNodeToDB(updateNode) {
   console.log(">>editNodetoDB");
- // console.log(updateNode.payload);
-  
+  // console.log(updateNode.payload);
+
   //  let updateNodeObj = JSON.parse(updateNode.payload[0])
 
   try {
-    
     let updateNodeID = JSON.parse(updateNode.payload[0].id);
-      yield call(post, "http://localhost:3000/Vertex/update", {
+    yield call(post, "http://localhost:3000/Vertex/update", {
       recordDescriptor: {
         rid: updateNodeID
       },
@@ -368,19 +367,19 @@ function* updateNodeToDB(updateNode) {
         time: updateNode.payload[0].time
       }
     });
-    console.log(typeof updateNode.payload[0].id)
-    const newNodeCanvas={
+    console.log(typeof updateNode.payload[0].id);
+    const newNodeCanvas = {
       id: updateNode.payload[0].id,
       label: updateNode.payload[0].label,
       group: updateNode.payload[0].group,
       date: updateNode.payload[0].date,
       time: updateNode.payload[0].time
-    }
-    console.log(newNodeCanvas)
+    };
+    console.log(newNodeCanvas);
 
-    const arr= []   
-    arr.push(newNodeCanvas)
-    console.log(arr)
+    const arr = [];
+    arr.push(newNodeCanvas);
+    console.log(arr);
     yield put(addNodeToCanvas(arr));
   } catch (error) {
     console.log(error);

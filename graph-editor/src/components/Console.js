@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {
   executeConsole,
   getAllClassFromDatabase,
-  getSrcDstEdge,
+  getSrcDstEdge
 } from "../actions/databaseAction.js";
 
 const mapStateToProps = state => {
@@ -25,8 +25,7 @@ const mapDispatchToProps = dispatch => {
     },
     getSrcDstEdgeActionCreator: edgeID => {
       dispatch(getSrcDstEdge(edgeID));
-    },
-   
+    }
   };
 };
 
@@ -34,7 +33,7 @@ class Console extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      textAreaValue: "",
+      textAreaValue: ""
     };
     this.handleTextArea = this.handleTextArea.bind(this);
   }
@@ -52,7 +51,8 @@ class Console extends Component {
           {" "}
         </textarea>
         {/* {console.log(this.state.textAreaValue)} */}
-        <button id ="CompileButton"
+        <button
+          id="CompileButton"
           onClick={() =>
             this.props.executeConsoleActionCreater(this.state.textAreaValue)
           }

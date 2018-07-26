@@ -332,7 +332,7 @@ class App extends Component {
                 {/* Group : {this.state.nodeClass} <br /> */}
                 <br />
                 <div id="inside-editmid-div">
-                  <br />                 
+                  <br />
                   {/*Hard Code*/}
                   <h5 id="Editnode-classname">name </h5>
                   {/*fill node name*/}
@@ -344,7 +344,6 @@ class App extends Component {
                   />
                   <select id="select-nodetype">
                     <option value="String">String </option>
-                   
                   </select>
                   <br />
 
@@ -362,7 +361,7 @@ class App extends Component {
           )}
           {this.state.page === 1 ? (
             <div id="addnodemodal-top-div">
-             <br />
+              <br />
               <br />
               <button
                 id="modal-cancel-button"
@@ -376,7 +375,6 @@ class App extends Component {
             </div>
           ) : (
             <div id="addnodemodal-bottom-div">
-              
               <button
                 id="modal-cancel-button"
                 onClick={this.setModalAddNodeFalse}
