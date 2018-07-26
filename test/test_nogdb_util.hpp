@@ -56,7 +56,7 @@ namespace nogdb {
     }
 
     inline bool operator==(const Record &lhs, const Record &rhs) {
-        return lhs.getAll() == rhs.getAll();
+        return lhs.getAll() == rhs.getAll() && lhs.getBasicInfo() == rhs.getBasicInfo();
     }
 
     inline bool operator==(const Result &lhs, const Result &rhs) {

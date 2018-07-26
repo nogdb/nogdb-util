@@ -369,8 +369,10 @@ TEST_F(ServerHttpResponseTest, ResponseVertexGet) {
     EXPECT_EQ(2, result.size());
     EXPECT_EQ(this->recD[0], result[0]["descriptor"].get<RecordDescriptor>());
     EXPECT_EQ("value0", result[0]["record"][this->propName]);
+    EXPECT_EQ(this->classNameV, result[0]["record"]["@className"]);
     EXPECT_EQ(this->recD[1], result[1]["descriptor"].get<RecordDescriptor>());
     EXPECT_EQ("value1", result[1]["record"][this->propName]);
+    EXPECT_EQ(this->classNameV, result[1]["record"]["@className"]);
 }
 
 TEST_F(ServerHttpResponseTest, ResponseVertexGetInEdge) {

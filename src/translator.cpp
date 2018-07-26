@@ -350,22 +350,26 @@ void nogdb::from_json(const json &j, Bytes &b, const PropertyType &t) {
 
 void nogdb::to_json(json &j, const Record &r, const ClassDescriptor &schema) {
     j.clear();
+    PropertyType type;
     for (const auto &p: r.getAll()) {
-        PropertyType type{};
         try {
             type = schema.properties.at(p.first).type;
         } catch (...) {
-            if (p.first == "@className") {
-                type = PropertyType::TEXT;
-            } else if (p.first == "@recordId") {
-                type = PropertyType::TEXT;
-            } else if (p.first == "@version") {
-                type = PropertyType::UNSIGNED_BIGINT;
-            } else if (p.first == "@depth") {
-                type = PropertyType::UNSIGNED_INTEGER;
-            } else {
-                type = PropertyType::UNDEFINED;
-            }
+            type = PropertyType::UNDEFINED;
+        }
+        to_json(j[p.first], p.second, type);
+    }
+    for (const auto &p: r.getBasicInfo()) {
+        if (p.first == "@className") {
+            type = PropertyType::TEXT;
+        } else if (p.first == "@recordId") {
+            type = PropertyType::TEXT;
+        } else if (p.first == "@version") {
+            type = PropertyType::UNSIGNED_BIGINT;
+        } else if (p.first == "@depth") {
+            type = PropertyType::UNSIGNED_INTEGER;
+        } else {
+            type = PropertyType::UNDEFINED;
         }
         to_json(j[p.first], p.second, type);
     }
