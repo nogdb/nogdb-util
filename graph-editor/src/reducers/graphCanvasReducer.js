@@ -68,7 +68,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     hashIDToClass[JSON.parse(backupNode[i].id)[0]] = backupNode[i].group;
   }
   switch (action.type) {
-    //add node button render
+    //edit node button render
     case "ADD_NODE_ACTION":
       console.log(state.nodeIDDB);
       //action.payload[0].id = state.nodeIDDB;
@@ -78,7 +78,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             JSON.stringify(action.payload[ele])
           ) === false
         ) {
-          backupEdge.push(action.payload[ele]);
+          backupNode.push(action.payload[ele]);
         }
       }
 
@@ -249,27 +249,58 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       let nodeID = [];
       let nodeName = [];
       let nodeGroup = [];
-      //console.log(action.payload);
+      let tempID = [];
+      let hashIDToLabel = {};
+      let hashLabelToID = {};
+
       for (let i = 0; i < action.payload.length; i++) {
         nodeID.push(action.payload[i].descriptor.rid);
+        tempID.push(nodeID[i].join(","));
         nodeName.push(action.payload[i].record.name);
         nodeGroup.push(action.payload[i].record["@className"]);
-
         //default
         //use label to store what node or edge name render
-        graphSetting.label.id.push(nodeID[i]);
-        graphSetting.label.label.push(nodeName[i]);
       }
+      console.log(tempID);
+      let a = [];
+      for (let i in graphSetting.label.id) {
+        a.push(graphSetting.label.id[i].join(","));
+      }
+      for (let ele in tempID) {
+        if (a.includes(tempID[ele]) === true) {
+          if (graphSetting.label.label.includes(nodeName[ele]) === false)
+            console.log(tempID[ele]);
+          {
+            for (let ele2 in graphSetting.label.id) {
+              if (a[ele2] === tempID[ele]) {
+                graphSetting.label.label[ele2] = nodeName[ele];
+              }
+            }
+          }
+        } else if (a.includes(tempID[ele]) === false) {
+          //console.log(graphSetting.label.id)
+          //console.log(nodeID[ele])
+          graphSetting.label.id.push(nodeID[ele]);
+          graphSetting.label.label.push(nodeName[ele]);
+        }
+      }
+      console.log(graphSetting.label.id);
 
       // hash node id to label of node
-      let hashIDToLabel = {};
       for (let ele in graphSetting.label.id) {
         hashIDToLabel[JSON.stringify(graphSetting.label.id[ele])] =
           graphSetting.label.label[ele];
+        hashLabelToID[graphSetting.label.label[ele]] = JSON.stringify(
+          graphSetting.label.id[ele]
+        );
       }
-
+      console.log(hashIDToLabel);
+      let hashIDBackupNode = {};
+      for (let ele in backupNode) {
+        hashIDBackupNode[backupNode[ele].id] = backupNode[ele].label;
+      }
+      console.log(hashIDBackupNode);
       const backupID = nodeID.map(item => JSON.stringify(item));
-
       for (let i in backupID) {
         if (backupNode.map(item => item.id).includes(backupID[i]) === false) {
           backupNode.push({
@@ -277,19 +308,31 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             label: hashIDToLabel[JSON.stringify(nodeID[i])],
             group: nodeGroup[i]
           });
+        } else if (
+          backupNode.map(item => item.id).includes(backupID[i]) === true &&
+          hashIDToLabel[backupID[i]] !== hashIDBackupNode[backupID[i]]
+        ) {
+          const index = backupNode
+            .map(item => item.label)
+            .indexOf(hashIDBackupNode[backupID[i]]);
+          //backupNode[index].label = hashIDToLabel[backupID[i]];
+          a = backupNode[index];
+          const update = {
+            ...backupNode[index],
+            label: hashIDToLabel[backupID[i]]
+          };
+          backupNode[index] = update;
         }
       }
-      // console.log(backupNode);
+
+      console.log(backupNode);
       return {
         ...state,
         graphCanvas: {
           edges: backupEdge,
-          //  nodes:graphSetting.graphCanvas.nodes,
           nodes: backupNode
         }
       };
-
-      break;
     }
     case "GET_ALL_CLASS": //get all class from getschema index.js
     case "GET_ALL_CLASS": //get all class from getschema index.js
@@ -387,7 +430,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };
     }
     case "ADD_NODE_RENDER": {
-      backupNode.push(action.payload);
+      backupNode.push(action.payload)
       return {
         ...state,
         graphCanvas: {

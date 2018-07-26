@@ -320,7 +320,6 @@ class Canvas extends Component {
 
   setEditNodeModalTrue = () => {
     this.props.getAllNodePropertiesActionCreator(this.props.data.nodeID);
-
     this.setState({
       isEditNodeActive: true
     });
@@ -362,11 +361,16 @@ class Canvas extends Component {
   };
 
   onChangeNodeName(e) {
-    this.props.storeEditNameActionCreator(e.target.value);
-    //  document.getElementById("myEditNodeDate").value,document.getElementById("myEditNodeTime").value)
+    this.props.storeEditNameActionCreator(e.target.value)
+      //  document.getElementById("myEditNodeDate").value,document.getElementById("myEditNodeTime").value)
     // this.setState({
     //   editNodeText: e.target.value
     // });
+  }
+  onChangeNodeDateTime = (e) => {
+    this.props.storeEditNodeDateTimeActionCreator(e._d)
+    // let ArrayTime = JSON.stringify(e._d.split(""))
+     console.log(e._d)
   }
   onChangeNodeDateTime = e => {
     this.props.storeEditNodeDateTimeActionCreator(e._d);
@@ -388,6 +392,10 @@ class Canvas extends Component {
   handleOutRelationChange = e => {
     this.props.storeEditOutRelationActionCreator(e.target.value);
   };
+
+  // onChangeNodeTime = () => {
+    
+  // }
 
   handleEditNodeButton() {
     let updateNodeDB = [
@@ -528,7 +536,7 @@ class Canvas extends Component {
               title="create relationship"
               onClick={this.handleCreateRelation}
             >
-              CreateRelation
+             CreateRelation
             </button>
             {
               <Modal
@@ -619,6 +627,7 @@ class Canvas extends Component {
               <div id="middle-deletenode-div">
                 Deleting node {this.state.nodeID} will permanantly be removed
                 from your Database
+                
               </div>
               <div id="bottom-deletenode-div">
                 <button onClick={this.toggleDeletenodeModal}>
@@ -626,6 +635,7 @@ class Canvas extends Component {
                 </button>
                 <Button color="danger" onClick={this.handleDeleteNode}>
                   Yes,Delete Node!
+                  
                 </Button>
               </div>
             </Modal>
@@ -738,6 +748,7 @@ class Canvas extends Component {
             <div id="middle-deletenode-div">
               Deleting Relation {this.state.relationID} will permanantly be
               removed from your Database
+               
             </div>
             <div id="bottom-deletenode-div">
               <button onClick={this.toggleDeleteRelationModal}>
@@ -755,6 +766,7 @@ class Canvas extends Component {
     }
 
     return (
+     
       <div className="Canvas" align="center">
         {commandBox}
         {relationBox}

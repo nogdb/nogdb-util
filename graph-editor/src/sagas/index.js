@@ -142,6 +142,7 @@ function* addConsoletoDB(sqlStr) {
           // console.log(Edges)
         }
       }
+      console.log(Nodes);
       yield put(addVertexConsole(Nodes));
       yield put(addEdgeConsole(Edges));
     } else if (resp.data.type === "c") {
@@ -254,6 +255,7 @@ function* getAllClassForAddNodeButton() {
 
 function* getInEdgeForNode(selectNode) {
   console.log(">get InEdge for Node");
+  console.log(selectNode);
   let nodes = [];
   let edges = [];
   let nodeID = JSON.parse(selectNode.payload);
@@ -282,16 +284,18 @@ function* getInEdgeForNode(selectNode) {
           }
         }
       );
+      console.log(nodeSrcResult);
       nodes.push({
         id: JSON.stringify(nodeSrcResult.data.descriptor.rid),
-        label: JSON.stringify(nodeSrcResult.data.record.name)
+        label: nodeSrcResult.data.record.name,
+        group: nodeSrcResult.data.record["@className"]
       });
 
       edges.push({
         id: JSON.stringify(incommingEdge.data[ele].descriptor.rid),
         from: JSON.stringify(nodeSrcResult.data.descriptor.rid),
         to: JSON.stringify(nodeID),
-        label: JSON.stringify(incommingEdge.data[ele].record.name)
+        label: incommingEdge.data[ele].record.name
       });
     }
     yield put(addIncomingNodeEdge(nodes, edges));
@@ -332,15 +336,15 @@ function* getOutEdgeForNode(selectNode) {
       );
       nodes.push({
         id: JSON.stringify(nodeDstResult.data.descriptor.rid),
-        label: JSON.stringify(nodeDstResult.data.record.name)
+        label: nodeDstResult.data.record.name,
+        group: nodeDstResult.data.record["@className"]
       });
-      JSON.stringify(nodeID),
-        edges.push({
-          id: JSON.stringify(outgoingEdge.data[ele].descriptor.rid),
-          from: JSON.stringify(nodeID),
-          to: JSON.stringify(nodeDstResult.data.descriptor.rid),
-          label: JSON.stringify(outgoingEdge.data[ele].record.name)
-        });
+      edges.push({
+        id: JSON.stringify(outgoingEdge.data[ele].descriptor.rid),
+        from: JSON.stringify(nodeID),
+        to: JSON.stringify(nodeDstResult.data.descriptor.rid),
+        label: outgoingEdge.data[ele].record.name
+      });
     }
     yield put(addOutgoingNodeEdge(nodes, edges));
   } catch (error) {
