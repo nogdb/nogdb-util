@@ -13,6 +13,9 @@ import {
   sendAllNodePropertyToDataReducer,
   sendAllEdgePropertyToDataReducer
 } from "../actions/databaseAction";
+import {
+  removeNode
+} from "../actions/menuAction"
 import { addNodeToCanvas, addEdgeToCanvas } from "../actions/mainButtonAction";
 
 // const SQL_RESULT_TYPE = {
@@ -26,7 +29,7 @@ function* rootSaga() {
     //takeEvery("DELETE_NODE_FROM_DATABASE", deleteNodeFromDB),
     takeEvery("DELETE_EDGE_FROM_DATABASE", deleteEdgeFromDB),
     takeEvery("GET_ALL_CLASS_FROM_DATABASE", checkClassEdgeNode),
-    takeEvery("GET_EDGE_SRC_DST", getSrcDst),
+    //takeEvery("GET_EDGE_SRC_DST", getSrcDst),
     takeEvery("GET_ALL_CLASS_FOR_ADDNODE_BUTTON", getAllClassForAddNodeButton),
     takeEvery("ADD_NODE_TO_DB", addNodeToDB),
     takeEvery("GET_IN_EDGE_FOR_NODE", getInEdgeForNode),
@@ -72,7 +75,8 @@ function* addNodeToDB(newNode) {
 //sql command in console
 function* addConsoletoDB(sqlStr) {
   console.log(">>>ConsoleToDB");
-
+  let checkDelete = null
+  let stash = []
   try {
     const resp = yield call(post, "http://localhost:3000/SQL/execute", {
       sql: sqlStr.payload
@@ -154,32 +158,56 @@ function* addConsoletoDB(sqlStr) {
     } else if (resp.data.type === "r") {
       //Record descriptor
       console.log("RECORD_DESCRIPTORS");
-      console.log(resp);
+      stash.push(resp)
+      console.log(resp.data.data);
+      const property = yield call(post,"http://localhost:3000/Db/getRecord",
+      {
+        recordDescriptor: resp.data.data[0]
+      })
+      stash.push(property)
+      console.log(property.status)
     }
   } catch (error) {
     console.log(error);
   }
-}
 
-function* getSrcDst() {
-  console.log(">getsrcdstEdge");
-
-  try {
-    const recordDescriptor = yield call(
-      post,
-      "http://localhost:3000/Edge/getSrcDst",
+  console.log(stash.length)
+  console.log(stash)
+  if(stash.length == 1){
+      console.log(stash[0].data.data[0].rid)
+      yield put(removeNode(JSON.stringify(stash[0].data.data[0].rid)))
+  }
+  else if(stash.length ==2){
+    let newNode = []
+      newNode.push(
       {
-        recordDescriptor: { rid: [11, 1] }
-      }
-    );
-
-    console.log(recordDescriptor);
-    // yield put(addNode(newNode));
-  } catch (error) {
-    console.log(error);
-    //  yield put(addNodeToDBError(error));
+        descriptor: stash[0].data.data[0],
+        record: stash[1].data
+      })
+    yield put(addVertexConsole(newNode));
   }
 }
+
+// function* getSrcDst() {
+//   console.log(">getsrcdstEdge");
+
+//   try {
+
+//     const recordDescriptor = yield call(
+//       post,
+//       "http://localhost:3000/Edge/getSrcDst",
+//       {
+//         recordDescriptor: { rid: [11, 1] }
+//       }
+//     );
+
+//     console.log(recordDescriptor);
+//     // yield put(addNode(newNode));
+//   } catch (error) {
+//     console.log(error);
+//     //  yield put(addNodeToDBError(error));
+//   }
+// }
 
 function* deleteNodeFromDB(nodeID) {
   const vertexID = JSON.parse(nodeID.payload);

@@ -233,6 +233,7 @@ class App extends Component {
   render() {
     const { graph, scale } = this.props;
     let Title;
+    let canvas
     let consoleBox;
     let historyBox;
     let nodeTabBars;
@@ -259,10 +260,13 @@ class App extends Component {
       Title = null;
       consoleBox = null;
       historyBox = null;
+      canvas = <Canvas id='fullCanvas'state={graph}  />
     } else {
       Title = <NogDBTitle />;
       consoleBox = <Console />;
       historyBox = <History />;
+      canvas = <Canvas id='normalCanvas' state={graph}  />
+
     }
     if (scale.nodeMenu === true) {
       nodeTabBars = <NodePropertyMenu />;
@@ -279,10 +283,10 @@ class App extends Component {
       <Container>
         {Title}
         <Row>
-          <Col md={scale.nodeMenu || scale.EdgeMenu ? 3 : 0}>
-            {edgeTabBars} {nodeTabBars}
+          <Col md={scale.nodeMenu || scale.edgeMenu ? 3 : 0}>
+          {nodeTabBars}{edgeTabBars} 
           </Col>
-          <Col md={scale.nodeMenu || scale.EdgeMenu ? 9 : 12}>
+          <Col md={scale.nodeMenu || scale.edgeMenu ? 9 : 12}>
             {consoleBox}
             <div>
               <button id="Addnode-modal" onClick={this.setModalAddNodeTrue}>
@@ -309,7 +313,7 @@ class App extends Component {
               </button>
             </div>
 
-            <Canvas state={graph} />
+            {canvas}
             {/* {historyBox} */}
           </Col>
         </Row>

@@ -63,7 +63,7 @@ class EdgePropertyMenu extends Component {
     const { data } = this.props;
 
     return (
-      <div className="edgeLeft-tab">
+      <div className="Left-tab">
         <div id="topbar-prop">
           Relationship{" "}
           <button

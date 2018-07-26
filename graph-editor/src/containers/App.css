@@ -216,6 +216,7 @@ td.rdtYear:hover {
 
 /* ///////////////////////////////////////////////////// */
 
+
 .App {
   text-align: center;
 }
@@ -261,6 +262,8 @@ td.rdtYear:hover {
   height: 600px;
   border: 1px solid black;
 }
+
+
 /* .Left-tab {
   height: 600px;
   width:20%;
@@ -271,6 +274,14 @@ td.rdtYear:hover {
   font-size: 70%;
   margin: 2%;
   display: inline-block;
+}
+#normalCanvas{
+  width: 100%; 
+  height: 100%;
+}
+#FullCanvas{
+  width: 200%;
+  height: 200%;
 }
 
 #CompileButton {

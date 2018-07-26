@@ -74,16 +74,16 @@ class NodePropertyMenu extends Component {
     }
   };
   handleSize25 = () => {
-    this.handleChangeSize(25);
+    this.handleChangeSize(10);
   };
   handleSize50 = () => {
-    this.handleChangeSize(50);
+    this.handleChangeSize(25);
   };
   handleSize75 = () => {
-    this.handleChangeSize(75);
+    this.handleChangeSize(40);
   };
   handleSize100 = () => {
-    this.handleChangeSize(100);
+    this.handleChangeSize(70);
   };
   handleChangeSize = size => {
     this.props.changeSizesActionCreator(this.props.data.nodeID, size);
@@ -167,7 +167,7 @@ class NodePropertyMenu extends Component {
             <Row>
               <Col sm="12">
                 <h4>Tab 2 Contents </h4>
-                <p> Display Format </p>
+                {/* <p> Display Format </p>
                 <input
                   type="text"
                   placeholder="display format..."
@@ -176,14 +176,14 @@ class NodePropertyMenu extends Component {
                 <button onClick={this.setDisplayFormat}> @rid</button>
                 <button onClick={this.setClassDisplayFormat}>@class</button>
                 <button> createdate </button>
-                <button onClick={this.setNameDisplayFormat}> name </button>
+                <button onClick={this.setNameDisplayFormat}> name </button> */}
 
                 <br />
                 <p> Node Size </p>
-                <button onClick={this.handleSize25}>25</button>
-                <button onClick={this.handleSize50}>50</button>
-                <button onClick={this.handleSize75}>75</button>
-                <button onClick={this.handleSize100}>100</button>
+                <button onClick={this.handleSize25}>10</button>
+                <button onClick={this.handleSize50}>25</button>
+                <button onClick={this.handleSize75}>40</button>
+                <button onClick={this.handleSize100}>70</button>
                 <p> display node size </p>
                 <p> Node Color </p>
                 {/*Hard Code*/}

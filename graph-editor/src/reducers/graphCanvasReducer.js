@@ -71,6 +71,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     //edit node button render
     case "ADD_NODE_ACTION":
       console.log(state.nodeIDDB);
+      console.log(action.payload)
       //action.payload[0].id = state.nodeIDDB;
       for (let ele in action.payload) {
         if (
@@ -81,7 +82,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           backupNode.push(action.payload[ele]);
         }
       }
-
+      console.log(backupNode)
       return {
         ...state,
         graphCanvas: {
@@ -121,6 +122,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
     case "REMOVE_NODE":
+    console.log(action.payload)
       for (let ele in backupNode) {
         if (backupNode[ele].id === action.payload) {
           backupNode.splice(ele, 1);
@@ -135,6 +137,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };
 
     case "REMOVE_EDGE":
+    
       for (let ele in backupEdge) {
         if (backupEdge[ele].id === action.payload) {
           backupEdge.splice(ele, 1);
@@ -249,6 +252,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       let nodeID = [];
       let nodeName = [];
       let nodeGroup = [];
+      /// convert nodeID type is string---"[10,2]"
       let tempID = [];
       let hashIDToLabel = {};
       let hashLabelToID = {};
@@ -278,15 +282,10 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             }
           }
         } else if (a.includes(tempID[ele]) === false) {
-          //console.log(graphSetting.label.id)
-          //console.log(nodeID[ele])
           graphSetting.label.id.push(nodeID[ele]);
           graphSetting.label.label.push(nodeName[ele]);
         }
       }
-      console.log(graphSetting.label.id);
-
-      // hash node id to label of node
       for (let ele in graphSetting.label.id) {
         hashIDToLabel[JSON.stringify(graphSetting.label.id[ele])] =
           graphSetting.label.label[ele];
@@ -294,12 +293,10 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           graphSetting.label.id[ele]
         );
       }
-      console.log(hashIDToLabel);
       let hashIDBackupNode = {};
       for (let ele in backupNode) {
         hashIDBackupNode[backupNode[ele].id] = backupNode[ele].label;
       }
-      console.log(hashIDBackupNode);
       const backupID = nodeID.map(item => JSON.stringify(item));
       for (let i in backupID) {
         if (backupNode.map(item => item.id).includes(backupID[i]) === false) {
@@ -402,9 +399,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         backupEdge.push(action.payloadEdge[ele]);
       }
       console.log(backupNode);
-      // console.log(action.payloadNode,action.payloadEdge)
-      // backupNode.push(action.payloadnode)
-      // backupEdge.push(action.payloadEdge)
+
       return {
         ...state,
         graphCanvas: {
