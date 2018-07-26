@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Graph from "react-graph-vis";
 import { connect } from "react-redux";
-import Datetime from 'react-datetime';
+import Datetime from "react-datetime";
 import {
   getNodeID,
   getNodeID2,
@@ -28,8 +28,15 @@ import {
   setEditNodeAlertTrue,
   setEditNodeAlertFalse
 } from "../actions/nodeEdgesMenu";
-import { deleteNodeFromDB,getNodeInEdge,getNodeOutEdge,addUpdateNodeToDatabase,getAllNodeProperties,
-  getAllEdgeProperties,addUpdateEdgeToDatabase } from "../actions/databaseAction";
+import {
+  deleteNodeFromDB,
+  getNodeInEdge,
+  getNodeOutEdge,
+  addUpdateNodeToDatabase,
+  getAllNodeProperties,
+  getAllEdgeProperties,
+  addUpdateEdgeToDatabase
+} from "../actions/databaseAction";
 import { removeNode, removeEdgeCanvas } from "../actions/menuAction";
 import { Modal, Button } from "reactstrap";
 
@@ -91,50 +98,45 @@ const mapDispatchToProps = dispatch => {
     deleteNodeFromDB: nodeID => {
       dispatch(deleteNodeFromDB(nodeID));
     },
-    getNodeInEdgeActionCreator: nodeID=>{
+    getNodeInEdgeActionCreator: nodeID => {
       dispatch(getNodeInEdge(nodeID));
     },
-    getNodeOutEdgeActionCreator: (nodeID) => {
+    getNodeOutEdgeActionCreator: nodeID => {
       dispatch(getNodeOutEdge(nodeID));
     },
-    addUpdateNodeToDatabaseActionCreator: (updateNodeDB) => {
+    addUpdateNodeToDatabaseActionCreator: updateNodeDB => {
       dispatch(addUpdateNodeToDatabase(updateNodeDB));
     },
-    getAllNodePropertiesActionCreator: (nodeID) => {
+    getAllNodePropertiesActionCreator: nodeID => {
       dispatch(getAllNodeProperties(nodeID));
     },
-    storeEditNameActionCreator: (name) => {
-      dispatch(storeEditName(name))
+    storeEditNameActionCreator: name => {
+      dispatch(storeEditName(name));
     },
-    storeEditNodeDateTimeActionCreator: (dateTime) => {
-      dispatch(storeEditNodeDateTime(dateTime))
+    storeEditNodeDateTimeActionCreator: dateTime => {
+      dispatch(storeEditNodeDateTime(dateTime));
     },
-    setEditNodeAlertTrueActionCreator:() =>{
-      dispatch(setEditNodeAlertTrue())
+    setEditNodeAlertTrueActionCreator: () => {
+      dispatch(setEditNodeAlertTrue());
     },
     setEditNodeAlertFalseActionCreator: () => {
-      dispatch(setEditNodeAlertFalse())
+      dispatch(setEditNodeAlertFalse());
     },
-    getAllEdgePropertiesActionCreator : (edgeID) => {
-      dispatch(getAllEdgeProperties(edgeID))
+    getAllEdgePropertiesActionCreator: edgeID => {
+      dispatch(getAllEdgeProperties(edgeID));
     },
-    addUpdateEdgeToDatabaseActionCreator : (updateEdgeID) => {
-      dispatch(addUpdateEdgeToDatabase(updateEdgeID))
+    addUpdateEdgeToDatabaseActionCreator: updateEdgeID => {
+      dispatch(addUpdateEdgeToDatabase(updateEdgeID));
     },
-    storeEditInRelationActionCreator : (inRelation) => {
-      dispatch(storeEditInRelation(inRelation))
+    storeEditInRelationActionCreator: inRelation => {
+      dispatch(storeEditInRelation(inRelation));
     },
-    storeEditOutRelationActionCreator : (outRelation) => {
-      dispatch(storeEditOutRelation(outRelation))
+    storeEditOutRelationActionCreator: outRelation => {
+      dispatch(storeEditOutRelation(outRelation));
     },
-    storeEditMessageActionCreator : (Message) => {
-      dispatch(storeEditMessage(Message))
+    storeEditMessageActionCreator: Message => {
+      dispatch(storeEditMessage(Message));
     }
-
-
-
-
-   
   };
 };
 const customStyle = {
@@ -151,18 +153,18 @@ const customStyle = {
   }
 };
 const customEditRelationStyle = {
-  content : {
-    posittion:'absolute',
-    top    : '20px',
-    left   : '40px',
-    right  : '40px',
-    bottom : '40px',
-    marginRight  : '10%',
-    marginLeft   : '10%',
-    marginTop    : '10%',
-    marginBottom : '10%'
+  content: {
+    posittion: "absolute",
+    top: "20px",
+    left: "40px",
+    right: "40px",
+    bottom: "40px",
+    marginRight: "10%",
+    marginLeft: "10%",
+    marginTop: "10%",
+    marginBottom: "10%"
   }
-} ;
+};
 const customCreateEdgeModal = {
   content: {
     position: "absolute",
@@ -184,10 +186,10 @@ class Canvas extends Component {
       editNodeText: "",
       isDeleteNodeActivate: false,
       isDeleteRelationActivate: false,
-      isEditNodeActive:false,
+      isEditNodeActive: false,
       createEdgeMode: false,
       isCreateRelationActive: false,
-      isEditRelationActive: false,
+      isEditRelationActive: false
     };
     this.handleNodeID = this.handleNodeID.bind(this);
     this.handleGetNodeName = this.handleGetNodeName.bind(this);
@@ -320,20 +322,20 @@ class Canvas extends Component {
     this.props.getAllNodePropertiesActionCreator(this.props.data.nodeID);
 
     this.setState({
-      isEditNodeActive:true
+      isEditNodeActive: true
     });
   };
   setEditNodeModalFalse = () => {
     this.setState({
-      isEditNodeActive:false
-    })
-  }
+      isEditNodeActive: false
+    });
+  };
 
   toggleEditRelationModal = () => {
     this.setState({
-      isEditRelationActive:!this.state.isEditRelationActive
-    })
-  }
+      isEditRelationActive: !this.state.isEditRelationActive
+    });
+  };
   toggleDeleteRelationModal = () => {
     this.setState({
       isDeleteRelationActivate: !this.state.isDeleteRelationActivate
@@ -353,45 +355,45 @@ class Canvas extends Component {
   };
 
   handleIncomingButton = () => {
-    this.props.getNodeInEdgeActionCreator(this.props.data.nodeID)
-  }
+    this.props.getNodeInEdgeActionCreator(this.props.data.nodeID);
+  };
   handleOutgoingButton = () => {
-    this.props.getNodeOutEdgeActionCreator(this.props.data.nodeID)
-  }
+    this.props.getNodeOutEdgeActionCreator(this.props.data.nodeID);
+  };
 
   onChangeNodeName(e) {
-    this.props.storeEditNameActionCreator(e.target.value)
-      //  document.getElementById("myEditNodeDate").value,document.getElementById("myEditNodeTime").value)
+    this.props.storeEditNameActionCreator(e.target.value);
+    //  document.getElementById("myEditNodeDate").value,document.getElementById("myEditNodeTime").value)
     // this.setState({
     //   editNodeText: e.target.value
     // });
   }
-  onChangeNodeDateTime = (e) => {
-    this.props.storeEditNodeDateTimeActionCreator(e._d)
+  onChangeNodeDateTime = e => {
+    this.props.storeEditNodeDateTimeActionCreator(e._d);
     // let ArrayTime = JSON.stringify(e._d.split(""))
-     console.log(e._d)
-  }
+    console.log(e._d);
+  };
 
   // onChangeNodeTime = () => {
-    
+
   // }
 
-  handleInRelationChange = (e) => {
-    this.props.storeEditInRelationActionCreator(e.target.value)
-  }
+  handleInRelationChange = e => {
+    this.props.storeEditInRelationActionCreator(e.target.value);
+  };
 
-  handleMessageChange = (e) => {
-    this.props.storeEditMessageActionCreator(e.target.value)
-  }
-  handleOutRelationChange = (e) => {
-    this.props.storeEditOutRelationActionCreator(e.target.value)
-  }
+  handleMessageChange = e => {
+    this.props.storeEditMessageActionCreator(e.target.value);
+  };
+  handleOutRelationChange = e => {
+    this.props.storeEditOutRelationActionCreator(e.target.value);
+  };
 
   handleEditNodeButton() {
     let updateNodeDB = [
-      { 
-        id:this.props.data.nodeID,
-        group: this.props.data.nodeProperty['@className'],
+      {
+        id: this.props.data.nodeID,
+        group: this.props.data.nodeProperty["@className"],
         label: this.props.data.editNodeName,
         // date: this.props.data.nodeDateTime
         date: this.props.data.nodeDateTime
@@ -404,33 +406,30 @@ class Canvas extends Component {
   }
 
   handleEditRelationbutton = () => {
-    console.log(this.props.data.edgeProperty)
+    console.log(this.props.data.edgeProperty);
     let updateEdgeDB = [
       {
-        id:this.props.data.edgeID,
+        id: this.props.data.edgeID,
         // from: ,
         // to: ,
         // label:JSON.stringify(this.props.data.edgeProperty.name),
-        label:'testEdgeName',
-        group:this.props.data.edgeProperty['@className'],
-        inRelation:this.props.data.inRelation,
-        outRelation:this.props.data.outRelation,
-        message:this.props.data.message
-
+        label: "testEdgeName",
+        group: this.props.data.edgeProperty["@className"],
+        inRelation: this.props.data.inRelation,
+        outRelation: this.props.data.outRelation,
+        message: this.props.data.message
       }
-    ]
+    ];
     this.props.addUpdateEdgeToDatabaseActionCreator(updateEdgeDB);
     this.toggleEditRelationModal();
-    console.log(updateEdgeDB)
-  }
+    console.log(updateEdgeDB);
+  };
 
+  // this.setNewNodeName(this.state.nodeID, this.state.editNodeName);
+  // console.log(this.state.graph.nodes);
+  // this.toggleEditnodeModal();
+  // this.handleAlertTrue();
 
-    // this.setNewNodeName(this.state.nodeID, this.state.editNodeName);
-    // console.log(this.state.graph.nodes);
-    // this.toggleEditnodeModal();
-    // this.handleAlertTrue();
-  
-  
   // handleRemoveRelation = () => {
   //   let BackupNode = this.state.graph.edges.slice();
   //   let BackupEdges = this.state.graph.edges.slice();
@@ -460,7 +459,7 @@ class Canvas extends Component {
             <button
               id="Incoming-button"
               title="Incoming Relationship"
-               onClick={this.handleIncomingButton}
+              onClick={this.handleIncomingButton}
             >
               Incoming
             </button>
@@ -471,61 +470,65 @@ class Canvas extends Component {
             >
               Outgoing
             </button>
-            <button
-              id="Edit-button"
-              onClick={this.setEditNodeModalTrue}
-            >
-              Edit node 
+            <button id="Edit-button" onClick={this.setEditNodeModalTrue}>
+              Edit node
             </button>
             <Modal
-                       isOpen={this.state.isEditNodeActive}
-                       contentlabel="Node Editor"
-                       onRequestClose={this.setEditNodeModalFalse}
-                       style={customCreateEdgeModal}
-                     >
-                       <div id="edit-top-div"> Edit Node : {data.nodeID}</div>
-                       <div id="edit-middle-div"> Classname : {data.nodeClass} <br />
-                         <div id="inside-editmid-div">
-                           <br />
-                           <h5 id="Editnode-classname">name </h5>
-                           <input
-                             type="text"
-                             placeholder="Edit...."
-                             className="Node-editor"
-                             value={this.props.data.editNodeName}
-                             onChange={this.onChangeNodeName}
-                           />
-                           <select id="select-nodetype">
-                             <option value="String">String </option>
-                           </select>
-                           <br />
-                          
-                           <form action="/action_page.php">
-                             CreateDate : <Datetime value={this.props.data.nodeDateTime} onChange={this.onChangeNodeDateTime} viewMode={'days'}/>
-                             {/* CreateDate: <input type="date" name="day" id="myEditNodeDate" /> */}
-                             {/* <input type="time" id="myEditNodeTime" /> */}
-                             <select id="select-nodetype">       
-                               <option value="String">String </option>
-                             </select>
-                           </form>
-                         </div>
-                       </div>
-                       <div id="edge-bottom-div">
-                         <br />
-                         <button id="cancel-edge" onClick={this.setEditNodeModalFalse}>
-                           Cancel
-                         </button>
-                         <button id="Edge-button" onClick={this.handleEditNodeButton}>
-                           Save Change
-                         </button>
-                       </div>
-                     </Modal>
+              isOpen={this.state.isEditNodeActive}
+              contentlabel="Node Editor"
+              onRequestClose={this.setEditNodeModalFalse}
+              style={customCreateEdgeModal}
+            >
+              <div id="edit-top-div"> Edit Node : {data.nodeID}</div>
+              <div id="edit-middle-div">
+                {" "}
+                Classname : {data.nodeClass} <br />
+                <div id="inside-editmid-div">
+                  <br />
+                  <h5 id="Editnode-classname">name </h5>
+                  <input
+                    type="text"
+                    placeholder="Edit...."
+                    className="Node-editor"
+                    value={this.props.data.editNodeName}
+                    onChange={this.onChangeNodeName}
+                  />
+                  <select id="select-nodetype">
+                    <option value="String">String </option>
+                  </select>
+                  <br />
+
+                  <form action="/action_page.php">
+                    CreateDate :{" "}
+                    <Datetime
+                      value={this.props.data.nodeDateTime}
+                      onChange={this.onChangeNodeDateTime}
+                      viewMode={"days"}
+                    />
+                    {/* CreateDate: <input type="date" name="day" id="myEditNodeDate" /> */}
+                    {/* <input type="time" id="myEditNodeTime" /> */}
+                    <select id="select-nodetype">
+                      <option value="String">String </option>
+                    </select>
+                  </form>
+                </div>
+              </div>
+              <div id="edge-bottom-div">
+                <br />
+                <button id="cancel-edge" onClick={this.setEditNodeModalFalse}>
+                  Cancel
+                </button>
+                <button id="Edge-button" onClick={this.handleEditNodeButton}>
+                  Save Change
+                </button>
+              </div>
+            </Modal>
             <button
               id="createRelation-button"
               title="create relationship"
               onClick={this.handleCreateRelation}
             >
-             CreateRelation
+              CreateRelation
             </button>
             {
               <Modal
@@ -616,7 +619,6 @@ class Canvas extends Component {
               <div id="middle-deletenode-div">
                 Deleting node {this.state.nodeID} will permanantly be removed
                 from your Database
-                
               </div>
               <div id="bottom-deletenode-div">
                 <button onClick={this.toggleDeletenodeModal}>
@@ -624,7 +626,6 @@ class Canvas extends Component {
                 </button>
                 <Button color="danger" onClick={this.handleDeleteNode}>
                   Yes,Delete Node!
-                  
                 </Button>
               </div>
             </Modal>
@@ -638,44 +639,89 @@ class Canvas extends Component {
     if (scale.edgeMenu === true) {
       relationBox = (
         <div id="relationMenu-div">
-          <button
-            id="editRelationship"
-           onClick={this.toggleEditRelationModal}
-          >
+          <button id="editRelationship" onClick={this.toggleEditRelationModal}>
             Edit Relationship
           </button>
-          <Modal isOpen={this.state.isEditRelationActive} contentLabel = "EditRelationship Modal" 
-                            onRequestClose={this.toggleEditRelationModal}
-                            style = {customEditRelationStyle} > <div id="editRModal-header">  Edit Relationship 
-                     <button id="hidemodal-button" onClick={this.toggleEditRelationModal}>Hide Modal</button>
-                     <hr></hr>
-                     </div>
-                    
-                        <div id="editRmodal-middle-div"> relation <hr></hr>
-                        
-                        <div id="ineditRmodal-middle-div">
-                           inRelation <input type="text" value={this.props.data.inRelation}  placeholder="input inrelation...." className="Nodetext" onChange={this.handleInRelationChange} />
-                            <select id="select-inrelation">
-                            <option value="String">INTEGER </option>
-                            </select> <br></br><br></br>
-                             message   <input type="text" value={this.props.data.message} placeholder="Type message here...." className="msgTxt" onChange={this.handleMessageChange} /> 
-                             <select id="select-message">
-                            <option value="String">STRING </option>
-                            </select>     <br></br><br></br>
-                           outRelation  <input type="text" value={this.props.data.outRelation} placeholder="input outrelation...." className="Nodetext" onChange={this.handleOutRelationChange} />
-                            <select id="select-outRelation">
-                            <option value="String">INTEGER </option>
-                            </select> <br></br><br></br>
-                           </div>
-                        </div>
-                        <br></br>
-                        <div id="editRmodal-bottom-div">  
-                        <button id="modal-cancel-button" onClick={this.toggleEditRelationModal}> Cancel </button>
-                        <button id="editRelation-button" onClick={this.handleEditRelationbutton} >Save Change</button>
-                        </div>
-        
-                       
-                     </Modal>
+          <Modal
+            isOpen={this.state.isEditRelationActive}
+            contentLabel="EditRelationship Modal"
+            onRequestClose={this.toggleEditRelationModal}
+            style={customEditRelationStyle}
+          >
+            {" "}
+            <div id="editRModal-header">
+              {" "}
+              Edit Relationship
+              <button
+                id="hidemodal-button"
+                onClick={this.toggleEditRelationModal}
+              >
+                Hide Modal
+              </button>
+              <hr />
+            </div>
+            <div id="editRmodal-middle-div">
+              {" "}
+              relation <hr />
+              <div id="ineditRmodal-middle-div">
+                inRelation{" "}
+                <input
+                  type="text"
+                  value={this.props.data.inRelation}
+                  placeholder="input inrelation...."
+                  className="Nodetext"
+                  onChange={this.handleInRelationChange}
+                />
+                <select id="select-inrelation">
+                  <option value="String">INTEGER </option>
+                </select>{" "}
+                <br />
+                <br />
+                message{" "}
+                <input
+                  type="text"
+                  value={this.props.data.message}
+                  placeholder="Type message here...."
+                  className="msgTxt"
+                  onChange={this.handleMessageChange}
+                />
+                <select id="select-message">
+                  <option value="String">STRING </option>
+                </select>{" "}
+                <br />
+                <br />
+                outRelation{" "}
+                <input
+                  type="text"
+                  value={this.props.data.outRelation}
+                  placeholder="input outrelation...."
+                  className="Nodetext"
+                  onChange={this.handleOutRelationChange}
+                />
+                <select id="select-outRelation">
+                  <option value="String">INTEGER </option>
+                </select>{" "}
+                <br />
+                <br />
+              </div>
+            </div>
+            <br />
+            <div id="editRmodal-bottom-div">
+              <button
+                id="modal-cancel-button"
+                onClick={this.toggleEditRelationModal}
+              >
+                {" "}
+                Cancel{" "}
+              </button>
+              <button
+                id="editRelation-button"
+                onClick={this.handleEditRelationbutton}
+              >
+                Save Change
+              </button>
+            </div>
+          </Modal>
           <button
             id="deleteRelationship"
             onClick={this.toggleDeleteRelationModal}
@@ -692,7 +738,6 @@ class Canvas extends Component {
             <div id="middle-deletenode-div">
               Deleting Relation {this.state.relationID} will permanantly be
               removed from your Database
-               
             </div>
             <div id="bottom-deletenode-div">
               <button onClick={this.toggleDeleteRelationModal}>
@@ -710,7 +755,6 @@ class Canvas extends Component {
     }
 
     return (
-     
       <div className="Canvas" align="center">
         {commandBox}
         {relationBox}
@@ -741,7 +785,9 @@ class Canvas extends Component {
               this.handleNodeID(event.nodes);
               this.props.showNodeMenuActionCreator();
               this.props.hideEdgeMenuActionCreator();
-              this.props.getAllNodePropertiesActionCreator(this.props.data.nodeID);
+              this.props.getAllNodePropertiesActionCreator(
+                this.props.data.nodeID
+              );
               this.handleGetNodeName();
               this.handleNodeClass();
               //  this.getCreateDate();
@@ -758,8 +804,10 @@ class Canvas extends Component {
               this.getOutRelationNode();
               this.props.showEdgeMenuActionCreator();
               this.props.hideNodeMenuActionCreator();
-              this.props.getAllEdgePropertiesActionCreator(this.props.data.edgeID);
-              console.log(this.props.scale.edgeMenu)
+              this.props.getAllEdgePropertiesActionCreator(
+                this.props.data.edgeID
+              );
+              console.log(this.props.scale.edgeMenu);
             }.bind(this),
             deselectEdge: function(/*event*/) {
               // this.toggleRelationMenu();

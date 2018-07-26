@@ -6,7 +6,7 @@ import NogDBTitle from "../components/Title";
 import Console from "../components/Console";
 import Canvas from "../components/Canvas";
 import History from "../components/History";
-import { Alert } from 'reactstrap';
+import { Alert } from "reactstrap";
 import { connect } from "react-redux";
 import {
   addNodeToDatabase,
@@ -20,7 +20,7 @@ import {
   getAllClassFromDatabase,
   getAllNodeClassForAddNodeButton
 } from "../actions/databaseAction";
-import {setEditNodeAlertFalse} from "../actions/nodeEdgesMenu";
+import { setEditNodeAlertFalse } from "../actions/nodeEdgesMenu";
 
 const customAddNodeStyle = {
   content: {
@@ -82,7 +82,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(getAllNodeClassForAddNodeButton());
     },
     setEditNodeAlertFalseActionCreator: () => {
-      dispatch(setEditNodeAlertFalse())
+      dispatch(setEditNodeAlertFalse());
     }
   };
 };
@@ -238,11 +238,21 @@ class App extends Component {
     let nodeTabBars;
     let edgeTabBars;
     let editNodeAlert;
-    if(scale.editAlert === true){
-      editNodeAlert =  <Alert id='alertTest' color="success"> Edit node successfully.
-       <button id='close-editnode-alert' onClick={this.props.setEditNodeAlertFalseActionCreator}>X</button></Alert> 
+    if (scale.editAlert === true) {
+      editNodeAlert = (
+        <Alert id="alertTest" color="success">
+          {" "}
+          Edit node successfully.
+          <button
+            id="close-editnode-alert"
+            onClick={this.props.setEditNodeAlertFalseActionCreator}
+          >
+            X
+          </button>
+        </Alert>
+      );
     } else {
-      editNodeAlert = null
+      editNodeAlert = null;
     }
 
     if (scale.isFullscreen === true) {
@@ -261,7 +271,6 @@ class App extends Component {
     }
     if (scale.edgeMenu === true) {
       edgeTabBars = <EdgePropertyMenu />;
-  
     } else if (scale.edgeMenu === false) {
       edgeTabBars = null;
     }
@@ -271,7 +280,7 @@ class App extends Component {
         {Title}
         <Row>
           <Col md={scale.nodeMenu || scale.EdgeMenu ? 3 : 0}>
-          {edgeTabBars} {nodeTabBars} 
+            {edgeTabBars} {nodeTabBars}
           </Col>
           <Col md={scale.nodeMenu || scale.EdgeMenu ? 9 : 12}>
             {consoleBox}
@@ -332,7 +341,7 @@ class App extends Component {
                 {/* Group : {this.state.nodeClass} <br /> */}
                 <br />
                 <div id="inside-editmid-div">
-                  <br />                 
+                  <br />
                   {/*Hard Code*/}
                   <h5 id="Editnode-classname">name </h5>
                   {/*fill node name*/}
@@ -344,7 +353,6 @@ class App extends Component {
                   />
                   <select id="select-nodetype">
                     <option value="String">String </option>
-                   
                   </select>
                   <br />
 
@@ -362,7 +370,7 @@ class App extends Component {
           )}
           {this.state.page === 1 ? (
             <div id="addnodemodal-top-div">
-             <br />
+              <br />
               <br />
               <button
                 id="modal-cancel-button"
@@ -376,7 +384,6 @@ class App extends Component {
             </div>
           ) : (
             <div id="addnodemodal-bottom-div">
-              
               <button
                 id="modal-cancel-button"
                 onClick={this.setModalAddNodeFalse}
@@ -389,7 +396,7 @@ class App extends Component {
             </div>
           )}
         </Modal>
-          {editNodeAlert}
+        {editNodeAlert}
       </Container>
     );
   }

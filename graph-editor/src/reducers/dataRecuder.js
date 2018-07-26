@@ -7,15 +7,15 @@ const data = {
   edgeIn: null,
   edgeOut: null,
   selectId: null,
-  edgeProperty:null,
+  edgeProperty: null,
   editNodeName: null,
   nodeDateTime: null,
   // nodeTime:null,
   nodeProperty: null,
 
-  inRelation:null,
-  outRelation:null,
-  message:null,
+  inRelation: null,
+  outRelation: null,
+  message: null
 };
 const dataReducer = (state = data, action) => {
   switch (action.type) {
@@ -25,7 +25,7 @@ const dataReducer = (state = data, action) => {
         nodeID: action.payload
       };
       return state;
-      case "GET_NODE_ID_2":
+    case "GET_NODE_ID_2":
       state = {
         ...state,
         nodeID2: action.payload
@@ -94,19 +94,19 @@ const dataReducer = (state = data, action) => {
         nodeDateTime: action.dateTime
       };
 
-      case "STORE_EDGE_INRELATION":
+    case "STORE_EDGE_INRELATION":
       return {
         ...state,
         inRelation: action.payload
-      };  
+      };
 
-      case "STORE_EDGE_OUTRELATION":
+    case "STORE_EDGE_OUTRELATION":
       return {
         ...state,
         outRelation: action.payload
       };
 
-      case "STORE_EDGE_MESSAGE":
+    case "STORE_EDGE_MESSAGE":
       return {
         ...state,
         message: action.payload
@@ -127,18 +127,17 @@ const dataReducer = (state = data, action) => {
         nodeDateTime: action.payload.data.date,
         // nodeTime:action.payload.data.time,
         // nodeClass:action.payload.data.className
-         nodeClass: action.payload.data['@className']
+        nodeClass: action.payload.data["@className"]
       };
 
-    case 'SEND_EDGE_PROPERTY_TO_DATA_REDUCER' :
-  
-    return {
-      ...state,
-      edgeProperty: action.payload.data,
-      inRelation:action.payload.data.inRelation,
-      message:action.payload.data.message,
-      outRelation:action.payload.data.outRelation,
-    }
+    case "SEND_EDGE_PROPERTY_TO_DATA_REDUCER":
+      return {
+        ...state,
+        edgeProperty: action.payload.data,
+        inRelation: action.payload.data.inRelation,
+        message: action.payload.data.message,
+        outRelation: action.payload.data.outRelation
+      };
     default:
       state = {
         ...state

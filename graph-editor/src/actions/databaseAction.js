@@ -37,58 +37,58 @@ const deleteNodeFromDB = NodeID => ({
   type: "DELETE_NODE_TO_DB",
   payload: NodeID
 });
-const sendNodeIDToCanvas = nodeID =>({
-  type : "SEND_NODE_ID_TO_CANVAS",
+const sendNodeIDToCanvas = nodeID => ({
+  type: "SEND_NODE_ID_TO_CANVAS",
   payload: nodeID
-})
-const getNodeInEdge = (selectNodeID) => ({
-  type : "GET_IN_EDGE_FOR_NODE",
-  payload : selectNodeID
-})
-const addIncomingNodeEdge = (nodes,edges) => ({
-  type : 'ADD_INCOMING_NODE_EDGE',
-  payloadNode:nodes,
-  payloadEdge:edges
-})
-const getNodeOutEdge = (selectNodeID) => ({
-  type : 'GET_OUT_EDGE_FOR_NODE',
-  payload:selectNodeID
-})
-const addOutgoingNodeEdge = (nodes,edges) => ({
-  type :'ADD_OUTGOING_NODE_EDGE',
-  payloadNode:nodes,
-  payloadEdge:edges
-})
-const addUpdateNodeToDatabase = (updateNode) => ({
-  type : 'ADD_UPDATE_NODE_TO_DB',
-  payload:updateNode
-})
+});
+const getNodeInEdge = selectNodeID => ({
+  type: "GET_IN_EDGE_FOR_NODE",
+  payload: selectNodeID
+});
+const addIncomingNodeEdge = (nodes, edges) => ({
+  type: "ADD_INCOMING_NODE_EDGE",
+  payloadNode: nodes,
+  payloadEdge: edges
+});
+const getNodeOutEdge = selectNodeID => ({
+  type: "GET_OUT_EDGE_FOR_NODE",
+  payload: selectNodeID
+});
+const addOutgoingNodeEdge = (nodes, edges) => ({
+  type: "ADD_OUTGOING_NODE_EDGE",
+  payloadNode: nodes,
+  payloadEdge: edges
+});
+const addUpdateNodeToDatabase = updateNode => ({
+  type: "ADD_UPDATE_NODE_TO_DB",
+  payload: updateNode
+});
 const addNodeRender = data => ({
   type: "ADD_NODE_RENDER",
   payload: data
 });
 
-const getAllNodeProperties =(nodeID) => ({
-  type : 'GET_NODE_PROPERTY',
-  payload:nodeID
-})
-const getAllEdgeProperties = (edgeID) => ({
-  type : 'GET_EDGE_PROPERTY',
-  payload:edgeID
-})
-const sendAllNodePropertyToDataReducer = (nodeProperty) => ({
-  type : 'SEND_NODE_PERPERTY_TO_DATA_REDUCER',
-  payload : nodeProperty
-})
+const getAllNodeProperties = nodeID => ({
+  type: "GET_NODE_PROPERTY",
+  payload: nodeID
+});
+const getAllEdgeProperties = edgeID => ({
+  type: "GET_EDGE_PROPERTY",
+  payload: edgeID
+});
+const sendAllNodePropertyToDataReducer = nodeProperty => ({
+  type: "SEND_NODE_PERPERTY_TO_DATA_REDUCER",
+  payload: nodeProperty
+});
 
-const sendAllEdgePropertyToDataReducer = (edgeProperty) => ({
-  type : 'SEND_EDGE_PROPERTY_TO_DATA_REDUCER',
-  payload : edgeProperty
-})
-const addUpdateEdgeToDatabase = (updateEdgeDB) => ({
-  type : 'ADD_UPDATE_EDGE_TO_DB',
-  payload : updateEdgeDB
-})
+const sendAllEdgePropertyToDataReducer = edgeProperty => ({
+  type: "SEND_EDGE_PROPERTY_TO_DATA_REDUCER",
+  payload: edgeProperty
+});
+const addUpdateEdgeToDatabase = updateEdgeDB => ({
+  type: "ADD_UPDATE_EDGE_TO_DB",
+  payload: updateEdgeDB
+});
 export {
   executeConsole,
   addVertexConsole,

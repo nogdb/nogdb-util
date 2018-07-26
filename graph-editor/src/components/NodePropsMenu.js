@@ -61,7 +61,7 @@ class NodePropertyMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab:"1"
+      activeTab: "1"
     };
     this.toggle = this.toggle.bind(this);
     this.setDisplayFormat = this.setDisplayFormat.bind(this);
@@ -121,7 +121,12 @@ class NodePropertyMenu extends Component {
       <div className="Left-tab">
         <div id="topbar-prop">
           Node{" "}
-          <button id="hide-nodeprops-button" onClick={this.props.hideNodeMenuActionCreator}>X</button>
+          <button
+            id="hide-nodeprops-button"
+            onClick={this.props.hideNodeMenuActionCreator}
+          >
+            X
+          </button>
         </div>
 
         <Nav tabs>

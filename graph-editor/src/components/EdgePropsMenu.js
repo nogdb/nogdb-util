@@ -66,7 +66,12 @@ class EdgePropertyMenu extends Component {
       <div className="edgeLeft-tab">
         <div id="topbar-prop">
           Relationship{" "}
-          <button id='edge-hide-button' onClick={this.props.hideEdgeMenuActionCreator}>X </button>
+          <button
+            id="edge-hide-button"
+            onClick={this.props.hideEdgeMenuActionCreator}
+          >
+            X{" "}
+          </button>
         </div>
 
         <Nav tabs>

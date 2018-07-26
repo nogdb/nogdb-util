@@ -3,7 +3,7 @@ const componentScale = {
   nodeMenu: false,
   edgeMenu: false,
   historyBar: false,
-  editAlert : false,
+  editAlert: false
 };
 
 const rescaleReducer = (state = componentScale, action) => {
@@ -60,7 +60,7 @@ const rescaleReducer = (state = componentScale, action) => {
     case "ALERT_EDIT_MESSAGE_TRUE":
       return {
         ...state,
-        editAlert:true
+        editAlert: true
       };
 
     case "ALERT_EDIT_MESSAGE_FALSE":

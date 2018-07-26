@@ -45,31 +45,31 @@ const deleteEdgeFromDatabase = edgeID => ({
   type: "DELETE_EDGE_FROM_DATABASE",
   payload: edgeID
 });
-const storeEditName = (name) => ({
-  type:'STORE_EDIT_NODENAME_VALUE',
-  name:name,
+const storeEditName = name => ({
+  type: "STORE_EDIT_NODENAME_VALUE",
+  name: name
   // date:date,
   // time:time
-})
-const storeEditNodeDateTime = (dateTime) => ({
-  type:'STORE_NODE_DATE_VALUE',
-  dateTime:dateTime
-})
+});
+const storeEditNodeDateTime = dateTime => ({
+  type: "STORE_NODE_DATE_VALUE",
+  dateTime: dateTime
+});
 
-const storeEditInRelation = (inRelation) => ({
-  type :'STORE_EDGE_INRELATION',
-  payload:inRelation
-})
+const storeEditInRelation = inRelation => ({
+  type: "STORE_EDGE_INRELATION",
+  payload: inRelation
+});
 
-const storeEditOutRelation =(outRelation) => ({
-  type : 'STORE_EDGE_OUTRELATION',
+const storeEditOutRelation = outRelation => ({
+  type: "STORE_EDGE_OUTRELATION",
   payload: outRelation
-})
+});
 
-const storeEditMessage = (Message) => ({
-  type :'STORE_EDGE_MESSAGE',
-  payload : Message
-})
+const storeEditMessage = Message => ({
+  type: "STORE_EDGE_MESSAGE",
+  payload: Message
+});
 
 // const storeEditTime = (time) => ({
 //   type:'STORE_TIME_VALUE',
@@ -98,7 +98,4 @@ export {
   storeEditInRelation,
   storeEditOutRelation,
   storeEditMessage
-  
-
-
 };

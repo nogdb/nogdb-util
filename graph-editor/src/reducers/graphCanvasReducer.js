@@ -48,7 +48,7 @@ const graphSetting = {
   ID: [],
   name: [],
   classes: [],
-  nodeID_DB: "ccccc",  
+  nodeID_DB: "ccccc",
   nodeIDDB: "",
   selectClass: " ",
   label: {
@@ -66,11 +66,11 @@ const graphCanvasReducer = (state = graphSetting, action) => {
   let hashIDToClass = {};
   for (let i in backupNode) {
     hashIDToClass[JSON.parse(backupNode[i].id)[0]] = backupNode[i].group;
-  }  
+  }
   switch (action.type) {
     //add node button render
     case "ADD_NODE_ACTION":
-      console.log(state.nodeIDDB)
+      console.log(state.nodeIDDB);
       //action.payload[0].id = state.nodeIDDB;
       for (let ele in action.payload) {
         if (
@@ -90,16 +90,20 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
 
-      case "ADD_EDGE_CANVAS": {
+    case "ADD_EDGE_CANVAS": {
       let copyEdge = state.graphCanvas.edges.slice();
-      console.log(action.payload)
+      console.log(action.payload);
       for (let ele in action.payload) {
-        if (JSON.stringify(copyEdge).includes(JSON.stringify(action.payload[ele])) === false) {
+        if (
+          JSON.stringify(copyEdge).includes(
+            JSON.stringify(action.payload[ele])
+          ) === false
+        ) {
           copyEdge.push(action.payload[ele]);
           copyEdge.shift();
         }
       }
-      console.log(copyEdge)
+      console.log(copyEdge);
       return {
         ...state,
         graphCanvas: {
@@ -107,7 +111,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           edges: copyEdge
         }
       };
-
     }
     case "CLEAR_CANVAS":
       return {
@@ -146,20 +149,19 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };
 
     case "EDIT_SIZE":
-    nodeGroup = hashIDToClass[JSON.parse(action.nodeID)[0]];
+      nodeGroup = hashIDToClass[JSON.parse(action.nodeID)[0]];
 
-    //Hard Code node class name
+      //Hard Code node class name
 
-         
       switch (nodeGroup) {
         case "Person":
-        updateSize = { ...externalOption.Person, size: action.size };
-        updateGroup = { ...externalOption, Person: updateSize };
+          updateSize = { ...externalOption.Person, size: action.size };
+          updateGroup = { ...externalOption, Person: updateSize };
           return {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
-          case "School":
+        case "School":
           updateSize = { ...externalOption.School, size: action.size };
           updateGroup = { ...externalOption, School: updateSize };
           return {
@@ -180,14 +182,14 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
-          default:
-        }
+        default:
+      }
       break;
     case "CHANGE_COLOR_NODE":
-    nodeGroup = hashIDToClass[JSON.parse(action.nodeID)[0]];
-    console.log(action);
-    //Hard Code node class name
-          
+      nodeGroup = hashIDToClass[JSON.parse(action.nodeID)[0]];
+      console.log(action);
+      //Hard Code node class name
+
       switch (nodeGroup) {
         case "Person":
           updateColor = {
@@ -199,7 +201,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
-          case "School":
+        case "School":
           updateColor = {
             ...externalOption.School,
             color: { background: action.color, border: action.color }
@@ -229,8 +231,8 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             ...state,
             options: { ...state.options, groups: updateGroup }
           };
-          default:
-        }
+        default:
+      }
       break;
     case "UPDATE_GRAPH":
       return {
@@ -259,27 +261,27 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         graphSetting.label.label.push(nodeName[i]);
       }
 
-// hash node id to label of node
-let hashIDToLabel = {};
-for (let ele in graphSetting.label.id) {
-  hashIDToLabel[JSON.stringify(graphSetting.label.id[ele])] =
-    graphSetting.label.label[ele];
-}
+      // hash node id to label of node
+      let hashIDToLabel = {};
+      for (let ele in graphSetting.label.id) {
+        hashIDToLabel[JSON.stringify(graphSetting.label.id[ele])] =
+          graphSetting.label.label[ele];
+      }
 
-const backupID = nodeID.map(item => JSON.stringify(item));
+      const backupID = nodeID.map(item => JSON.stringify(item));
 
-for (let i in backupID) {
-  if (backupNode.map(item => item.id).includes(backupID[i]) === false) {
-    backupNode.push({
-      id: JSON.stringify(nodeID[i]),
-      label: hashIDToLabel[JSON.stringify(nodeID[i])],
-      group: nodeGroup[i]
-    });
-  }
-}
-// console.log(backupNode);      
-  return {        
-    ...state,
+      for (let i in backupID) {
+        if (backupNode.map(item => item.id).includes(backupID[i]) === false) {
+          backupNode.push({
+            id: JSON.stringify(nodeID[i]),
+            label: hashIDToLabel[JSON.stringify(nodeID[i])],
+            group: nodeGroup[i]
+          });
+        }
+      }
+      // console.log(backupNode);
+      return {
+        ...state,
         graphCanvas: {
           edges: backupEdge,
           //  nodes:graphSetting.graphCanvas.nodes,
@@ -291,8 +293,8 @@ for (let i in backupID) {
     }
     case "GET_ALL_CLASS": //get all class from getschema index.js
     case "GET_ALL_CLASS": //get all class from getschema index.js
-    console.log(action.payload);      
-    let className = [];
+      console.log(action.payload);
+      let className = [];
       for (let i = 0; i < action.payload.length; i++) {
         className.push(action.payload[i].name);
       }
@@ -323,19 +325,18 @@ for (let i in backupID) {
         });
       }
 
-    
-    const backupID = edgeID.map(item => JSON.stringify(item));
-    for (let i in backupID) {
-      if (backupEdge.map(item => item.id).includes(backupID[i]) === false) {
-        backupEdge.push({
-          id: JSON.stringify(edgeID[i]),
-          from: JSON.stringify(src[i]),
-          to: JSON.stringify(dst[i]),
-          label: edgeName[i]
-        });
+      const backupID = edgeID.map(item => JSON.stringify(item));
+      for (let i in backupID) {
+        if (backupEdge.map(item => item.id).includes(backupID[i]) === false) {
+          backupEdge.push({
+            id: JSON.stringify(edgeID[i]),
+            from: JSON.stringify(src[i]),
+            to: JSON.stringify(dst[i]),
+            label: edgeName[i]
+          });
+        }
       }
-    }      
-    return {
+      return {
         ...state,
         graphCanvas: {
           edges: backupEdge,
@@ -394,7 +395,6 @@ for (let i in backupID) {
           nodes: backupNode
         }
       };
-
     }
 
     default:
