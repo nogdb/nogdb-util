@@ -97,19 +97,19 @@ const dataReducer = (state = data, action) => {
       case "STORE_EDGE_INRELATION":
       return {
         ...state,
-        inRelation: action.dateTime
+        inRelation: action.payload
       };  
 
       case "STORE_EDGE_OUTRELATION":
       return {
         ...state,
-        outRelation: action.dateTime
+        outRelation: action.payload
       };
 
       case "STORE_EDGE_MESSAGE":
       return {
         ...state,
-        message: action.dateTime
+        message: action.payload
       };
     // case 'STORE_EDIT_NODETIME_VALUE':
 
@@ -131,8 +131,7 @@ const dataReducer = (state = data, action) => {
       };
 
     case 'SEND_EDGE_PROPERTY_TO_DATA_REDUCER' :
-    console.log(action.payload.data)
-    console.log(action.payload.data)
+  
     return {
       ...state,
       edgeProperty: action.payload.data,

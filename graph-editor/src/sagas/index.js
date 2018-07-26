@@ -13,7 +13,7 @@ import {
   sendAllNodePropertyToDataReducer,
   sendAllEdgePropertyToDataReducer
 } from "../actions/databaseAction";
-import { addNodeToCanvas } from "../actions/mainButtonAction";
+import { addNodeToCanvas,addEdgeToCanvas } from "../actions/mainButtonAction";
 
 // const SQL_RESULT_TYPE = {
 //     RESULT_SET: 's',
@@ -82,6 +82,7 @@ function* addConsoletoDB(sqlStr) {
     if (resp.data.type === "n") {
       //No result
       console.log("There is no result");
+      console.log(resp);
     } else if (resp.data.type === "s") {
       //Result set
       //select command
@@ -386,13 +387,23 @@ function* updateEdgeToDB(updateEdge) {
   console.log(updateEdge.payload);
   try {
     
+    // Parse EdgeID payload to object > database
     let updateEdgeID = JSON.parse(updateEdge.payload[0].id);
+     let edgeSrcDst = yield call (post,"http://localhost:3000//Edge/getSrcDst", {
+      "recordDescriptor":{
+        "rid" : updateEdgeID
+      }
+
+     });
+     console.log(edgeSrcDst);
       yield call(post, "http://localhost:3000/Edge/update", {
       recordDescriptor: {
         rid: updateEdgeID
       },
       record: {
         name:updateEdge.payload[0].label,
+        // from:edgeSrcDst.data[0].descriptor.rid ,
+        //  to: edgeSrcDst.data[1].descriptor.rid,
         inRelation: updateEdge.payload[0].inRelation,
         message: updateEdge.payload[0].message,
         outRelation: updateEdge.payload[0].outRelation,
@@ -402,6 +413,8 @@ function* updateEdgeToDB(updateEdge) {
 
     const newEdgeCanvas={
       id: updateEdge.payload[0].id,
+      from: JSON.stringify(edgeSrcDst.data[0].descriptor.rid),
+      to: JSON.stringify(edgeSrcDst.data[1].descriptor.rid),
       label: updateEdge.payload[0].label,
       group: updateEdge.payload[0].group,
       inRelation : updateEdge.payload[0].inRelation,
@@ -413,7 +426,7 @@ function* updateEdgeToDB(updateEdge) {
 
      const arrayEdge= []   
      arrayEdge.push(newEdgeCanvas)
-     yield put(addNodeToCanvas(arrayEdge));
+     yield put(addEdgeToCanvas(arrayEdge));
   } catch (error) {
     console.log(error);
   }

@@ -78,7 +78,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
             JSON.stringify(action.payload[ele])
           ) === false
         ) {
-          backupNode.push(action.payload[ele]);
+          backupEdge.push(action.payload[ele]);
         }
       }
 
@@ -89,6 +89,26 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           edges: backupEdge
         }
       };
+
+      case "ADD_EDGE_CANVAS": {
+      let copyEdge = state.graphCanvas.edges.slice();
+      console.log(action.payload)
+      for (let ele in action.payload) {
+        if (JSON.stringify(copyEdge).includes(JSON.stringify(action.payload[ele])) === false) {
+          copyEdge.push(action.payload[ele]);
+          copyEdge.shift();
+        }
+      }
+      console.log(copyEdge)
+      return {
+        ...state,
+        graphCanvas: {
+          nodes: backupNode,
+          edges: copyEdge
+        }
+      };
+
+    }
     case "CLEAR_CANVAS":
       return {
         ...state,

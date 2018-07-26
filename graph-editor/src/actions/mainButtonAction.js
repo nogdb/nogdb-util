@@ -2,6 +2,10 @@ const addNodeToCanvas = newNode => ({
   type: "ADD_NODE_ACTION",
   payload: newNode
 });
+const addEdgeToCanvas = (newEdge) => ({
+  type: 'ADD_EDGE_CANVAS',
+  payload : newEdge
+})
 
 const addNodeToDatabase = newNode => ({
   type: "ADD_NODE_TO_DB",
@@ -27,5 +31,6 @@ export {
   clearCanvas,
   fullscreen,
   exitFullscreen,
-  addNodeToDBError
+  addNodeToDBError,
+  addEdgeToCanvas
 };

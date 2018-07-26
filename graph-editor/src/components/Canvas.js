@@ -413,13 +413,14 @@ class Canvas extends Component {
         // label:JSON.stringify(this.props.data.edgeProperty.name),
         label:'testEdgeName',
         group:this.props.data.edgeProperty['@className'],
-        inRelation:this.props.data.edgeProperty.inRelation,
-        outRelation:this.props.data.edgeProperty.outRelation,
-        message:this.props.data.edgeProperty.message
+        inRelation:this.props.data.inRelation,
+        outRelation:this.props.data.outRelation,
+        message:this.props.data.message
 
       }
     ]
     this.props.addUpdateEdgeToDatabaseActionCreator(updateEdgeDB);
+    this.toggleEditRelationModal();
     console.log(updateEdgeDB)
   }
 
@@ -651,6 +652,7 @@ class Canvas extends Component {
                      </div>
                     
                         <div id="editRmodal-middle-div"> relation <hr></hr>
+                        
                         <div id="ineditRmodal-middle-div">
                            inRelation <input type="text" value={this.props.data.inRelation}  placeholder="input inrelation...." className="Nodetext" onChange={this.handleInRelationChange} />
                             <select id="select-inrelation">
