@@ -75,19 +75,23 @@ Body:
 
 Response: `<<<ClassDescriptor>>>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#create[nogdb::Class::create]
+
 #### Operation `createExtend`
 
 URL: `+http://<server>:<port>/Class/createExtend+`
 
 Body:
  
-[source, subs="normal"]`
+[source, subs="normal"]
 {
     "className": <string>,
     "superClass": <string>
 }
 
 Response: `<<<ClassDescriptor>>>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#create-extend[nogdb::Class::createExtend]
 
 #### Operation `drop`
 
@@ -102,6 +106,8 @@ Body:
 
 Response: `{}`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#drop[nogdb::Class::drop]
+
 #### Operation `alter`
 
 URL: `+http://<server>:<port>/Class/alter+`
@@ -115,6 +121,8 @@ Body:
 }
 
 Response: `{}`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#alter[nogdb::Class::alter]
 
 ### Category `Property`
 
@@ -133,6 +141,8 @@ Body:
 
 Response: `<<<PropertyDescriptor>>>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#add[nogdb::Property::add]
+
 #### Operation `alter`
 
 URL: `+http://<server>:<port>/Property/alter+`
@@ -148,6 +158,8 @@ Body:
 
 Response: `{}`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#alter-1[nogdb::Property::alter]
+
 #### Operation `remove`
 
 URL: `+http://<server>:<port>/Property/remove+`
@@ -161,6 +173,8 @@ Body:
 }
 
 Response: `{}`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#remove[nogdb::Property::remove]
 
 #### Operation `createIndex`
 
@@ -177,6 +191,8 @@ Body:
 
 Response: `{}`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#create-index[nogdb::Property:createIndex]
+
 #### Operation `dropIndex`
 
 URL: `+http://<server>:<port>/Property/dropIndex+`
@@ -190,6 +206,8 @@ Body:
 }
 
 Response: `{}`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#drop-index[nogdb::Property::dropIndex]
 
 ### Category `Vertex`
 
@@ -207,6 +225,8 @@ Body:
 
 Response: `<<<RecordDescriptor>>>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#create-1[nogdb::Vertex::create]
+
 #### Operation `update`
 
 URL: `+http://<server>:<port>/Vertex/update+`
@@ -220,6 +240,8 @@ Body:
 }
 
 Response: `{}`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#update[nogdb::Vertex::update]
 
 #### Operation `destroy`
 
@@ -241,6 +263,8 @@ or
 
 Response: 
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#destroy[nogdb::Vertex::destroy]
+
 #### Operation `get`
 
 URL: `+http://<server>:<port>/Vertex/get+`
@@ -253,6 +277,8 @@ Body:
 }
 
 Response: `<<<Result>>[]>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-1[nogdb::Vertex::get]
 
 #### Operation `getInEdge`
 
@@ -268,6 +294,8 @@ Body:
 
 Response: `<<<Result>>[]>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-in-edge[nogdb::Vertex::getInEdge]
+
 #### Operation `getOutEdge`
 
 URL: `+http://<server>:<port>/Vertex/getOutEdge+`
@@ -282,6 +310,8 @@ Body:
 
 Response: `<<<Result>>[]>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-out-edge[nogdb::Vertex::getOutEdge]
+
 #### Operation `getAllEdge`
 
 URL: `+http://<server>:<port>/Vertex/getAllEdge+`
@@ -295,6 +325,8 @@ Body:
 }
 
 Response: `<<<Result>>[]>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-all-edge[nogdb::Vertex::getAllEdge]
 
 ### Category `Edge`
 
@@ -314,6 +346,8 @@ Body:
 
 Response: `<<<RecordDescriptor>>>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#create-2[nogdb::Edge::create]
+
 #### Operation `update`
 
 URL: `+http://<server>:<port>/Edge/update+`
@@ -327,6 +361,8 @@ Body:
 }
 
 Response: `{}`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#update-1[nogdb::Edge::update]
 
 #### Operation `updateSrc`
 
@@ -342,6 +378,8 @@ Body:
 
 Response: `{}` 
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#update-source[nogdb::Edge::updateSrc]
+
 #### Operation `updateDst`
 
 URL: `+http://<server>:<port>/Edge/updateDst+`
@@ -355,6 +393,8 @@ Body:
 }
 
 Response: `{}`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#update-destination[nogdb::Edge::updateDst]
 
 #### Operation `destroy`
 
@@ -374,6 +414,8 @@ Body:
 
 Response: `{}`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#destroy-1[nogdb::Edge::destroy]
+
 #### Operation `get`
 
 URL: `+http://<server>:<port>/Edge/get+`
@@ -386,6 +428,8 @@ Body:
 }
 
 Response: `<<<Result>>[]>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-2[nogdb::Edge::get]
 
 #### Operation `getSrc`
 
@@ -400,6 +444,8 @@ Body:
 
 Response: `<<<Result>>>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-source[nogdb::Edge::getSrc]
+
 #### Operation `getDst`
 
 URL: `+http://<server>:<port>/Edge/getDst+`
@@ -413,6 +459,8 @@ Body:
 
 Response: `<<<Result>>>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-destination[nogdb::Edge::getDst]
+
 #### Operation `getSrcDst`
 
 URL: `+http://<server>:<port>/Edge/getSrcDst+`
@@ -425,6 +473,8 @@ Body:
 }
 
 Response: `<<<Result>>[]>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-source--destination[nogdb::Edge::getSrcDst]
 
 ### Category `Db`
 
@@ -440,6 +490,8 @@ Body:
 }
 
 Response: `<<<Record>>>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-record[nogdb::Db::getRecord]
 
 #### Operation `getSchema`
 
@@ -467,6 +519,8 @@ Body: `{}`
 
 Response: `<<<ClassDescriptor>>[]>
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-schema[nogdb::Db::getSchema]
+
 #### Operation `getDbInfo`
 
 URL: `+http://<server>:<port>/Db/getDbInfo+`
@@ -474,6 +528,8 @@ URL: `+http://<server>:<port>/Db/getDbInfo+`
 Body: `{}`
 
 Response: `<<<DBInfo>>>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#get-db-info[nogdb::Db::getDbInfo]
 
 ### Category `Traverse`
 
@@ -493,6 +549,8 @@ Body:
 
 Response: `<<<Result>>[]>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#bfs-traverse-in-edge[nogdb::Traverse::inEdgeBfs]
+
 #### Operation `outEdgeBfs`
 
 URL: `+http://<server>:<port>/Traverse/outEdgeBfs+`
@@ -508,6 +566,8 @@ Body:
 }
 
 Response: `<<<Result>>[]>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#bfs-traverse-out-edge[nogdb::Traverse::outEdgeBfs]
 
 #### Operation `allEdgeBfs`
 
@@ -525,6 +585,8 @@ Body:
 
 Response: `<<<Result>>[]>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#bfs-traverse-all-edge[nogdb::Traverse::allEdgeBfs]
+
 #### Operation `inEdgeDfs`
 
 URL: `+http://<server>:<port>/Traverse/inEdgeDfs+`
@@ -540,6 +602,8 @@ Body:
 }
 
 Response: `<<<Result>>[]>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#dfs-traverse-in-edge[nogdb::Traverse::inEdgeDfs]
 
 #### Operation `outEdgeDfs`
 
@@ -557,6 +621,8 @@ Body:
 
 Response: `<<<Result>>[]>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#dfs-traverse-out-edge[nogdb::Traverse::outEdgeDfs]
+
 #### Operation `allEdgeDfs`
 
 URL: `+http://<server>:<port>/Traverse/allEdgeDfs+`
@@ -573,6 +639,8 @@ Body:
 
 Response: `<<<Result>>[]>`
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#dfs-traverse-all-edge[nogdb::Traverse::allEdgeDfs]
+
 #### Operation `shortestPath`
 
 URL: `+http://<server>:<port>/Traverse/shortestPath+`
@@ -587,6 +655,8 @@ Body:
 }
 
 Response: `<<<Result>>[]>`
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#shortest-path[nogdb::Traverse::shortestPath]
 
 ### Category `SQL`
 
@@ -623,6 +693,8 @@ Response: `<<<SQL::Result>>>`
     "what": <string>
 }
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#error-handling[nogdb::Error]
+
 ### DBInfo
 
 [source]
@@ -637,6 +709,8 @@ Response: `<<<SQL::Result>>>`
     "maxIndexId": <number>,
     "numIndex": <number>
 }
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#database-information[nogdb::DBInfo]
 
 ### PropertyType
 
@@ -654,6 +728,8 @@ Response: `<<<SQL::Result>>>`
 "b" (BLOB)
 "n" (UNDEFINED)
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#types-of-properties[nogdb::PropertyType]
+
 ### PropertyDescriptor
 
 [source, subs="normal"]
@@ -663,12 +739,16 @@ Response: `<<<SQL::Result>>>`
     "indexInfo": <<<IndexInfo>>>
 }
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#property-descriptor[nogdb::PropertyDescriptor]
+
 ### ClassType
 
 [source]
 "v" (VERTEX)
 "e" (EDGE)
 "n" (UNDEFINED)
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#class-types[nogdb::ClassType]
 
 ### ClassDescriptor
 
@@ -685,6 +765,8 @@ Response: `<<<SQL::Result>>>`
     "sub": <string[]>
 }
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#class-descriptor[nogdb::ClassDescriptor]
+
 ### RecordDescriptor
 
 [source]
@@ -692,10 +774,14 @@ Response: `<<<SQL::Result>>>`
     "rid": [<ClassID>, <PosID>]
 }
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#record-descriptor[nogdb::RecordDescriptor]
+
 ### Bytes
 
 [source]
 <string>|<number>
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#bytes[nogdb::Bytes]
 
 ### Record
 
@@ -705,6 +791,8 @@ Response: `<<<SQL::Result>>>`
     . . .
 }
 
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#record[nogdb::Record]
+
 ### Result
 
 [source, subs="normal"]
@@ -712,6 +800,8 @@ Response: `<<<SQL::Result>>>`
     "descriptor": <<<RecordDescriptor>>>,
     "record": <<<Record>>>
 }
+
+See also: https://github.com/nogdb/nogdb/blob/develop/doc/manual.adoc#result-result-set-and-result-set-cursor[nogdb::Result]
 
 ### SQL::Result::Type
 
