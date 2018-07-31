@@ -209,7 +209,6 @@ class Canvas extends Component {
       page: 1,
       group: null
     };
-    this.handleNodeID = this.handleNodeID.bind(this);
     this.handleGetNodeName = this.handleGetNodeName.bind(this);
     this.getInRelationNode = this.getInRelationNode.bind(this);
     this.getOutRelationNode = this.getOutRelationNode.bind(this);
@@ -828,7 +827,6 @@ class Canvas extends Component {
           events={{
             selectNode: function(event) {
               if (this.state.createEdgeMode === false) {
-                this.handleNodeID(event.nodes);
                 this.props.getNodeIDActionCreator(event.nodes[0]);
               } else {
                 this.handleNodeID2(event.nodes);
@@ -841,7 +839,6 @@ class Canvas extends Component {
                 });
               }
 
-              this.handleNodeID(event.nodes);
               this.props.showNodeMenuActionCreator();
               this.props.hideEdgeMenuActionCreator();
               this.props.getAllNodePropertiesActionCreator(
