@@ -1,0 +1,3 @@
+[submodule "nogdb"]
+	path = nogdb
+	url = https://github.com/nogdb/nogdb.git
