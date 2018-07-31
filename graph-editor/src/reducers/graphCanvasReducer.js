@@ -71,7 +71,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     //edit node button render
     case "ADD_NODE_ACTION":
       console.log(state.nodeIDDB);
-      console.log(action.payload)
+      console.log(action.payload);
       //action.payload[0].id = state.nodeIDDB;
       for (let ele in action.payload) {
         if (
@@ -82,7 +82,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           backupNode.push(action.payload[ele]);
         }
       }
-      console.log(backupNode)
+      console.log(backupNode);
       return {
         ...state,
         graphCanvas: {
@@ -122,7 +122,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
     case "REMOVE_NODE":
-    console.log(action.payload)
+      console.log(action.payload);
       for (let ele in backupNode) {
         if (backupNode[ele].id === action.payload) {
           backupNode.splice(ele, 1);
@@ -137,7 +137,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };
 
     case "REMOVE_EDGE":
-    
       for (let ele in backupEdge) {
         if (backupEdge[ele].id === action.payload) {
           backupEdge.splice(ele, 1);
@@ -425,7 +424,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       };
     }
     case "ADD_NODE_RENDER": {
-      backupNode.push(action.payload)
+      backupNode.push(action.payload);
       return {
         ...state,
         graphCanvas: {

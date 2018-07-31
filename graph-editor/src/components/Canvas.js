@@ -361,17 +361,17 @@ class Canvas extends Component {
   };
 
   onChangeNodeName(e) {
-    this.props.storeEditNameActionCreator(e.target.value)
-      //  document.getElementById("myEditNodeDate").value,document.getElementById("myEditNodeTime").value)
+    this.props.storeEditNameActionCreator(e.target.value);
+    //  document.getElementById("myEditNodeDate").value,document.getElementById("myEditNodeTime").value)
     // this.setState({
     //   editNodeText: e.target.value
     // });
   }
-  onChangeNodeDateTime = (e) => {
-    this.props.storeEditNodeDateTimeActionCreator(e._d)
+  onChangeNodeDateTime = e => {
+    this.props.storeEditNodeDateTimeActionCreator(e._d);
     // let ArrayTime = JSON.stringify(e._d.split(""))
-     console.log(e._d)
-  }
+    console.log(e._d);
+  };
   onChangeNodeDateTime = e => {
     this.props.storeEditNodeDateTimeActionCreator(e._d);
     // let ArrayTime = JSON.stringify(e._d.split(""))
@@ -394,7 +394,7 @@ class Canvas extends Component {
   };
 
   // onChangeNodeTime = () => {
-    
+
   // }
 
   handleEditNodeButton() {
@@ -539,70 +539,70 @@ class Canvas extends Component {
               CreateRelation
             </button> */}
             {
-            //   <Modal
-            //     isOpen={this.state.isCreateRelationActive}
-            //     contentLabel="CreateRelation Modal"
-            //     onRequestClose={this.state.toggleCreateRelationModalFalse}
-            //     style={customStyle}
-            //   >
-            //     <div id="Modal-header">
-            //       Create Relationship from #inNodeID to #outNodeID
-            //       <button
-            //         id="hidemodal-button"
-            //         onClick={this.toggleCreateRelationModalFalse}
-            //       >
-            //         Hide Modal
-            //       </button>
-            //     </div>
-            //     {this.state.page === 1 ? (
-            //       <div id="modal-middle-div">
-            //         Class :{" "}
-            //         <select id="select-id"> {this.selectBoxList()} </select>
-            //       </div>
-            //     ) : (
-            //       <div id="modal-middle-div">
-            //         Relation Classname : <hr />
-            //         <div id="inside-box">
-            //           {" "}
-            //           This relationship require no attribute
-            //         </div>
-            //       </div>
-            //     )}
-            //     {this.state.page === 1 ? (
-            //       <div id="modal-bottom-div">
-            //         <button
-            //           id="modal-cancel-button"
-            //           onClick={this.toggleCreateRelationModalFalse}
-            //         >
-            //           Cancel
-            //         </button>
-            //         <button
-            //           id="modal-next-button"
-            //           onClick={this.handleNextPage}
-            //         >
-            //           Next
-            //         </button>
-            //       </div>
-            //     ) : (
-            //       <div id="modal-bottom-div">
-            //         <button onClick={this.InitializePage}> Back </button>
-            //         <button
-            //           id="modal-cancel-button"
-            //           onClick={this.toggleCreateRelationModalFalse}
-            //         >
-            //           {" "}
-            //           Cancel
-            //         </button>
-            //         <button
-            //           id="Addedge-button"
-            //           onClick={this.handleCreateRelationbutton}
-            //         >
-            //           Create Relation
-            //         </button>
-            //       </div>
-            //     )}
-            //   </Modal>
-             }
+              //   <Modal
+              //     isOpen={this.state.isCreateRelationActive}
+              //     contentLabel="CreateRelation Modal"
+              //     onRequestClose={this.state.toggleCreateRelationModalFalse}
+              //     style={customStyle}
+              //   >
+              //     <div id="Modal-header">
+              //       Create Relationship from #inNodeID to #outNodeID
+              //       <button
+              //         id="hidemodal-button"
+              //         onClick={this.toggleCreateRelationModalFalse}
+              //       >
+              //         Hide Modal
+              //       </button>
+              //     </div>
+              //     {this.state.page === 1 ? (
+              //       <div id="modal-middle-div">
+              //         Class :{" "}
+              //         <select id="select-id"> {this.selectBoxList()} </select>
+              //       </div>
+              //     ) : (
+              //       <div id="modal-middle-div">
+              //         Relation Classname : <hr />
+              //         <div id="inside-box">
+              //           {" "}
+              //           This relationship require no attribute
+              //         </div>
+              //       </div>
+              //     )}
+              //     {this.state.page === 1 ? (
+              //       <div id="modal-bottom-div">
+              //         <button
+              //           id="modal-cancel-button"
+              //           onClick={this.toggleCreateRelationModalFalse}
+              //         >
+              //           Cancel
+              //         </button>
+              //         <button
+              //           id="modal-next-button"
+              //           onClick={this.handleNextPage}
+              //         >
+              //           Next
+              //         </button>
+              //       </div>
+              //     ) : (
+              //       <div id="modal-bottom-div">
+              //         <button onClick={this.InitializePage}> Back </button>
+              //         <button
+              //           id="modal-cancel-button"
+              //           onClick={this.toggleCreateRelationModalFalse}
+              //         >
+              //           {" "}
+              //           Cancel
+              //         </button>
+              //         <button
+              //           id="Addedge-button"
+              //           onClick={this.handleCreateRelationbutton}
+              //         >
+              //           Create Relation
+              //         </button>
+              //       </div>
+              //     )}
+              //   </Modal>
+            }
             <button
               id="removeNode-button"
               title="remove node from canvas"
@@ -627,7 +627,6 @@ class Canvas extends Component {
               <div id="middle-deletenode-div">
                 Deleting node {this.state.nodeID} will permanantly be removed
                 from your Database
-                
               </div>
               <div id="bottom-deletenode-div">
                 <button onClick={this.toggleDeletenodeModal}>
@@ -635,7 +634,6 @@ class Canvas extends Component {
                 </button>
                 <Button color="danger" onClick={this.handleDeleteNode}>
                   Yes,Delete Node!
-                  
                 </Button>
               </div>
             </Modal>
@@ -748,7 +746,6 @@ class Canvas extends Component {
             <div id="middle-deletenode-div">
               Deleting Relation {this.state.relationID} will permanantly be
               removed from your Database
-               
             </div>
             <div id="bottom-deletenode-div">
               <button onClick={this.toggleDeleteRelationModal}>
@@ -766,7 +763,6 @@ class Canvas extends Component {
     }
 
     return (
-     
       <div className="Canvas" align="center">
         {commandBox}
         {relationBox}

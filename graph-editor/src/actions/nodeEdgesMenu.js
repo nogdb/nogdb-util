@@ -21,12 +21,11 @@ const changeColorNode = (nodeID, color) => ({
   color: color
 });
 const setEditNodeAlertTrue = () => ({
-  type : 'ALERT_EDIT_MESSAGE_TRUE',
-
-})
+  type: "ALERT_EDIT_MESSAGE_TRUE"
+});
 const setEditNodeAlertFalse = () => ({
-  type : 'ALERT_EDIT_MESSAGE_FALSE'
-})
+  type: "ALERT_EDIT_MESSAGE_FALSE"
+});
 
 export {
   showNodeMenu,
@@ -37,5 +36,4 @@ export {
   changeColorNode,
   setEditNodeAlertTrue,
   setEditNodeAlertFalse
-
 };

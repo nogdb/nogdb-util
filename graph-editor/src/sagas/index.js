@@ -13,9 +13,7 @@ import {
   sendAllNodePropertyToDataReducer,
   sendAllEdgePropertyToDataReducer
 } from "../actions/databaseAction";
-import {
-  removeNode
-} from "../actions/menuAction"
+import { removeNode } from "../actions/menuAction";
 import { addNodeToCanvas, addEdgeToCanvas } from "../actions/mainButtonAction";
 
 // const SQL_RESULT_TYPE = {
@@ -75,8 +73,8 @@ function* addNodeToDB(newNode) {
 //sql command in console
 function* addConsoletoDB(sqlStr) {
   console.log(">>>ConsoleToDB");
-  let checkDelete = null
-  let stash = []
+  let checkDelete = null;
+  let stash = [];
   try {
     const resp = yield call(post, "http://localhost:3000/SQL/execute", {
       sql: sqlStr.payload
@@ -158,32 +156,29 @@ function* addConsoletoDB(sqlStr) {
     } else if (resp.data.type === "r") {
       //Record descriptor
       console.log("RECORD_DESCRIPTORS");
-      stash.push(resp)
+      stash.push(resp);
       console.log(resp.data.data);
-      const property = yield call(post,"http://localhost:3000/Db/getRecord",
-      {
+      const property = yield call(post, "http://localhost:3000/Db/getRecord", {
         recordDescriptor: resp.data.data[0]
-      })
-      stash.push(property)
-      console.log(property.status)
+      });
+      stash.push(property);
+      console.log(property.status);
     }
   } catch (error) {
     console.log(error);
   }
 
-  console.log(stash.length)
-  console.log(stash)
-  if(stash.length == 1){
-      console.log(stash[0].data.data[0].rid)
-      yield put(removeNode(JSON.stringify(stash[0].data.data[0].rid)))
-  }
-  else if(stash.length ==2){
-    let newNode = []
-      newNode.push(
-      {
-        descriptor: stash[0].data.data[0],
-        record: stash[1].data
-      })
+  console.log(stash.length);
+  console.log(stash);
+  if (stash.length == 1) {
+    console.log(stash[0].data.data[0].rid);
+    yield put(removeNode(JSON.stringify(stash[0].data.data[0].rid)));
+  } else if (stash.length == 2) {
+    let newNode = [];
+    newNode.push({
+      descriptor: stash[0].data.data[0],
+      record: stash[1].data
+    });
     yield put(addVertexConsole(newNode));
   }
 }

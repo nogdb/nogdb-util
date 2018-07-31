@@ -233,7 +233,7 @@ class App extends Component {
   render() {
     const { graph, scale } = this.props;
     let Title;
-    let canvas
+    let canvas;
     let consoleBox;
     let historyBox;
     let nodeTabBars;
@@ -260,13 +260,12 @@ class App extends Component {
       Title = null;
       consoleBox = null;
       historyBox = null;
-      canvas = <Canvas id='fullCanvas'state={graph}  />
+      canvas = <Canvas id="fullCanvas" state={graph} />;
     } else {
       Title = <NogDBTitle />;
       consoleBox = <Console />;
       historyBox = <History />;
-      canvas = <Canvas id='normalCanvas' state={graph}  />
-
+      canvas = <Canvas id="normalCanvas" state={graph} />;
     }
     if (scale.nodeMenu === true) {
       nodeTabBars = <NodePropertyMenu />;
@@ -284,7 +283,8 @@ class App extends Component {
         {Title}
         <Row>
           <Col md={scale.nodeMenu || scale.edgeMenu ? 3 : 0}>
-          {nodeTabBars}{edgeTabBars} 
+            {nodeTabBars}
+            {edgeTabBars}
           </Col>
           <Col md={scale.nodeMenu || scale.edgeMenu ? 9 : 12}>
             {consoleBox}
