@@ -75,6 +75,10 @@ const storeEdgeNewName = EdgeName => ({
   type: "STORE_EDGE_NAME",
   payload: EdgeName
 });
+const storeEditRelationName = editEdgeName => ({
+  type :'STORE_EDIT_EDGE_NAME',
+  payload: editEdgeName
+})
 
 // const storeEditTime = (time) => ({
 //   type:'STORE_TIME_VALUE',
@@ -103,5 +107,6 @@ export {
   storeEditInRelation,
   storeEditOutRelation,
   storeEditMessage,
-  storeEdgeNewName
+  storeEdgeNewName,
+  storeEditRelationName
 };

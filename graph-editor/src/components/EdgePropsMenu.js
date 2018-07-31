@@ -49,7 +49,9 @@ const mapDispatchToProps = dispatch => {
 class EdgePropertyMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      activeTab: "1"
+    };
     this.toggle = this.toggle.bind(this);
   }
   toggle = tab => {
@@ -108,6 +110,7 @@ class EdgePropertyMenu extends Component {
                 message : {data.message} <br />
                 out : {data.edgeOut} <br />
                 outRelation :{data.outRelation} <br />
+                 name : {data.edgeName} <br/> 
               </Col>
             </Row>
           </TabPane>

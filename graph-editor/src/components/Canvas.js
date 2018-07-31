@@ -14,7 +14,8 @@ import {
   storeEditInRelation,
   storeEditOutRelation,
   storeEditMessage,
-  storeEdgeNewName
+  storeEdgeNewName,
+  storeEditRelationName
 } from "../actions/dataAction.js";
 import {
   getEdgeClass,
@@ -140,6 +141,9 @@ const mapDispatchToProps = dispatch => {
     storeEditMessageActionCreator: Message => {
       dispatch(storeEditMessage(Message));
     },
+    storeEditRelationNameActionCreator: editEdgeName => {
+      dispatch(storeEditRelationName(editEdgeName))
+    },
     getAllEdgeClassForAddNodeButtonActionCreator: () => {
       dispatch(getAllEdgeClassForAddNodeButton());
     },
@@ -222,6 +226,7 @@ class Canvas extends Component {
     this.handleEdgeNewName = this.handleEdgeNewName.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleOutRelationChange = this.handleOutRelationChange.bind(this);
+    this.handleRelationNameChange = this.handleRelationNameChange.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
     this.initializePage = this.initializePage.bind(this);
   }
@@ -419,6 +424,9 @@ class Canvas extends Component {
   handleOutRelationChange = e => {
     this.props.storeEditOutRelationActionCreator(e.target.value);
   };
+  handleRelationNameChange = (e) => {
+    this.props.storeEditRelationNameActionCreator(e.target.value);
+  }
 
   handleEdgeNewName = e => {
     this.props.storeEdgeNewNameActionCreator(e.target.value);
@@ -451,7 +459,7 @@ class Canvas extends Component {
         // from: ,
         // to: ,
         // label:JSON.stringify(this.props.data.edgeProperty.name),
-        label: "testEdgeName",
+        label: this.props.data.edgeName,
         group: this.props.data.edgeProperty["@className"],
         inRelation: this.props.data.inRelation,
         outRelation: this.props.data.outRelation,
@@ -752,9 +760,9 @@ class Canvas extends Component {
                   className="Nodetext"
                   onChange={this.handleInRelationChange}
                 />
-                <select id="select-inrelation">
+                {/* <select id="select-inrelation">
                   <option value="String">INTEGER </option>
-                </select>{" "}
+                </select>{" "} */}
                 <br />
                 <br />
                 message{" "}
@@ -765,9 +773,9 @@ class Canvas extends Component {
                   className="msgTxt"
                   onChange={this.handleMessageChange}
                 />
-                <select id="select-message">
+                {/* <select id="select-message">
                   <option value="String">STRING </option>
-                </select>{" "}
+                </select>{" "} */}
                 <br />
                 <br />
                 outRelation{" "}
@@ -778,9 +786,23 @@ class Canvas extends Component {
                   className="Nodetext"
                   onChange={this.handleOutRelationChange}
                 />
-                <select id="select-outRelation">
+                {/* <select id="select-outRelation">
                   <option value="String">INTEGER </option>
-                </select>{" "}
+                </select>{" "}  */}
+                <br/>
+                 Name :
+                <input
+                  type="text"
+                  value={this.props.data.edgeName}
+                  placeholder="input namerelation...."
+                  className="Nodetext"
+                  onChange={this.handleRelationNameChange}
+                />
+                <select id="select-outRelation">
+                  <option value="String">STRING </option>
+                </select>
+
+
                 <br />
                 <br />
               </div>

@@ -120,6 +120,12 @@ const dataReducer = (state = data, action) => {
         ...state,
         edgeName: action.payload
       };
+    
+    case "STORE_EDIT_EDGE_NAME":
+      return {
+        ...state,
+        edgeName: action.payload
+      }
     // case 'STORE_EDIT_NODETIME_VALUE':
 
     //      return {
@@ -140,12 +146,15 @@ const dataReducer = (state = data, action) => {
       };
 
     case "SEND_EDGE_PROPERTY_TO_DATA_REDUCER":
+    console.log(action.payload)
       return {
         ...state,
+        edgeName : action.payload.data.name,
         edgeProperty: action.payload.data,
         inRelation: action.payload.data.inRelation,
         message: action.payload.data.message,
-        outRelation: action.payload.data.outRelation
+        outRelation: action.payload.data.outRelation,
+        edgeClass: action.payload.data['@className']
       };
     default:
       state = {

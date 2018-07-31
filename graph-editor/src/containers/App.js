@@ -295,7 +295,7 @@ class App extends Component {
                 Add node
               </button>
 
-              {scale.isFullscreen === false ? (
+              {/* {scale.isFullscreen === false ? (
                 <button
                   id="FullScreen-button"
                   onClick={this.props.setFullsceenActionCreator}
@@ -309,7 +309,7 @@ class App extends Component {
                 >
                   Exit Fullscreen
                 </button>
-              )}
+              )} */}
               <button id="Clear-Canvas" onClick={this.handleClearCanvas}>
                 Clear Canvas
               </button>
