@@ -27,7 +27,6 @@ class History extends Component {
     this.state = {
       isHistoryDispaly: false
     };
-    // this.handle
   }
   render() {
     const { scale } = this.props;

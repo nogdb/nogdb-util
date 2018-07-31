@@ -48,8 +48,6 @@ const deleteEdgeFromDatabase = edgeID => ({
 const storeEditName = name => ({
   type: "STORE_EDIT_NODENAME_VALUE",
   name: name
-  // date:date,
-  // time:time
 });
 const storeEditNodeDateTime = dateTime => ({
   type: "STORE_NODE_DATE_VALUE",
@@ -76,19 +74,9 @@ const storeEdgeNewName = EdgeName => ({
   payload: EdgeName
 });
 const storeEditRelationName = editEdgeName => ({
-  type :'STORE_EDIT_EDGE_NAME',
+  type: "STORE_EDIT_EDGE_NAME",
   payload: editEdgeName
-})
-
-// const storeEditTime = (time) => ({
-//   type:'STORE_TIME_VALUE',
-//   time:time
-// })
-
-// const storeEditTime = (time) => ({
-//   type:'STORE_TIME_VALUE',
-//   time:time
-// })
+});
 
 export {
   getNodeID,

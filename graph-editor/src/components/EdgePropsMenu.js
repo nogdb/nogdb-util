@@ -110,7 +110,7 @@ class EdgePropertyMenu extends Component {
                 message : {data.message} <br />
                 out : {data.edgeOut} <br />
                 outRelation :{data.outRelation} <br />
-                 name : {data.edgeName} <br/> 
+                name : {data.edgeName} <br />
               </Col>
             </Row>
           </TabPane>
@@ -136,9 +136,9 @@ class EdgePropertyMenu extends Component {
                   {" "}
                   out{" "}
                 </button> */}
-                {/* <button onClick={this.setInRelationDisplayFormat}> inRelation </button> */}
-                {/* <button onClick={this.setOutRelationDisplayFormat}> outRelation </button> */}
-                {/* <button onClick={this.setMessageDisplayFormat}>
+          {/* <button onClick={this.setInRelationDisplayFormat}> inRelation </button> */}
+          {/* <button onClick={this.setOutRelationDisplayFormat}> outRelation </button> */}
+          {/* <button onClick={this.setMessageDisplayFormat}>
                   {" "}
                   message{" "}
                 </button>

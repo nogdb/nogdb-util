@@ -19,7 +19,7 @@ const rescaleReducer = (state = componentScale, action) => {
         ...state,
         isFullscreen: false
       };
-    ///////////////////////////////////////////////////////////////////////
+    // Fulscreen state
 
     case "SHOW_NODE_MENU":
       return {
@@ -32,7 +32,7 @@ const rescaleReducer = (state = componentScale, action) => {
         ...state,
         nodeMenu: false
       };
-    //////////////////////////////////////////////////////////////////////////
+    //Node menu
     case "SHOW_EDGE_MENU":
       return {
         ...state,
@@ -45,7 +45,7 @@ const rescaleReducer = (state = componentScale, action) => {
         edgeMenu: false
       };
 
-    //////////////////////////////////////////////////////////////////////////
+    //Edge menu
     case "DISPLAY_HISTORY":
       return {
         ...state,

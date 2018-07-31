@@ -142,7 +142,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(storeEditMessage(Message));
     },
     storeEditRelationNameActionCreator: editEdgeName => {
-      dispatch(storeEditRelationName(editEdgeName))
+      dispatch(storeEditRelationName(editEdgeName));
     },
     getAllEdgeClassForAddNodeButtonActionCreator: () => {
       dispatch(getAllEdgeClassForAddNodeButton());
@@ -219,7 +219,6 @@ class Canvas extends Component {
     this.handleOutgoingButton = this.handleOutgoingButton.bind(this);
     this.onChangeNodeName = this.onChangeNodeName.bind(this);
     this.onChangeNodeDateTime = this.onChangeNodeDateTime.bind(this);
-    // this.onChangeNodeTime = this.onChangeNodeTime.bind(this);
     this.handleEditNodeButton = this.handleEditNodeButton.bind(this);
     this.handleNodeID2 = this.handleNodeID2.bind(this);
     this.handleInRelationChange = this.handleInRelationChange.bind(this);
@@ -236,12 +235,7 @@ class Canvas extends Component {
     });
   };
 
-  handleNodeID(nodeIDs) {
-    console.log(typeof nodeIDs[0]);
-    // this.props.getNodeIDActionCreator(nodeIDs[0]);
-  }
-  handleNodeID2 = nodeIDs => {
-    // this.props.getNodeID2ActionCreator(nodeIDs[0]);
+  handleNodeID2 = () => {
     this.setCreateEdgeModalTrue();
   };
   handleCreateRelation = () => {
@@ -252,7 +246,6 @@ class Canvas extends Component {
   };
 
   setCreateEdgeModalTrue = () => {
-    console.log(this.props.data);
     this.setState({
       isCreateRelationActive: true
     });
@@ -394,25 +387,13 @@ class Canvas extends Component {
 
   onChangeNodeName(e) {
     this.props.storeEditNameActionCreator(e.target.value);
-    //  document.getElementById("myEditNodeDate").value,document.getElementById("myEditNodeTime").value)
-    // this.setState({
-    //   editNodeText: e.target.value
-    // });
   }
   onChangeNodeDateTime = e => {
     this.props.storeEditNodeDateTimeActionCreator(e._d);
-    // let ArrayTime = JSON.stringify(e._d.split(""))
-    console.log(e._d);
   };
   onChangeNodeDateTime = e => {
     this.props.storeEditNodeDateTimeActionCreator(e._d);
-    // let ArrayTime = JSON.stringify(e._d.split(""))
-    console.log(e._d);
   };
-
-  // onChangeNodeTime = () => {
-
-  // }
 
   handleInRelationChange = e => {
     this.props.storeEditInRelationActionCreator(e.target.value);
@@ -424,16 +405,13 @@ class Canvas extends Component {
   handleOutRelationChange = e => {
     this.props.storeEditOutRelationActionCreator(e.target.value);
   };
-  handleRelationNameChange = (e) => {
+  handleRelationNameChange = e => {
     this.props.storeEditRelationNameActionCreator(e.target.value);
-  }
+  };
 
   handleEdgeNewName = e => {
     this.props.storeEdgeNewNameActionCreator(e.target.value);
   };
-  // onChangeNodeTime = () => {
-
-  // }
 
   handleEditNodeButton() {
     let updateNodeDB = [
@@ -441,9 +419,7 @@ class Canvas extends Component {
         id: this.props.data.nodeID,
         group: this.props.data.nodeProperty["@className"],
         label: this.props.data.editNodeName,
-        // date: this.props.data.nodeDateTime
         date: this.props.data.nodeDateTime
-        // time: document.getElementById("myEditNodeTime").value
       }
     ];
     this.props.setEditNodeAlertTrueActionCreator();
@@ -452,13 +428,9 @@ class Canvas extends Component {
   }
 
   handleEditRelationbutton = () => {
-    console.log(this.props.data.edgeProperty);
     let updateEdgeDB = [
       {
         id: this.props.data.edgeID,
-        // from: ,
-        // to: ,
-        // label:JSON.stringify(this.props.data.edgeProperty.name),
         label: this.props.data.edgeName,
         group: this.props.data.edgeProperty["@className"],
         inRelation: this.props.data.inRelation,
@@ -468,12 +440,10 @@ class Canvas extends Component {
     ];
     this.props.addUpdateEdgeToDatabaseActionCreator(updateEdgeDB);
     this.toggleEditRelationModal();
-    console.log(updateEdgeDB);
   };
 
   selectEdgeClassList = graph => {
     let arr = [];
-    //  const list =Object.keys(graph.classes)
     const list = graph.edgeClass;
     for (let ele in list) {
       arr.push(
@@ -513,12 +483,7 @@ class Canvas extends Component {
 
     this.props.createNewEdgeToDatabaseActionCreator(newEdge);
 
-    // this.AddEdgeToCanvas([
-    //   { from: this.state.srcEdge, to: this.state.dscEdge }
-    // ]);
-
     this.setCreateEdgeModalFalse();
-    // this.toggleCreateRAlertmsgTrue();
   };
 
   render() {
@@ -641,7 +606,6 @@ class Canvas extends Component {
                       Name :{" "}
                       <input
                         type="text"
-                        //  value={this.props.data.inRelation}
                         placeholder="input new nodename...."
                         className="Nodetext"
                         onChange={this.handleEdgeNewName}
@@ -789,8 +753,8 @@ class Canvas extends Component {
                 {/* <select id="select-outRelation">
                   <option value="String">INTEGER </option>
                 </select>{" "}  */}
-                <br/>
-                 Name :
+                <br />
+                Name :
                 <input
                   type="text"
                   value={this.props.data.edgeName}
@@ -801,8 +765,6 @@ class Canvas extends Component {
                 <select id="select-outRelation">
                   <option value="String">STRING </option>
                 </select>
-
-
                 <br />
                 <br />
               </div>
@@ -860,7 +822,6 @@ class Canvas extends Component {
       <div className="Canvas" align="center">
         {commandBox}
         {relationBox}
-        {/*console.log("NodeID :"+data.nodeID)*/}
         <Graph
           graph={state.graphCanvas}
           options={graphOptions}
@@ -875,13 +836,6 @@ class Canvas extends Component {
               }
 
               if (this.state.createEdgeMode === true) {
-                const src = this.props.data.nodeID;
-                const dest = this.props.data.nodeID2;
-                console.log(src);
-                console.log(dest);
-                //this.setSrcEdge(src);
-                //this.setDecEdge(dest);
-                //this.toggleCreateRelationModalTrue();
                 this.setState({
                   createEdgeMode: false
                 });
@@ -895,12 +849,9 @@ class Canvas extends Component {
               );
               this.handleGetNodeName();
               this.handleNodeClass();
-              //  this.getCreateDate();
             }.bind(this),
             deselectNode: function(/*event*/) {
               this.props.hideNodeMenuActionCreator();
-              // this.handleAlertFalse();
-              // this.toggleCreateRAlertmsgFalse();
             }.bind(this),
 
             selectEdge: function(event) {
@@ -912,14 +863,9 @@ class Canvas extends Component {
               this.props.getAllEdgePropertiesActionCreator(
                 this.props.data.edgeID
               );
-              console.log(this.props.scale.edgeMenu);
             }.bind(this),
-            deselectEdge: function(/*event*/) {
-              // this.toggleRelationMenu();
+            deselectEdge: function() {
               this.props.hideEdgeMenuActionCreator();
-
-              // this.setHideEdge();
-              // this.setHideprop();
             }.bind(this)
           }}
         />

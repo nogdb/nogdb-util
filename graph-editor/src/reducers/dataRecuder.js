@@ -12,7 +12,6 @@ const data = {
   edgeProperty: null,
   editNodeName: null,
   nodeDateTime: null,
-  // nodeTime:null,
   nodeProperty: null,
 
   inRelation: null,
@@ -32,7 +31,6 @@ const dataReducer = (state = data, action) => {
         ...state,
         nodeID2: action.payload
       };
-      console.log(state);
       console.log("from ", state.nodeID);
       console.log("to ", state.nodeID2);
       return state;
@@ -88,8 +86,6 @@ const dataReducer = (state = data, action) => {
       return {
         ...state,
         editNodeName: action.name
-        // nodeDate: action.date,
-        // nodeTime: action.time
       };
     case "STORE_NODE_DATE_VALUE":
       return {
@@ -120,41 +116,31 @@ const dataReducer = (state = data, action) => {
         ...state,
         edgeName: action.payload
       };
-    
+
     case "STORE_EDIT_EDGE_NAME":
       return {
         ...state,
         edgeName: action.payload
-      }
-    // case 'STORE_EDIT_NODETIME_VALUE':
+      };
 
-    //      return {
-    //        ...state,
-    //        nodeTime:action.time
-    //      }
     case "SEND_NODE_PERPERTY_TO_DATA_REDUCER":
-      // console.log(state.nodeProperty)
-      // console.log(action.payload);
       return {
         ...state,
         nodeProperty: action.payload.data,
         editNodeName: action.payload.data.name,
         nodeDateTime: action.payload.data.date,
-        // nodeTime:action.payload.data.time,
-        // nodeClass:action.payload.data.className
         nodeClass: action.payload.data["@className"]
       };
 
     case "SEND_EDGE_PROPERTY_TO_DATA_REDUCER":
-    console.log(action.payload)
       return {
         ...state,
-        edgeName : action.payload.data.name,
+        edgeName: action.payload.data.name,
         edgeProperty: action.payload.data,
         inRelation: action.payload.data.inRelation,
         message: action.payload.data.message,
         outRelation: action.payload.data.outRelation,
-        edgeClass: action.payload.data['@className']
+        edgeClass: action.payload.data["@className"]
       };
     default:
       state = {

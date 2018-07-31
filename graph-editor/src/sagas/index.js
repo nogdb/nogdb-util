@@ -6,11 +6,9 @@ import {
   addEdgeConsole,
   sendAllNodeClassToGraphCanvasReducer,
   sendAllEdgeClassToGraphCanvasReducer,
-  sendNodeIDToCanvas,
   addIncomingNodeEdge,
   addOutgoingNodeEdge,
   addNodeRender,
-  getAllNodeProperties,
   sendAllNodePropertyToDataReducer,
   sendAllEdgePropertyToDataReducer,
   addEdgeRender
@@ -18,15 +16,9 @@ import {
 import { removeNode } from "../actions/menuAction";
 import { addNodeToCanvas, addEdgeToCanvas } from "../actions/mainButtonAction";
 
-// const SQL_RESULT_TYPE = {
-//     RESULT_SET: 's',
-
-// }
-
 function* rootSaga() {
   yield all([
     takeEvery("EXECUTE", addConsoletoDB),
-    //takeEvery("DELETE_NODE_FROM_DATABASE", deleteNodeFromDB),
     takeEvery("DELETE_EDGE_FROM_DATABASE", deleteEdgeFromDB),
     takeEvery("GET_ALL_CLASS_FROM_DATABASE", checkClassEdgeNode),
     takeEvery("GET_ALL_CLASS_FOR_ADDNODE_BUTTON", getAllClassForAddNodeButton),
@@ -43,11 +35,7 @@ function* rootSaga() {
     takeEvery("GET_EDGE_PROPERTY", getAllEdgePropertyDB),
     takeEvery("ADD_EDGE_TO_DB", addEdgeToDB),
     takeEvery("GET_EDGE_SRC_DST", getSrcDst),
-    // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
-    // takeEvery('GET_EDGES_FROM_DB', getEdgesFromDB),
-    // takeEvery('UPDATE_EDGE_TO_DB', updateEdgeToDB),
     takeEvery("DELETE_NODE_TO_DB", deleteNodeFromDB)
-    //  takeEvery('DELETE_EDGE_TO_DB', deleteEdgeFromDB)
   ]);
 }
 //add node button
@@ -72,14 +60,12 @@ function* addNodeToDB(newNode) {
     };
     yield put(addNodeRender(nodeData));
   } catch (error) {
-    //    yield put(addNodeToDBError(error));
     console.log(error);
   }
 }
 //sql command in console
 function* addConsoletoDB(sqlStr) {
   console.log(">>>ConsoleToDB");
-  let checkDelete = null;
   let stash = [];
   try {
     const resp = yield call(post, "http://localhost:3000/SQL/execute", {
@@ -89,7 +75,6 @@ function* addConsoletoDB(sqlStr) {
     if (resp.data.type === "n") {
       //No result
       console.log("There is no result");
-      console.log(resp);
     } else if (resp.data.type === "s") {
       //Result set
       //select command
@@ -108,27 +93,11 @@ function* addConsoletoDB(sqlStr) {
       }
       //[id,type], [id,name]
 
-      //let classNameData = [];
-      //console.log(classdescriptor.data);
-      // for (let ele in classdescriptor.data) {
-      //   if (classdescriptor.data[ele].type === "v") {
-      //     classNameData.push(classdescriptor.data[ele]);
-      //   }
-      // }
-      // console.log(classNameData)
-      //yield put(sendAllNodeClassToGraphCanvasReducer(classNameData));
       let Nodes = [];
       let Edges = [];
       for (let ele in resp.data.data) {
         if (hashIDToType[resp.data.data[ele].descriptor.rid[0]] === "v") {
           Nodes.push(resp.data.data[ele]);
-          // USE
-          // Nodes.push({
-          //   data: resp.data.data[ele],
-          //   group: hash2[resp.data.data[ele].descriptor.rid[0]]
-          // })
-
-          // )
         } else if (
           hashIDToType[resp.data.data[ele].descriptor.rid[0]] === "e"
         ) {
@@ -139,15 +108,11 @@ function* addConsoletoDB(sqlStr) {
               recordDescriptor: { rid: resp.data.data[ele].descriptor.rid }
             }
           );
-          //console.log(recordDescriptor);
-          // Edges.push(resp.data.data[ele])
           Edges.push({
             data: resp.data.data[ele],
             from: recordDescriptor.data[0].descriptor.rid,
             to: recordDescriptor.data[1].descriptor.rid
-            //group: hash2[resp.data.data[ele].descriptor.rid[0]]
           });
-          // console.log(Edges)
         }
       }
       yield put(addVertexConsole(Nodes));
@@ -162,20 +127,15 @@ function* addConsoletoDB(sqlStr) {
       //Record descriptor
       console.log("RECORD_DESCRIPTORS");
       stash.push(resp);
-      console.log(resp.data.data);
       const property = yield call(post, "http://localhost:3000/Db/getRecord", {
         recordDescriptor: resp.data.data[0]
       });
       stash.push(property);
-      console.log(property.status);
     }
   } catch (error) {
     console.log(error);
   }
-  console.log(stash.length);
-  console.log(stash);
   if (stash.length == 1) {
-    console.log(stash[0].data.data[0].rid);
     yield put(removeNode(JSON.stringify(stash[0].data.data[0].rid)));
   } else if (stash.length == 2) {
     let newNode = [];
@@ -184,16 +144,13 @@ function* addConsoletoDB(sqlStr) {
       record: stash[1].data
     });
     yield put(addVertexConsole(newNode));
-}
+  }
 }
 
 function* addEdgeToDB(newEdge) {
   console.log(">addEdgeToDatabase");
-  console.log(newEdge.payload);
   let srcID = JSON.parse(newEdge.payload[0].srcVertex);
   let dstID = JSON.parse(newEdge.payload[0].dstVertex);
-  console.log(srcID);
-  console.log(dstID);
   try {
     const recordDescriptor = yield call(
       post,
@@ -201,7 +158,6 @@ function* addEdgeToDB(newEdge) {
       {
         className: newEdge.payload[0].className,
         srcVertexRecordDescriptor: {
-          // rid : action.payload[0].srcVertex
           rid: srcID
         },
         dstVertexRecordDescriptor: {
@@ -218,67 +174,35 @@ function* addEdgeToDB(newEdge) {
         label: newEdge.payload[0].name
       }
     ];
-
-    console.log(recordDescriptor.data.rid);
-    console.log(newEdgeCanvas);
     yield put(addEdgeRender(newEdgeCanvas));
   } catch (error) {
     console.log(error);
-    //  yield put(addNodeToDBError(error));
   }
 }
 
-// function* getSrcDst() {
-//   console.log(">getsrcdstEdge");
-
-//   try {
-
-//     const recordDescriptor = yield call(
-//       post,
-//       "http://localhost:3000/Edge/getSrcDst",
-//       {
-//         recordDescriptor: { rid: [11, 1] }
-//       }
-//     );
-
-//     console.log(recordDescriptor);
-//     // yield put(addNode(newNode));
-//   } catch (error) {
-//     console.log(error);
-//     //  yield put(addNodeToDBError(error));
-//   }
-// }
-
 function* deleteNodeFromDB(nodeID) {
   const vertexID = JSON.parse(nodeID.payload);
-  console.log(vertexID);
   try {
     yield call(post, "http://localhost:3000/Vertex/destroy", {
       recordDescriptor: {
         rid: vertexID
       }
     });
-
-    // yield put(addNode(newNode));
   } catch (error) {
-    //  yield put(addNodeToDBError(error));
+    console.log(error);
   }
 }
 
 function* deleteEdgeFromDB(edgeID) {
   console.log(">deleteEdgefromDB");
-
-  console.log(JSON.parse(edgeID.payload));
   try {
     yield call(post, "http://localhost:3000/Edge/destroy", {
       recordDescriptor: {
         rid: JSON.parse(edgeID.payload)
       }
     });
-
-    // yield put(addNode(newNode));
   } catch (error) {
-    //  yield put(addNodeToDBError(error));
+    console.log(error);
   }
 }
 
@@ -293,8 +217,6 @@ function* checkClassEdgeNode(selectID) {
         classId: selectID.payload
       }
     );
-
-    // console.log(classdescriptor.data.type)
     yield put(sendAllClassFromDatabaseToState(classdescriptor));
   } catch (error) {
     console.log(error);
@@ -337,7 +259,6 @@ function* getAllClassForCreateRelationButton() {
         classNameData.push(classdescriptor.data[ele]);
       }
     }
-    console.log(classNameData);
     yield put(sendAllEdgeClassToGraphCanvasReducer(classNameData));
   } catch (error) {
     console.log(error);
@@ -346,7 +267,6 @@ function* getAllClassForCreateRelationButton() {
 
 function* getInEdgeForNode(selectNode) {
   console.log(">get InEdge for Node");
-  console.log(selectNode);
   let nodes = [];
   let edges = [];
   let nodeID = JSON.parse(selectNode.payload);
@@ -363,8 +283,6 @@ function* getInEdgeForNode(selectNode) {
     );
 
     for (let ele in incommingEdge.data) {
-      // console.log(incommingEdge.data[ele].descriptor.rid)
-
       //// Input EdgeID to get Src Node
       const nodeSrcResult = yield call(
         post,
@@ -375,7 +293,6 @@ function* getInEdgeForNode(selectNode) {
           }
         }
       );
-      console.log(nodeSrcResult);
       nodes.push({
         id: JSON.stringify(nodeSrcResult.data.descriptor.rid),
         label: nodeSrcResult.data.record.name,
@@ -400,8 +317,6 @@ function* getOutEdgeForNode(selectNode) {
   let nodes = [];
   let edges = [];
   let nodeID = JSON.parse(selectNode.payload);
-  // let nodeID = selectNode.payload
-  console.log(nodeID);
   try {
     //// Input NodeID To get outgoing Edge(ID)
     const outgoingEdge = yield call(
@@ -457,7 +372,6 @@ function* updateNodeToDB(updateNode) {
         time: updateNode.payload[0].time
       }
     });
-    // console.log(typeof updateNode.payload[0].id)
     const newNodeCanvas = {
       id: updateNode.payload[0].id,
       label: updateNode.payload[0].label,
@@ -465,8 +379,6 @@ function* updateNodeToDB(updateNode) {
       date: updateNode.payload[0].date,
       time: updateNode.payload[0].time
     };
-    console.log(newNodeCanvas);
-
     const arr = [];
     arr.push(newNodeCanvas);
     yield put(addNodeToCanvas(arr));
@@ -477,7 +389,6 @@ function* updateNodeToDB(updateNode) {
 
 function* updateEdgeToDB(updateEdge) {
   console.log(">>editEdgetoDB");
-  console.log(updateEdge.payload);
   try {
     // Parse EdgeID payload to object > database
     let updateEdgeID = JSON.parse(updateEdge.payload[0].id);
@@ -486,22 +397,17 @@ function* updateEdgeToDB(updateEdge) {
         rid: updateEdgeID
       }
     });
-    console.log(edgeSrcDst);
     yield call(post, "http://localhost:3000/Edge/update", {
       recordDescriptor: {
         rid: updateEdgeID
       },
       record: {
         name: updateEdge.payload[0].label,
-        // from:edgeSrcDst.data[0].descriptor.rid ,
-        //  to: edgeSrcDst.data[1].descriptor.rid,
         inRelation: updateEdge.payload[0].inRelation,
         message: updateEdge.payload[0].message,
         outRelation: updateEdge.payload[0].outRelation
       }
     });
-    console.log(typeof updateEdge.payload[0].id);
-
     const newEdgeCanvas = {
       id: updateEdge.payload[0].id,
       from: JSON.stringify(edgeSrcDst.data[0].descriptor.rid),
@@ -512,7 +418,6 @@ function* updateEdgeToDB(updateEdge) {
       message: updateEdge.payload[0].message,
       outRelation: updateEdge.payload[0].outRelation
     };
-    console.log(newEdgeCanvas);
 
     const arrayEdge = [];
     arrayEdge.push(newEdgeCanvas);
@@ -535,8 +440,6 @@ function* getallnodePropertyDB(nodeID) {
         }
       }
     );
-    console.log(nodeProperty);
-
     yield put(sendAllNodePropertyToDataReducer(nodeProperty));
   } catch (error) {
     console.log(error);
@@ -556,7 +459,6 @@ function* getAllEdgePropertyDB(edgeID) {
         }
       }
     );
-    console.log(edgeProperty);
     yield put(sendAllEdgePropertyToDataReducer(edgeProperty));
   } catch (error) {
     console.log(error);
@@ -567,19 +469,11 @@ function* getSrcDst() {
   console.log(">getsrcdstEdge");
 
   try {
-    const recordDescriptor = yield call(
-      post,
-      "http://localhost:3000/Edge/getSrcDst",
-      {
-        recordDescriptor: { rid: [11, 1] }
-      }
-    );
-
-    console.log(recordDescriptor);
-    // yield put(addNode(newNode));
+    yield call(post, "http://localhost:3000/Edge/getSrcDst", {
+      recordDescriptor: { rid: [11, 1] }
+    });
   } catch (error) {
     console.log(error);
-    //  yield put(addNodeToDBError(error));
   }
 }
 

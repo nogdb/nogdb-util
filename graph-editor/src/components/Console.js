@@ -43,14 +43,12 @@ class Console extends Component {
     });
   }
   render() {
-    //const {graph,scale,data} = this.props;
-
     return (
       <div className="Top-Box" align="center">
         <textarea row="4" cols="50" onChange={this.handleTextArea}>
           {" "}
         </textarea>
-        {/* {console.log(this.state.textAreaValue)} */}
+
         <button
           id="CompileButton"
           onClick={() =>

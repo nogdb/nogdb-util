@@ -71,9 +71,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
   switch (action.type) {
     //edit node button render
     case "ADD_NODE_ACTION":
-      console.log(state.nodeIDDB);
-      console.log(action.payload);
-      //action.payload[0].id = state.nodeIDDB;
       for (let ele in action.payload) {
         if (
           JSON.stringify(backupNode).includes(
@@ -83,7 +80,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           backupNode.push(action.payload[ele]);
         }
       }
-      console.log(backupNode);
       return {
         ...state,
         graphCanvas: {
@@ -94,7 +90,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
 
     case "ADD_EDGE_CANVAS": {
       let copyEdge = state.graphCanvas.edges.slice();
-      console.log(action.payload);
       for (let ele in action.payload) {
         if (
           JSON.stringify(copyEdge).includes(
@@ -105,7 +100,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           copyEdge.shift();
         }
       }
-      console.log(copyEdge);
       return {
         ...state,
         graphCanvas: {
@@ -123,7 +117,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
     case "REMOVE_NODE":
-      console.log(action.payload);
       for (let ele in backupNode) {
         if (backupNode[ele].id === action.payload) {
           backupNode.splice(ele, 1);
@@ -190,7 +183,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       break;
     case "CHANGE_COLOR_NODE":
       nodeGroup = hashIDToClass[JSON.parse(action.nodeID)[0]];
-      console.log(action);
       //Hard Code node class name
 
       switch (nodeGroup) {
@@ -271,9 +263,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       }
       for (let ele in tempID) {
         if (a.includes(tempID[ele]) === true) {
-          if (graphSetting.label.label.includes(nodeName[ele]) === false)
-            console.log(tempID[ele]);
-          {
+          if (graphSetting.label.label.includes(nodeName[ele]) === false) {
             for (let ele2 in graphSetting.label.id) {
               if (a[ele2] === tempID[ele]) {
                 graphSetting.label.label[ele2] = nodeName[ele];
@@ -313,7 +303,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           const index = backupNode
             .map(item => item.label)
             .indexOf(hashIDBackupNode[backupID[i]]);
-          //backupNode[index].label = hashIDToLabel[backupID[i]];
           a = backupNode[index];
           const update = {
             ...backupNode[index],
@@ -323,7 +312,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       }
 
-      console.log(backupNode);
       return {
         ...state,
         graphCanvas: {
@@ -332,8 +320,8 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
     }
-    case "SEND_EDGE_CLASS": //get all edgeclass from getschema index.js
-      console.log(action.payload);
+    case "SEND_EDGE_CLASS": {
+      //get all edgeclass from getschema index.js
       let edgeClassName = [];
       for (let i = 0; i < action.payload.length; i++) {
         edgeClassName.push(action.payload[i].name);
@@ -342,9 +330,9 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         ...state,
         edgeClass: edgeClassName
       };
-
-    case "GET_ALL_CLASS": //get all class from getschema index.js
-      console.log(action.payload);
+    }
+    case "GET_ALL_CLASS": {
+      //get all class from getschema index.js
       let className = [];
       for (let i = 0; i < action.payload.length; i++) {
         className.push(action.payload[i].name);
@@ -353,7 +341,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         ...state,
         classes: className
       };
-
+    }
     case "ADD_EDGE_CONSOLE": {
       //AddEDGE
       let edgeID = [];
@@ -365,9 +353,7 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         src.push(action.payload[i].from);
         dst.push(action.payload[i].to);
         edgeName.push(action.payload[i].data.record.name);
-        //////////////////////////////////////////////////////////////
-        /// check same Edge before adding to backupEdge (graphcanvas State ) Here
-        ///////////////////////////////////////////////////////////////
+
         backupEdge.push({
           id: JSON.stringify(edgeID[i]),
           from: JSON.stringify(src[i]),
@@ -409,7 +395,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
       for (let ele in action.payloadEdge) {
         backupEdge.push(action.payloadEdge[ele]);
       }
-      console.log(backupNode);
 
       return {
         ...state,
@@ -448,7 +433,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     case "ADD_EDGE_RENDER": {
       console.log(">>addedgeTorender");
       backupEdge.push(action.payload[0]);
-      console.log(backupEdge);
       return {
         ...state,
         graphCanvas: {
