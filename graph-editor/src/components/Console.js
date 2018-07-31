@@ -18,7 +18,6 @@ const mapDispatchToProps = dispatch => {
   return {
     executeConsoleActionCreater: SQL => {
       const action = executeConsole(SQL);
-      console.log("#####", action);
       dispatch(action);
     },
     getAllClassFromDatabaseActionCreator: () => {
@@ -44,21 +43,21 @@ class Console extends Component {
     });
   }
   render() {
-    //const {graph,scale,data} = this.props;
-
     return (
       <div className="Top-Box" align="center">
         <textarea row="4" cols="50" onChange={this.handleTextArea}>
           {" "}
         </textarea>
-        {/* {console.log(this.state.textAreaValue)} */}
+
         <button
+          id="CompileButton"
           onClick={() =>
             this.props.executeConsoleActionCreater(this.state.textAreaValue)
           }
         >
           Compile
         </button>
+        {/* <button onClick={() => this.props.getNodeInEdgeActionCreator()}>GetAllgraph</button> */}
       </div>
     );
   }

@@ -49,7 +49,9 @@ const mapDispatchToProps = dispatch => {
 class EdgePropertyMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      activeTab: "1"
+    };
     this.toggle = this.toggle.bind(this);
   }
   toggle = tab => {
@@ -66,7 +68,12 @@ class EdgePropertyMenu extends Component {
       <div className="Left-tab">
         <div id="topbar-prop">
           Relationship{" "}
-          <button onClick={this.props.hideEdgeMenuActionCreator}>Hide </button>
+          <button
+            id="edge-hide-button"
+            onClick={this.props.hideEdgeMenuActionCreator}
+          >
+            X{" "}
+          </button>
         </div>
 
         <Nav tabs>
@@ -97,16 +104,17 @@ class EdgePropertyMenu extends Component {
               <Col sm="12">
                 <h4>Tab 1 Edge</h4>
                 @rid : {data.edgeID} <br />
-                @class : relationship <br />
+                @class : {data.edgeClass} <br />
                 in : {data.edgeIn} <br />
-                inRelation : <br />
-                message : <br />
+                inRelation : {data.inRelation} <br />
+                message : {data.message} <br />
                 out : {data.edgeOut} <br />
-                outRelation : <br />
+                outRelation :{data.outRelation} <br />
+                name : {data.edgeName} <br />
               </Col>
             </Row>
           </TabPane>
-          <TabPane tabId="2">
+          {/* <TabPane tabId="2">
             <Row>
               <Col sm="12">
                 <h4>Tab 2 Edge </h4>
@@ -127,10 +135,10 @@ class EdgePropertyMenu extends Component {
                 <button onClick={this.setOutRelationDisplayFormat}>
                   {" "}
                   out{" "}
-                </button>
-                {/* <button onClick={this.setInRelationDisplayFormat}> inRelation </button> */}
-                {/* <button onClick={this.setOutRelationDisplayFormat}> outRelation </button> */}
-                <button onClick={this.setMessageDisplayFormat}>
+                </button> */}
+          {/* <button onClick={this.setInRelationDisplayFormat}> inRelation </button> */}
+          {/* <button onClick={this.setOutRelationDisplayFormat}> outRelation </button> */}
+          {/* <button onClick={this.setMessageDisplayFormat}>
                   {" "}
                   message{" "}
                 </button>
@@ -145,7 +153,7 @@ class EdgePropertyMenu extends Component {
                 </select>
               </Col>
             </Row>
-          </TabPane>
+          </TabPane> */}
         </TabContent>
       </div>
     );

@@ -27,7 +27,6 @@ class History extends Component {
     this.state = {
       isHistoryDispaly: false
     };
-    // this.handle
   }
   render() {
     const { scale } = this.props;
@@ -43,7 +42,10 @@ class History extends Component {
       historyBody = <div className="History-body"> HelloWorld </div>;
     } else if (scale.historyBar === false) {
       displaybutton = (
-        <button onClick={this.props.setHistoryDisplayActionCreator}>
+        <button
+          id="showHideHistoryBar"
+          onClick={this.props.setHistoryDisplayActionCreator}
+        >
           show
         </button>
       );

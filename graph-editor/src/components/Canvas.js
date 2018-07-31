@@ -1,13 +1,21 @@
 import React, { Component } from "react";
 import Graph from "react-graph-vis";
 import { connect } from "react-redux";
+import Datetime from "react-datetime";
 import {
   getNodeID,
+  getNodeID2,
   getNodeClass,
   getNodename,
   getEdgeID,
-  dedeteNodeInDatabase,
-  deleteEdgeFromDatabase
+  deleteEdgeFromDatabase,
+  storeEditName,
+  storeEditNodeDateTime,
+  storeEditInRelation,
+  storeEditOutRelation,
+  storeEditMessage,
+  storeEdgeNewName,
+  storeEditRelationName
 } from "../actions/dataAction.js";
 import {
   getEdgeClass,
@@ -18,8 +26,21 @@ import {
   showNodeMenu,
   hideNodeMenu,
   showEdgeMenu,
-  hideEdgeMenu
+  hideEdgeMenu,
+  setEditNodeAlertTrue,
+  setEditNodeAlertFalse
 } from "../actions/nodeEdgesMenu";
+import {
+  deleteNodeFromDB,
+  getNodeInEdge,
+  getNodeOutEdge,
+  addUpdateNodeToDatabase,
+  getAllNodeProperties,
+  getAllEdgeProperties,
+  addUpdateEdgeToDatabase,
+  getAllEdgeClassForAddNodeButton,
+  createNewEdgeToDatabase
+} from "../actions/databaseAction";
 import { removeNode, removeEdgeCanvas } from "../actions/menuAction";
 import { Modal, Button } from "reactstrap";
 
@@ -35,6 +56,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getNodeIDActionCreator: nodeID => {
       dispatch(getNodeID(nodeID));
+    },
+    getNodeID2ActionCreator: nodeID => {
+      dispatch(getNodeID2(nodeID));
     },
     getEdgeIDActionCreator: edgeID => {
       dispatch(getEdgeID(edgeID));
@@ -69,59 +93,71 @@ const mapDispatchToProps = dispatch => {
     removeNodeActionCreator: nodeID => {
       dispatch(removeNode(nodeID));
     },
-    deleteNodeInDatabaseActionCreator: nodeID => {
-      dispatch(dedeteNodeInDatabase(nodeID));
-    },
     deleteEdgeFromDatabaseActionCreator: edgeID => {
       dispatch(deleteEdgeFromDatabase(edgeID));
     },
     removeEdgeCanvasActionCreator: edgeID => {
       dispatch(removeEdgeCanvas(edgeID));
+    },
+    deleteNodeFromDB: nodeID => {
+      dispatch(deleteNodeFromDB(nodeID));
+    },
+    getNodeInEdgeActionCreator: nodeID => {
+      dispatch(getNodeInEdge(nodeID));
+    },
+    getNodeOutEdgeActionCreator: nodeID => {
+      dispatch(getNodeOutEdge(nodeID));
+    },
+    addUpdateNodeToDatabaseActionCreator: updateNodeDB => {
+      dispatch(addUpdateNodeToDatabase(updateNodeDB));
+    },
+    getAllNodePropertiesActionCreator: nodeID => {
+      dispatch(getAllNodeProperties(nodeID));
+    },
+    storeEditNameActionCreator: name => {
+      dispatch(storeEditName(name));
+    },
+    storeEditNodeDateTimeActionCreator: dateTime => {
+      dispatch(storeEditNodeDateTime(dateTime));
+    },
+    setEditNodeAlertTrueActionCreator: () => {
+      dispatch(setEditNodeAlertTrue());
+    },
+    setEditNodeAlertFalseActionCreator: () => {
+      dispatch(setEditNodeAlertFalse());
+    },
+    getAllEdgePropertiesActionCreator: edgeID => {
+      dispatch(getAllEdgeProperties(edgeID));
+    },
+    addUpdateEdgeToDatabaseActionCreator: updateEdgeID => {
+      dispatch(addUpdateEdgeToDatabase(updateEdgeID));
+    },
+    storeEditInRelationActionCreator: inRelation => {
+      dispatch(storeEditInRelation(inRelation));
+    },
+    storeEditOutRelationActionCreator: outRelation => {
+      dispatch(storeEditOutRelation(outRelation));
+    },
+    storeEditMessageActionCreator: Message => {
+      dispatch(storeEditMessage(Message));
+    },
+    storeEditRelationNameActionCreator: editEdgeName => {
+      dispatch(storeEditRelationName(editEdgeName));
+    },
+    getAllEdgeClassForAddNodeButtonActionCreator: () => {
+      dispatch(getAllEdgeClassForAddNodeButton());
+    },
+    createNewEdgeToDatabaseActionCreator: newEdge => {
+      dispatch(createNewEdgeToDatabase(newEdge));
+    },
+    storeEdgeNewNameActionCreator: edgeName => {
+      dispatch(storeEdgeNewName(edgeName));
     }
   };
 };
-// const customStyle = {
-//   content: {
-//     posittion: "absolute",
-//     top: "20px",
-//     left: "40px",
-//     right: "40px",
-//     bottom: "40px",
-//     marginRight: "15%",
-//     marginLeft: "15%",
-//     marginTop: "15%",
-//     marginBottom: "15%"
-//   }
-// };
-// const customAddNodeStyle = {
-//   content: {
-//     posittion: "absolute",
-//     top: "20px",
-//     left: "40px",
-//     right: "40px",
-//     bottom: "40px",
-//     marginRight: "15%",
-//     marginLeft: "15%",
-//     marginTop: "10%",
-//     marginBottom: "10%"
-//   }
-// };
-// const customEditRStyle = {
-//   content: {
-//     posittion: "absolute",
-//     top: "20px",
-//     left: "40px",
-//     right: "40px",
-//     bottom: "40px",
-//     marginRight: "15%",
-//     marginLeft: "15%",
-//     marginTop: "10%",
-//     marginBottom: "10%"
-//   }
-// };
-const customCreateEdgeModal = {
+const customStyle = {
   content: {
-    position: "absolute",
+    posittion: "absolute",
     top: "20px",
     left: "40px",
     right: "40px",
@@ -132,24 +168,94 @@ const customCreateEdgeModal = {
     marginBottom: "15%"
   }
 };
+const customEditRelationStyle = {
+  content: {
+    posittion: "absolute",
+    top: "20px",
+    left: "40px",
+    right: "40px",
+    bottom: "40px",
+    marginRight: "10%",
+    marginLeft: "10%",
+    marginTop: "10%",
+    marginBottom: "10%"
+  }
+};
+const customCreateEdgeModal = {
+  content: {
+    position: "absolute",
+    top: "20px",
+    left: "40px",
+    right: "40px",
+    bottom: "40px",
+    marginRight: "10%",
+    marginLeft: "10%",
+    marginTop: "30%",
+    marginBottom: "15%"
+  }
+};
 
 class Canvas extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      editNodeText: "",
       isDeleteNodeActivate: false,
-      isDeleteRelationActivate: false
+      isDeleteRelationActivate: false,
+      isEditNodeActive: false,
+      createEdgeMode: false,
+      isCreateRelationActive: false,
+      isEditRelationActive: false,
+      page: 1,
+      group: null
     };
-    this.handleNodeID = this.handleNodeID.bind(this);
     this.handleGetNodeName = this.handleGetNodeName.bind(this);
     this.getInRelationNode = this.getInRelationNode.bind(this);
     this.getOutRelationNode = this.getOutRelationNode.bind(this);
     this.setDisplayFormat = this.setDisplayFormat.bind(this);
     this.handleDeleteRelation = this.handleDeleteRelation.bind(this);
+    this.handleIncomingButton = this.handleIncomingButton.bind(this);
+    this.handleOutgoingButton = this.handleOutgoingButton.bind(this);
+    this.onChangeNodeName = this.onChangeNodeName.bind(this);
+    this.onChangeNodeDateTime = this.onChangeNodeDateTime.bind(this);
+    this.handleEditNodeButton = this.handleEditNodeButton.bind(this);
+    this.handleNodeID2 = this.handleNodeID2.bind(this);
+    this.handleInRelationChange = this.handleInRelationChange.bind(this);
+    this.handleEdgeNewName = this.handleEdgeNewName.bind(this);
+    this.handleMessageChange = this.handleMessageChange.bind(this);
+    this.handleOutRelationChange = this.handleOutRelationChange.bind(this);
+    this.handleRelationNameChange = this.handleRelationNameChange.bind(this);
+    this.handleNextPage = this.handleNextPage.bind(this);
+    this.initializePage = this.initializePage.bind(this);
   }
-  handleNodeID(nodeIDs) {
-    this.props.getNodeIDActionCreator(nodeIDs[0]);
-  }
+  initializePage = () => {
+    this.setState({
+      page: 1
+    });
+  };
+
+  handleNodeID2 = () => {
+    this.setCreateEdgeModalTrue();
+  };
+  handleCreateRelation = () => {
+    this.props.getAllEdgeClassForAddNodeButtonActionCreator();
+    this.setState({
+      createEdgeMode: true
+    });
+  };
+
+  setCreateEdgeModalTrue = () => {
+    this.setState({
+      isCreateRelationActive: true
+    });
+  };
+
+  setCreateEdgeModalFalse = () => {
+    this.setState({
+      isCreateRelationActive: false,
+      page: 1
+    });
+  };
 
   handleGetNodeName = () => {
     for (let ele in this.props.graph.graphCanvas.nodes) {
@@ -167,20 +273,15 @@ class Canvas extends Component {
       if (
         this.props.graph.graphCanvas.nodes[ele].id === this.props.data.nodeID
       ) {
-        // this.setState({
-        //   nodeClass: this.state.graph.nodes[ele].group
-        // });
         this.props.getNodeClassActionCreator(
           this.props.graph.graphCanvas.nodes[ele].group
         );
       }
     }
   };
-
   handleRelationID = relaID => {
     this.props.getEdgeIDActionCreator(relaID[0]);
   };
-
   getInRelationNode = () => {
     for (let ele in this.props.graph.graphCanvas.edges) {
       if (
@@ -192,7 +293,6 @@ class Canvas extends Component {
       }
     }
   };
-
   getOutRelationNode = () => {
     for (let ele in this.props.graph.graphCanvas.edges) {
       if (
@@ -204,7 +304,6 @@ class Canvas extends Component {
       }
     }
   };
-
   setDisplayFormat = () => {
     let canvasNode = this.props.graph.graphCanvas.nodes.slice();
     let canvasEdge = this.props.graph.grapCanvas.edges.slice();
@@ -243,6 +342,23 @@ class Canvas extends Component {
     });
   };
 
+  setEditNodeModalTrue = () => {
+    this.props.getAllNodePropertiesActionCreator(this.props.data.nodeID);
+    this.setState({
+      isEditNodeActive: true
+    });
+  };
+  setEditNodeModalFalse = () => {
+    this.setState({
+      isEditNodeActive: false
+    });
+  };
+
+  toggleEditRelationModal = () => {
+    this.setState({
+      isEditRelationActive: !this.state.isEditRelationActive
+    });
+  };
   toggleDeleteRelationModal = () => {
     this.setState({
       isDeleteRelationActivate: !this.state.isDeleteRelationActivate
@@ -250,7 +366,7 @@ class Canvas extends Component {
   };
 
   handleDeleteNode = () => {
-    this.props.deleteNodeInDatabaseActionCreator(this.props.data.nodeID);
+    this.props.deleteNodeFromDB(this.props.data.nodeID);
     this.props.removeNodeActionCreator(this.props.data.nodeID);
     this.toggleDeletenodeModal();
   };
@@ -261,156 +377,292 @@ class Canvas extends Component {
     this.toggleDeleteRelationModal();
   };
 
-  // handleRemoveRelation = () => {
-  //   let BackupNode = this.state.graph.edges.slice();
-  //   let BackupEdges = this.state.graph.edges.slice();
+  handleIncomingButton = () => {
+    this.props.getNodeInEdgeActionCreator(this.props.data.nodeID);
+  };
+  handleOutgoingButton = () => {
+    this.props.getNodeOutEdgeActionCreator(this.props.data.nodeID);
+  };
 
-  //   for (let ele1 in BackupEdges) {
-  //     if (BackupEdges[ele1].id === this.state.relationID) {
-  //       BackupEdges.splice(ele1, 1);
-  //     }
-  //   }
+  onChangeNodeName(e) {
+    this.props.storeEditNameActionCreator(e.target.value);
+  }
+  onChangeNodeDateTime = e => {
+    this.props.storeEditNodeDateTimeActionCreator(e._d);
+  };
+  onChangeNodeDateTime = e => {
+    this.props.storeEditNodeDateTimeActionCreator(e._d);
+  };
 
-  //   this.setState({ graph: { nodes: BackupNode, edges: BackupEdges } });
-  //   this.toggleRelationMenu();
-  // };
+  handleInRelationChange = e => {
+    this.props.storeEditInRelationActionCreator(e.target.value);
+  };
+
+  handleMessageChange = e => {
+    this.props.storeEditMessageActionCreator(e.target.value);
+  };
+  handleOutRelationChange = e => {
+    this.props.storeEditOutRelationActionCreator(e.target.value);
+  };
+  handleRelationNameChange = e => {
+    this.props.storeEditRelationNameActionCreator(e.target.value);
+  };
+
+  handleEdgeNewName = e => {
+    this.props.storeEdgeNewNameActionCreator(e.target.value);
+  };
+
+  handleEditNodeButton() {
+    let updateNodeDB = [
+      {
+        id: this.props.data.nodeID,
+        group: this.props.data.nodeProperty["@className"],
+        label: this.props.data.editNodeName,
+        date: this.props.data.nodeDateTime
+      }
+    ];
+    this.props.setEditNodeAlertTrueActionCreator();
+    this.props.addUpdateNodeToDatabaseActionCreator(updateNodeDB);
+    this.setEditNodeModalFalse();
+  }
+
+  handleEditRelationbutton = () => {
+    let updateEdgeDB = [
+      {
+        id: this.props.data.edgeID,
+        label: this.props.data.edgeName,
+        group: this.props.data.edgeProperty["@className"],
+        inRelation: this.props.data.inRelation,
+        outRelation: this.props.data.outRelation,
+        message: this.props.data.message
+      }
+    ];
+    this.props.addUpdateEdgeToDatabaseActionCreator(updateEdgeDB);
+    this.toggleEditRelationModal();
+  };
+
+  selectEdgeClassList = graph => {
+    let arr = [];
+    const list = graph.edgeClass;
+    for (let ele in list) {
+      arr.push(
+        <option key={ele} value={list[ele]}>
+          {list[ele]}
+        </option>
+      );
+    }
+    return arr;
+  };
+
+  handleNextPage = () => {
+    let g = document.getElementById("selectEdge-id");
+    let selectGroup;
+
+    for (let i = 0; i < g.options.length; i++) {
+      if (g.options[i].selected === true) {
+        selectGroup = g.options[i].value;
+        break;
+      }
+    }
+    this.setState({
+      page: 2,
+      group: selectGroup
+    });
+  };
+
+  handleCreateRelationbutton = () => {
+    let newEdge = [
+      {
+        className: this.state.group,
+        srcVertex: this.props.data.nodeID,
+        dstVertex: this.props.data.nodeID2,
+        name: this.props.data.edgeName
+      }
+    ];
+
+    this.props.createNewEdgeToDatabaseActionCreator(newEdge);
+
+    this.setCreateEdgeModalFalse();
+  };
 
   render() {
     const { state, scale, data } = this.props;
-    const graphOptions = Object.assign({width: '100%', height: '100%', autoResize: true}, state.options)
+    const graphOptions = Object.assign(
+      { width: "100%", height: "100%", autoResize: true },
+      state.options
+    );
     let commandBox;
+    //Show node menu when click node
     if (scale.nodeMenu === true) {
       commandBox = (
         <div id="command-div">
           <div id="history-div">
-            Command Menu : {data.nodeID}
             <button
               id="Incoming-button"
               title="Incoming Relationship"
-              //    onClick={this.handleIncoming}
+              onClick={this.handleIncomingButton}
             >
               Incoming
             </button>
             <button
               id="Outcoming-button"
               title="Outcoming Relationship"
-              //    onClick={this.handleOutcoming}
+              onClick={this.handleOutgoingButton}
             >
-              Outcoming
+              Outgoing
             </button>
-            <button
-              id="Edit-button"
-              //  onClick={this.toggleEditnodeModal}
+            <button id="Edit-button" onClick={this.setEditNodeModalTrue}>
+              Edit node
+            </button>
+            <Modal
+              isOpen={this.state.isEditNodeActive}
+              contentlabel="Node Editor"
+              onRequestClose={this.setEditNodeModalFalse}
+              style={customCreateEdgeModal}
             >
-              Edit node{data.nodeID}
-            </button>
-            {/* <Modal
-                       isOpen={this.state.isEditNodeActive}
-                       contentLabel="Node Editor"
-                       onRequestClose={this.toggleEditnodeModal}
-                       style={customCreateEdgeModal}
-                     >
-                       <div id="edit-top-div"> Edit Node : {this.state.nodeID}</div>
-                       <div id="edit-middle-div"> Classname : {this.state.nodeClass} <br />
-                         <div id="inside-editmid-div">
-                           <br />
-                           <h5 id="Editnode-classname">name </h5>
-                           <input
-                             type="node-edit"
-                             placeholder="Edit...."
-                             className="Node-editor"
-                             onChange={this.handleEditNodeName}
-                           />
-                           <select id="select-nodetype">
-                             <option value="String">String </option>
-                             <option value="Integer">Integer </option>
-                             <option value="etc">Etc </option>
-                           </select>
-                           <br />
-                          
-                           <form action="/action_page.php">
-                             CreateDate: <input type="date" name="bday" />
-                             <input type="submit" />
-                             <input type="time" id="myTime" value="22:15:00" />
-                             <select id="select-nodetype">       
-                               <option value="String">String </option>
-                               <option value="Integer">Integer </option>
-                               <option value="etc">Etc </option>
-                             </select>
-                           </form>
-                         </div>
-                       </div>
-                       <div id="edge-bottom-div">
-                         <br />
-                         <button id="cancel-edge" onClick={this.toggleEditnodeModal}>
-                           Cancel
-                         </button>
-                         <button id="Edge-button" onClick={this.updateNodeName}>
-                           Save Change
-                         </button>
-                       </div>
-                     </Modal> */}
+              <div id="edit-top-div"> Edit Node : {data.nodeID}</div>
+              <div id="edit-middle-div">
+                {" "}
+                Classname : {data.nodeClass} <br />
+                <div id="inside-editmid-div">
+                  <br />
+                  <h5 id="Editnode-classname">name </h5>
+                  <input
+                    type="text"
+                    placeholder="Edit...."
+                    className="Node-editor"
+                    value={this.props.data.editNodeName}
+                    onChange={this.onChangeNodeName}
+                  />
+                  <select id="select-nodetype">
+                    <option value="String">String </option>
+                  </select>
+                  <br />
+
+                  <form action="/action_page.php">
+                    CreateDate :{" "}
+                    <Datetime
+                      value={this.props.data.nodeDateTime}
+                      onChange={this.onChangeNodeDateTime}
+                      viewMode={"days"}
+                    />
+                    {/* CreateDate: <input type="date" name="day" id="myEditNodeDate" /> */}
+                    {/* <input type="time" id="myEditNodeTime" /> */}
+                    <select id="select-nodetype">
+                      <option value="String">String </option>
+                    </select>
+                  </form>
+                </div>
+              </div>
+              <div id="edge-bottom-div">
+                <br />
+                <button id="cancel-edge" onClick={this.setEditNodeModalFalse}>
+                  Cancel
+                </button>
+                <button id="Edge-button" onClick={this.handleEditNodeButton}>
+                  Save Change
+                </button>
+              </div>
+            </Modal>
             <button
               id="createRelation-button"
               title="create relationship"
-              //    onClick={this.handleCreateRelation}
+              onClick={this.handleCreateRelation}
             >
               CreateRelation
             </button>
-            {/* <Modal
-                       isOpen={this.state.isCreateRelationActive}
-                       contentLabel="CreateRelation Modal"
-                       onRequestClose={this.state.toggleCreateRelationModalFalse}
-                       style={customStyle}
-                     >  
-                       <div id="Modal-header">Create Relationship from #inNodeID to #outNodeID 
-                         <button id="hidemodal-button" onClick={this.toggleCreateRelationModalFalse}>Hide Modal</button>
-                       </div>
-                       {this.state.page === 1 ? (
-                         <div id="modal-middle-div">
-                         Class :   <select id="select-id"> {this.selectBoxList()} </select>
-                         </div>
-                       ) : (
-                         <div id="modal-middle-div">
-                           Relation Classname : <hr />
-                           <div id="inside-box"> This relationship require no attribute</div>
-                         </div>
-                       )}
-                       {this.state.page === 1 ? (
-                         <div id="modal-bottom-div"> 
-                           Bottom modal 1 <hr />
-                           <button id="modal-cancel-button" onClick={this.toggleCreateRelationModalFalse}>Cancel</button>
-                           <button id="modal-next-button" onClick={this.handleNextPage}>
-                             Next
-                           </button>
-                         </div>
-                       ) : (
-                         <div id="modal-bottom-div">
-                          
-                           Bottom modal 2 <hr />
-                           <button onClick={this.InitializePage}> Back </button>
-                           <button id="modal-cancel-button" onClick={this.toggleCreateRelationModalFalse} > Cancel</button>
-                           <button id="Addedge-button" onClick={this.handleCreateRelationbutton}>Create Relation</button>
-                         </div>
-                       )}
-                     </Modal> */}
+            {
+              <Modal
+                isOpen={this.state.isCreateRelationActive}
+                contentLabel="CreateRelation Modal"
+                onRequestClose={this.state.setCreateEdgeModalFalse}
+                style={customStyle}
+              >
+                <div id="Modal-header">
+                  Create Relationship from #{this.props.data.nodeID} to #{
+                    this.props.data.nodeID2
+                  }
+                  <button
+                    id="hidemodal-button"
+                    onClick={this.setCreateEdgeModalFalse}
+                  >
+                    Hide Modal
+                  </button>
+                </div>
+                {this.state.page === 1 ? (
+                  <div id="modal-middle-div">
+                    Class :
+                    <select id="selectEdge-id">
+                      {" "}
+                      {this.selectEdgeClassList(state)}{" "}
+                    </select>
+                  </div>
+                ) : (
+                  <div id="modal-middle-div">
+                    Relation Classname : {this.state.group} <hr />
+                    <div id="inside-box">
+                      {" "}
+                      Name :{" "}
+                      <input
+                        type="text"
+                        placeholder="input new nodename...."
+                        className="Nodetext"
+                        onChange={this.handleEdgeNewName}
+                      />
+                    </div>
+                  </div>
+                )}
+                {this.state.page === 1 ? (
+                  <div id="modal-bottom-div">
+                    <button
+                      id="modal-cancel-button"
+                      onClick={this.setCreateEdgeModalFalse}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      id="modal-next-button"
+                      onClick={this.handleNextPage}
+                    >
+                      Next
+                    </button>
+                  </div>
+                ) : (
+                  <div id="modal-bottom-div">
+                    <button onClick={this.initializePage}> Back </button>
+                    <button
+                      id="modal-cancel-button"
+                      onClick={this.setCreateEdgeModalFalse}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      id="Addedge-button"
+                      onClick={this.handleCreateRelationbutton}
+                    >
+                      Create Relation
+                    </button>
+                  </div>
+                )}
+              </Modal>
+            }
             <button
               id="removeNode-button"
               title="remove node from canvas"
               onClick={this.handleRemoveNode}
             >
-              Remove
+              Delete node from canvas
             </button>
             <button
               id="deleteNode-button"
               title="delete node from Database"
               onClick={this.toggleDeletenodeModal}
             >
-              Delete
+              Delete node from database
             </button>
             <Modal
               isOpen={this.state.isDeleteNodeActivate}
-              contentLabel="DeleteNodeModal"
+              contentlabel="DeleteNodeModal"
               onRequestClose={this.toggleDeletenodeModal}
               style={customCreateEdgeModal}
             >
@@ -435,48 +687,113 @@ class Canvas extends Component {
       commandBox = null;
     }
     let relationBox;
-
     if (scale.edgeMenu === true) {
       relationBox = (
         <div id="relationMenu-div">
-          Relationship Menu :
-          {/* {this.state.relationID} */}
-          <button
-          // onClick={this.toggleEditRelationModal}
-          >
+          <button id="editRelationship" onClick={this.toggleEditRelationModal}>
             Edit Relationship
           </button>
-          {/* <Modal isOpen={this.state.isEditRelationActive} contentLabel = "EditRelationship Modal" 
-                            onRequestClose={this.toggleEditRelationModal}
-                            style = {customEditRStyle} > <div id="editRModal-header">  Edit Relationship 
-                     <button id="hidemodal-button" onClick={this.toggleEditRelationModal}>Hide Modal</button>
-                     <hr></hr>
-                     </div>
-                    
-                        <div id="editRmodal-middle-div"> relation <hr></hr>
-                        <div id="ineditRmodal-middle-div">
-                           inRelation <input type="text" placeholder="Node name...." className="Nodetext" onChange={this.handleChange} />
-                               <select id="select-id"  > {this.selectBoxList()} </select> <br></br><br></br>
-                             message   <input type="text" placeholder="Type message here...." className="msgTxt"  /> 
-                               <select id="select-id"  > {this.selectBoxList()} </select>        <br></br><br></br>
-                           outRelation  <input type="text" placeholder="Node name...." className="Nodetext" onChange={this.handleChange} />
-                               <select id="select-id"  > {this.selectBoxList()} </select>
-                           </div>
-                        </div>
-                        <br></br>
-                        <div id="editRmodal-bottom-div">  
-                        <button id="modal-cancel-button" onClick={this.toggleEditRelationModal}> Cancel </button>
-                        <button id="Addnode-button" onClick={this.handleAddNodebutton} >Save Change</button>
-                        </div>
-        
-                       
-                     </Modal> */}
-          <button onClick={this.toggleDeleteRelationModal}>
+          <Modal
+            isOpen={this.state.isEditRelationActive}
+            contentLabel="EditRelationship Modal"
+            onRequestClose={this.toggleEditRelationModal}
+            style={customEditRelationStyle}
+          >
+            {" "}
+            <div id="editRModal-header">
+              {" "}
+              Edit Relationship
+              <button
+                id="hidemodal-button"
+                onClick={this.toggleEditRelationModal}
+              >
+                Hide Modal
+              </button>
+              <hr />
+            </div>
+            <div id="editRmodal-middle-div">
+              {" "}
+              relation <hr />
+              <div id="ineditRmodal-middle-div">
+                inRelation{" "}
+                <input
+                  type="text"
+                  value={this.props.data.inRelation}
+                  placeholder="input inrelation...."
+                  className="Nodetext"
+                  onChange={this.handleInRelationChange}
+                />
+                {/* <select id="select-inrelation">
+                  <option value="String">INTEGER </option>
+                </select>{" "} */}
+                <br />
+                <br />
+                message{" "}
+                <input
+                  type="text"
+                  value={this.props.data.message}
+                  placeholder="Type message here...."
+                  className="msgTxt"
+                  onChange={this.handleMessageChange}
+                />
+                {/* <select id="select-message">
+                  <option value="String">STRING </option>
+                </select>{" "} */}
+                <br />
+                <br />
+                outRelation{" "}
+                <input
+                  type="text"
+                  value={this.props.data.outRelation}
+                  placeholder="input outrelation...."
+                  className="Nodetext"
+                  onChange={this.handleOutRelationChange}
+                />
+                {/* <select id="select-outRelation">
+                  <option value="String">INTEGER </option>
+                </select>{" "}  */}
+                <br />
+                Name :
+                <input
+                  type="text"
+                  value={this.props.data.edgeName}
+                  placeholder="input namerelation...."
+                  className="Nodetext"
+                  onChange={this.handleRelationNameChange}
+                />
+                <select id="select-outRelation">
+                  <option value="String">STRING </option>
+                </select>
+                <br />
+                <br />
+              </div>
+            </div>
+            <br />
+            <div id="editRmodal-bottom-div">
+              <button
+                id="modal-cancel-button"
+                onClick={this.toggleEditRelationModal}
+              >
+                {" "}
+                Cancel{" "}
+              </button>
+              <button
+                id="editRelation-button"
+                onClick={this.handleEditRelationbutton}
+              >
+                Save Change
+              </button>
+            </div>
+          </Modal>
+          <button
+            id="deleteRelationship"
+            onClick={this.toggleDeleteRelationModal}
+          >
             Delete Relationship
           </button>
           <Modal
             isOpen={this.state.isDeleteRelationActivate}
-            contentLabel="DeleteRelationModal"
+            contentlabel="DeleteRelationModal"
             onRequestClose={this.toggleDeleteRelationModal}
             style={customCreateEdgeModal}
           >
@@ -504,38 +821,34 @@ class Canvas extends Component {
       <div className="Canvas" align="center">
         {commandBox}
         {relationBox}
-        {/*console.log("NodeID :"+data.nodeID)*/}
         <Graph
           graph={state.graphCanvas}
           options={graphOptions}
           events={{
             selectNode: function(event) {
-              // if (this.state.createEdgeMode === false) {
-              //   this.handleNodeID(event.nodes);
-              // } else {
-              //   this.handleNodeID2(event.nodes);
-              // }
+              if (this.state.createEdgeMode === false) {
+                this.props.getNodeIDActionCreator(event.nodes[0]);
+              } else {
+                this.handleNodeID2(event.nodes);
+                this.props.getNodeID2ActionCreator(event.nodes[0]);
+              }
 
-              // if (this.state.createEdgeMode === true) {
-              //   const src = this.state.prevNodeID.toString();
-              //   const dest = this.state.nodeID.toString();
-              //   this.setSrcEdge(src);
-              //   this.setDecEdge(dest);
-              //   this.toggleCreateRelationModalTrue();
-              //   this.state.createEdgeMode = false;
-              // }
+              if (this.state.createEdgeMode === true) {
+                this.setState({
+                  createEdgeMode: false
+                });
+              }
 
-              this.handleNodeID(event.nodes);
               this.props.showNodeMenuActionCreator();
               this.props.hideEdgeMenuActionCreator();
+              this.props.getAllNodePropertiesActionCreator(
+                this.props.data.nodeID
+              );
               this.handleGetNodeName();
               this.handleNodeClass();
-              // this.getCreateDate();
             }.bind(this),
             deselectNode: function(/*event*/) {
               this.props.hideNodeMenuActionCreator();
-              // this.handleAlertFalse();
-              // this.toggleCreateRAlertmsgFalse();
             }.bind(this),
 
             selectEdge: function(event) {
@@ -544,14 +857,12 @@ class Canvas extends Component {
               this.getOutRelationNode();
               this.props.showEdgeMenuActionCreator();
               this.props.hideNodeMenuActionCreator();
-              // this.setDisplayEdge();
+              this.props.getAllEdgePropertiesActionCreator(
+                this.props.data.edgeID
+              );
             }.bind(this),
-            deselectEdge: function(/*event*/) {
-              // this.toggleRelationMenu();
+            deselectEdge: function() {
               this.props.hideEdgeMenuActionCreator();
-
-              // this.setHideEdge();
-              // this.setHideprop();
             }.bind(this)
           }}
         />
