@@ -18,6 +18,9 @@ const getAllClassFromDatabase = selectID => ({
 const getAllNodeClassForAddNodeButton = () => ({
   type: "GET_ALL_CLASS_FOR_ADDNODE_BUTTON"
 });
+const getAllEdgeClassForAddNodeButton = () => ({
+  type: "GET_ALL_EDGE_CLASS_FOR_CREATE_RELATION_BUTTON"
+});
 
 const sendAllClassFromDatabaseToState = allClass => ({
   type: "SEND_ALL_CLASS_FROM_DATABASE_TO_STATE",
@@ -33,6 +36,11 @@ const sendAllNodeClassToGraphCanvasReducer = allClass => ({
   payload: allClass
 });
 
+const sendAllEdgeClassToGraphCanvasReducer = edgeClass => ({
+  type: "SEND_EDGE_CLASS",
+  payload: edgeClass
+});
+
 const deleteNodeFromDB = NodeID => ({
   type: "DELETE_NODE_TO_DB",
   payload: NodeID
@@ -45,6 +53,11 @@ const sendNodeIDToCanvas = nodeID => ({
 const addNodeRender = data => ({
   type: "ADD_NODE_RENDER",
   payload: data
+});
+
+const addEdgeRender = newEdge => ({
+  type: "ADD_EDGE_RENDER",
+  payload: newEdge
 });
 const getNodeInEdge = selectNodeID => ({
   type: "GET_IN_EDGE_FOR_NODE",
@@ -90,6 +103,12 @@ const addUpdateEdgeToDatabase = updateEdgeDB => ({
   type: "ADD_UPDATE_EDGE_TO_DB",
   payload: updateEdgeDB
 });
+
+const createNewEdgeToDatabase = newEdge => ({
+  type: "ADD_EDGE_TO_DB",
+  payload: newEdge
+});
+
 export {
   executeConsole,
   addVertexConsole,
@@ -98,6 +117,7 @@ export {
   addEdgeConsole,
   getSrcDstEdge,
   sendAllNodeClassToGraphCanvasReducer,
+  sendAllEdgeClassToGraphCanvasReducer,
   getAllNodeClassForAddNodeButton,
   deleteNodeFromDB,
   sendNodeIDToCanvas,
@@ -111,5 +131,8 @@ export {
   sendAllNodePropertyToDataReducer,
   getAllEdgeProperties,
   sendAllEdgePropertyToDataReducer,
-  addUpdateEdgeToDatabase
+  addUpdateEdgeToDatabase,
+  getAllEdgeClassForAddNodeButton,
+  createNewEdgeToDatabase,
+  addEdgeRender
 };

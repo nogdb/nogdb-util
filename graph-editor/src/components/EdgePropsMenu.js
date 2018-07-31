@@ -102,16 +102,16 @@ class EdgePropertyMenu extends Component {
               <Col sm="12">
                 <h4>Tab 1 Edge</h4>
                 @rid : {data.edgeID} <br />
-                @class : relationship <br />
+                @class : {data.edgeClass} <br />
                 in : {data.edgeIn} <br />
-                inRelation : <br />
-                message : <br />
+                inRelation : {data.inRelation} <br />
+                message : {data.message} <br />
                 out : {data.edgeOut} <br />
-                outRelation : <br />
+                outRelation :{data.outRelation} <br />
               </Col>
             </Row>
           </TabPane>
-          <TabPane tabId="2">
+          {/* <TabPane tabId="2">
             <Row>
               <Col sm="12">
                 <h4>Tab 2 Edge </h4>
@@ -132,10 +132,10 @@ class EdgePropertyMenu extends Component {
                 <button onClick={this.setOutRelationDisplayFormat}>
                   {" "}
                   out{" "}
-                </button>
+                </button> */}
                 {/* <button onClick={this.setInRelationDisplayFormat}> inRelation </button> */}
                 {/* <button onClick={this.setOutRelationDisplayFormat}> outRelation </button> */}
-                <button onClick={this.setMessageDisplayFormat}>
+                {/* <button onClick={this.setMessageDisplayFormat}>
                   {" "}
                   message{" "}
                 </button>
@@ -150,7 +150,7 @@ class EdgePropertyMenu extends Component {
                 </select>
               </Col>
             </Row>
-          </TabPane>
+          </TabPane> */}
         </TabContent>
       </div>
     );

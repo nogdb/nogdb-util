@@ -48,6 +48,7 @@ const graphSetting = {
   ID: [],
   name: [],
   classes: [],
+  edgeClass: [],
   nodeID_DB: "ccccc",
   nodeIDDB: "",
   selectClass: " ",
@@ -264,7 +265,6 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         //default
         //use label to store what node or edge name render
       }
-      console.log(tempID);
       let a = [];
       for (let i in graphSetting.label.id) {
         a.push(graphSetting.label.id[i].join(","));
@@ -285,6 +285,8 @@ const graphCanvasReducer = (state = graphSetting, action) => {
           graphSetting.label.label.push(nodeName[ele]);
         }
       }
+
+      // hash node id to label of node
       for (let ele in graphSetting.label.id) {
         hashIDToLabel[JSON.stringify(graphSetting.label.id[ele])] =
           graphSetting.label.label[ele];
@@ -330,7 +332,17 @@ const graphCanvasReducer = (state = graphSetting, action) => {
         }
       };
     }
-    case "GET_ALL_CLASS": //get all class from getschema index.js
+    case "SEND_EDGE_CLASS": //get all edgeclass from getschema index.js
+      console.log(action.payload);
+      let edgeClassName = [];
+      for (let i = 0; i < action.payload.length; i++) {
+        edgeClassName.push(action.payload[i].name);
+      }
+      return {
+        ...state,
+        edgeClass: edgeClassName
+      };
+
     case "GET_ALL_CLASS": //get all class from getschema index.js
       console.log(action.payload);
       let className = [];
@@ -425,6 +437,18 @@ const graphCanvasReducer = (state = graphSetting, action) => {
     }
     case "ADD_NODE_RENDER": {
       backupNode.push(action.payload);
+      return {
+        ...state,
+        graphCanvas: {
+          edges: backupEdge,
+          nodes: backupNode
+        }
+      };
+    }
+    case "ADD_EDGE_RENDER": {
+      console.log(">>addedgeTorender");
+      backupEdge.push(action.payload[0]);
+      console.log(backupEdge);
       return {
         ...state,
         graphCanvas: {

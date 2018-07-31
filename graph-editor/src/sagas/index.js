@@ -5,13 +5,15 @@ import {
   addVertexConsole,
   addEdgeConsole,
   sendAllNodeClassToGraphCanvasReducer,
+  sendAllEdgeClassToGraphCanvasReducer,
   sendNodeIDToCanvas,
   addIncomingNodeEdge,
   addOutgoingNodeEdge,
   addNodeRender,
   getAllNodeProperties,
   sendAllNodePropertyToDataReducer,
-  sendAllEdgePropertyToDataReducer
+  sendAllEdgePropertyToDataReducer,
+  addEdgeRender
 } from "../actions/databaseAction";
 import { removeNode } from "../actions/menuAction";
 import { addNodeToCanvas, addEdgeToCanvas } from "../actions/mainButtonAction";
@@ -27,8 +29,11 @@ function* rootSaga() {
     //takeEvery("DELETE_NODE_FROM_DATABASE", deleteNodeFromDB),
     takeEvery("DELETE_EDGE_FROM_DATABASE", deleteEdgeFromDB),
     takeEvery("GET_ALL_CLASS_FROM_DATABASE", checkClassEdgeNode),
-    //takeEvery("GET_EDGE_SRC_DST", getSrcDst),
     takeEvery("GET_ALL_CLASS_FOR_ADDNODE_BUTTON", getAllClassForAddNodeButton),
+    takeEvery(
+      "GET_ALL_EDGE_CLASS_FOR_CREATE_RELATION_BUTTON",
+      getAllClassForCreateRelationButton
+    ),
     takeEvery("ADD_NODE_TO_DB", addNodeToDB),
     takeEvery("GET_IN_EDGE_FOR_NODE", getInEdgeForNode),
     takeEvery("GET_OUT_EDGE_FOR_NODE", getOutEdgeForNode),
@@ -36,7 +41,8 @@ function* rootSaga() {
     takeEvery("ADD_UPDATE_EDGE_TO_DB", updateEdgeToDB),
     takeEvery("GET_NODE_PROPERTY", getallnodePropertyDB),
     takeEvery("GET_EDGE_PROPERTY", getAllEdgePropertyDB),
-    // takeEvery('ADD_EDGE_TO_DB', addEdgeToDB),
+    takeEvery("ADD_EDGE_TO_DB", addEdgeToDB),
+    takeEvery("GET_EDGE_SRC_DST", getSrcDst),
     // takeEvery('GET_NODES_FROM_DB', getNodesFromDB),
     // takeEvery('GET_EDGES_FROM_DB', getEdgesFromDB),
     // takeEvery('UPDATE_EDGE_TO_DB', updateEdgeToDB),
@@ -144,7 +150,6 @@ function* addConsoletoDB(sqlStr) {
           // console.log(Edges)
         }
       }
-      console.log(Nodes);
       yield put(addVertexConsole(Nodes));
       yield put(addEdgeConsole(Edges));
     } else if (resp.data.type === "c") {
@@ -167,7 +172,6 @@ function* addConsoletoDB(sqlStr) {
   } catch (error) {
     console.log(error);
   }
-
   console.log(stash.length);
   console.log(stash);
   if (stash.length == 1) {
@@ -180,6 +184,47 @@ function* addConsoletoDB(sqlStr) {
       record: stash[1].data
     });
     yield put(addVertexConsole(newNode));
+}
+}
+
+function* addEdgeToDB(newEdge) {
+  console.log(">addEdgeToDatabase");
+  console.log(newEdge.payload);
+  let srcID = JSON.parse(newEdge.payload[0].srcVertex);
+  let dstID = JSON.parse(newEdge.payload[0].dstVertex);
+  console.log(srcID);
+  console.log(dstID);
+  try {
+    const recordDescriptor = yield call(
+      post,
+      "http://localhost:3000/Edge/create",
+      {
+        className: newEdge.payload[0].className,
+        srcVertexRecordDescriptor: {
+          // rid : action.payload[0].srcVertex
+          rid: srcID
+        },
+        dstVertexRecordDescriptor: {
+          rid: dstID
+        },
+        record: {}
+      }
+    );
+    let newEdgeCanvas = [
+      {
+        id: JSON.stringify(recordDescriptor.data.rid),
+        from: newEdge.payload[0].srcVertex,
+        to: newEdge.payload[0].dstVertex,
+        label: newEdge.payload[0].name
+      }
+    ];
+
+    console.log(recordDescriptor.data.rid);
+    console.log(newEdgeCanvas);
+    yield put(addEdgeRender(newEdgeCanvas));
+  } catch (error) {
+    console.log(error);
+    //  yield put(addNodeToDBError(error));
   }
 }
 
@@ -271,6 +316,29 @@ function* getAllClassForAddNodeButton() {
       }
     }
     yield put(sendAllNodeClassToGraphCanvasReducer(classNameData));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// get adll class for CreateRelation button selector
+function* getAllClassForCreateRelationButton() {
+  console.log(">>> getallclassfor-addnodebutton");
+  try {
+    const classdescriptor = yield call(
+      post,
+      "http://localhost:3000/Db/getSchema",
+      {}
+    );
+    let classNameData = [];
+    for (let ele in classdescriptor.data) {
+      // if it is Edge class?
+      if (classdescriptor.data[ele].type === "e") {
+        classNameData.push(classdescriptor.data[ele]);
+      }
+    }
+    console.log(classNameData);
+    yield put(sendAllEdgeClassToGraphCanvasReducer(classNameData));
   } catch (error) {
     console.log(error);
   }
@@ -492,6 +560,26 @@ function* getAllEdgePropertyDB(edgeID) {
     yield put(sendAllEdgePropertyToDataReducer(edgeProperty));
   } catch (error) {
     console.log(error);
+  }
+}
+
+function* getSrcDst() {
+  console.log(">getsrcdstEdge");
+
+  try {
+    const recordDescriptor = yield call(
+      post,
+      "http://localhost:3000/Edge/getSrcDst",
+      {
+        recordDescriptor: { rid: [11, 1] }
+      }
+    );
+
+    console.log(recordDescriptor);
+    // yield put(addNode(newNode));
+  } catch (error) {
+    console.log(error);
+    //  yield put(addNodeToDBError(error));
   }
 }
 

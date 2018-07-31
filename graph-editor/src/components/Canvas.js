@@ -13,7 +13,8 @@ import {
   storeEditNodeDateTime,
   storeEditInRelation,
   storeEditOutRelation,
-  storeEditMessage
+  storeEditMessage,
+  storeEdgeNewName
 } from "../actions/dataAction.js";
 import {
   getEdgeClass,
@@ -35,7 +36,9 @@ import {
   addUpdateNodeToDatabase,
   getAllNodeProperties,
   getAllEdgeProperties,
-  addUpdateEdgeToDatabase
+  addUpdateEdgeToDatabase,
+  getAllEdgeClassForAddNodeButton,
+  createNewEdgeToDatabase
 } from "../actions/databaseAction";
 import { removeNode, removeEdgeCanvas } from "../actions/menuAction";
 import { Modal, Button } from "reactstrap";
@@ -136,6 +139,15 @@ const mapDispatchToProps = dispatch => {
     },
     storeEditMessageActionCreator: Message => {
       dispatch(storeEditMessage(Message));
+    },
+    getAllEdgeClassForAddNodeButtonActionCreator: () => {
+      dispatch(getAllEdgeClassForAddNodeButton());
+    },
+    createNewEdgeToDatabaseActionCreator: newEdge => {
+      dispatch(createNewEdgeToDatabase(newEdge));
+    },
+    storeEdgeNewNameActionCreator: edgeName => {
+      dispatch(storeEdgeNewName(edgeName));
     }
   };
 };
@@ -189,7 +201,9 @@ class Canvas extends Component {
       isEditNodeActive: false,
       createEdgeMode: false,
       isCreateRelationActive: false,
-      isEditRelationActive: false
+      isEditRelationActive: false,
+      page: 1,
+      group: null
     };
     this.handleNodeID = this.handleNodeID.bind(this);
     this.handleGetNodeName = this.handleGetNodeName.bind(this);
@@ -205,23 +219,35 @@ class Canvas extends Component {
     this.handleEditNodeButton = this.handleEditNodeButton.bind(this);
     this.handleNodeID2 = this.handleNodeID2.bind(this);
     this.handleInRelationChange = this.handleInRelationChange.bind(this);
+    this.handleEdgeNewName = this.handleEdgeNewName.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleOutRelationChange = this.handleOutRelationChange.bind(this);
+    this.handleNextPage = this.handleNextPage.bind(this);
+    this.initializePage = this.initializePage.bind(this);
   }
+  initializePage = () => {
+    this.setState({
+      page: 1
+    });
+  };
+
   handleNodeID(nodeIDs) {
-    this.props.getNodeIDActionCreator(nodeIDs[0]);
+    console.log(typeof nodeIDs[0]);
+    // this.props.getNodeIDActionCreator(nodeIDs[0]);
   }
   handleNodeID2 = nodeIDs => {
-    this.props.getNodeID2ActionCreator(nodeIDs[0]);
+    // this.props.getNodeID2ActionCreator(nodeIDs[0]);
     this.setCreateEdgeModalTrue();
   };
   handleCreateRelation = () => {
+    this.props.getAllEdgeClassForAddNodeButtonActionCreator();
     this.setState({
       createEdgeMode: true
     });
   };
 
   setCreateEdgeModalTrue = () => {
+    console.log(this.props.data);
     this.setState({
       isCreateRelationActive: true
     });
@@ -229,7 +255,8 @@ class Canvas extends Component {
 
   setCreateEdgeModalFalse = () => {
     this.setState({
-      isCreateRelationActive: false
+      isCreateRelationActive: false,
+      page: 1
     });
   };
 
@@ -393,6 +420,9 @@ class Canvas extends Component {
     this.props.storeEditOutRelationActionCreator(e.target.value);
   };
 
+  handleEdgeNewName = e => {
+    this.props.storeEdgeNewNameActionCreator(e.target.value);
+  };
   // onChangeNodeTime = () => {
 
   // }
@@ -433,24 +463,55 @@ class Canvas extends Component {
     console.log(updateEdgeDB);
   };
 
-  // this.setNewNodeName(this.state.nodeID, this.state.editNodeName);
-  // console.log(this.state.graph.nodes);
-  // this.toggleEditnodeModal();
-  // this.handleAlertTrue();
+  selectEdgeClassList = graph => {
+    let arr = [];
+    //  const list =Object.keys(graph.classes)
+    const list = graph.edgeClass;
+    for (let ele in list) {
+      arr.push(
+        <option key={ele} value={list[ele]}>
+          {list[ele]}
+        </option>
+      );
+    }
+    return arr;
+  };
 
-  // handleRemoveRelation = () => {
-  //   let BackupNode = this.state.graph.edges.slice();
-  //   let BackupEdges = this.state.graph.edges.slice();
+  handleNextPage = () => {
+    let g = document.getElementById("selectEdge-id");
+    let selectGroup;
 
-  //   for (let ele1 in BackupEdges) {
-  //     if (BackupEdges[ele1].id === this.state.relationID) {
-  //       BackupEdges.splice(ele1, 1);
-  //     }
-  //   }
+    for (let i = 0; i < g.options.length; i++) {
+      if (g.options[i].selected === true) {
+        selectGroup = g.options[i].value;
+        break;
+      }
+    }
+    this.setState({
+      page: 2,
+      group: selectGroup
+    });
+  };
 
-  //   this.setState({ graph: { nodes: BackupNode, edges: BackupEdges } });
-  //   this.toggleRelationMenu();
-  // };
+  handleCreateRelationbutton = () => {
+    let newEdge = [
+      {
+        className: this.state.group,
+        srcVertex: this.props.data.nodeID,
+        dstVertex: this.props.data.nodeID2,
+        name: this.props.data.edgeName
+      }
+    ];
+
+    this.props.createNewEdgeToDatabaseActionCreator(newEdge);
+
+    // this.AddEdgeToCanvas([
+    //   { from: this.state.srcEdge, to: this.state.dscEdge }
+    // ]);
+
+    this.setCreateEdgeModalFalse();
+    // this.toggleCreateRAlertmsgTrue();
+  };
 
   render() {
     const { state, scale, data } = this.props;
@@ -531,91 +592,102 @@ class Canvas extends Component {
                 </button>
               </div>
             </Modal>
-            {/* <button
+            <button
               id="createRelation-button"
               title="create relationship"
               onClick={this.handleCreateRelation}
             >
               CreateRelation
-            </button> */}
+            </button>
             {
-              //   <Modal
-              //     isOpen={this.state.isCreateRelationActive}
-              //     contentLabel="CreateRelation Modal"
-              //     onRequestClose={this.state.toggleCreateRelationModalFalse}
-              //     style={customStyle}
-              //   >
-              //     <div id="Modal-header">
-              //       Create Relationship from #inNodeID to #outNodeID
-              //       <button
-              //         id="hidemodal-button"
-              //         onClick={this.toggleCreateRelationModalFalse}
-              //       >
-              //         Hide Modal
-              //       </button>
-              //     </div>
-              //     {this.state.page === 1 ? (
-              //       <div id="modal-middle-div">
-              //         Class :{" "}
-              //         <select id="select-id"> {this.selectBoxList()} </select>
-              //       </div>
-              //     ) : (
-              //       <div id="modal-middle-div">
-              //         Relation Classname : <hr />
-              //         <div id="inside-box">
-              //           {" "}
-              //           This relationship require no attribute
-              //         </div>
-              //       </div>
-              //     )}
-              //     {this.state.page === 1 ? (
-              //       <div id="modal-bottom-div">
-              //         <button
-              //           id="modal-cancel-button"
-              //           onClick={this.toggleCreateRelationModalFalse}
-              //         >
-              //           Cancel
-              //         </button>
-              //         <button
-              //           id="modal-next-button"
-              //           onClick={this.handleNextPage}
-              //         >
-              //           Next
-              //         </button>
-              //       </div>
-              //     ) : (
-              //       <div id="modal-bottom-div">
-              //         <button onClick={this.InitializePage}> Back </button>
-              //         <button
-              //           id="modal-cancel-button"
-              //           onClick={this.toggleCreateRelationModalFalse}
-              //         >
-              //           {" "}
-              //           Cancel
-              //         </button>
-              //         <button
-              //           id="Addedge-button"
-              //           onClick={this.handleCreateRelationbutton}
-              //         >
-              //           Create Relation
-              //         </button>
-              //       </div>
-              //     )}
-              //   </Modal>
+              <Modal
+                isOpen={this.state.isCreateRelationActive}
+                contentLabel="CreateRelation Modal"
+                onRequestClose={this.state.setCreateEdgeModalFalse}
+                style={customStyle}
+              >
+                <div id="Modal-header">
+                  Create Relationship from #{this.props.data.nodeID} to #{
+                    this.props.data.nodeID2
+                  }
+                  <button
+                    id="hidemodal-button"
+                    onClick={this.setCreateEdgeModalFalse}
+                  >
+                    Hide Modal
+                  </button>
+                </div>
+                {this.state.page === 1 ? (
+                  <div id="modal-middle-div">
+                    Class :
+                    <select id="selectEdge-id">
+                      {" "}
+                      {this.selectEdgeClassList(state)}{" "}
+                    </select>
+                  </div>
+                ) : (
+                  <div id="modal-middle-div">
+                    Relation Classname : {this.state.group} <hr />
+                    <div id="inside-box">
+                      {" "}
+                      Name :{" "}
+                      <input
+                        type="text"
+                        //  value={this.props.data.inRelation}
+                        placeholder="input new nodename...."
+                        className="Nodetext"
+                        onChange={this.handleEdgeNewName}
+                      />
+                    </div>
+                  </div>
+                )}
+                {this.state.page === 1 ? (
+                  <div id="modal-bottom-div">
+                    <button
+                      id="modal-cancel-button"
+                      onClick={this.setCreateEdgeModalFalse}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      id="modal-next-button"
+                      onClick={this.handleNextPage}
+                    >
+                      Next
+                    </button>
+                  </div>
+                ) : (
+                  <div id="modal-bottom-div">
+                    <button onClick={this.initializePage}> Back </button>
+                    <button
+                      id="modal-cancel-button"
+                      onClick={this.setCreateEdgeModalFalse}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      id="Addedge-button"
+                      onClick={this.handleCreateRelationbutton}
+                    >
+                      Create Relation
+                    </button>
+                  </div>
+                )}
+              </Modal>
             }
             <button
               id="removeNode-button"
               title="remove node from canvas"
               onClick={this.handleRemoveNode}
             >
-              Remove
+              Delete node from canvas
             </button>
             <button
               id="deleteNode-button"
               title="delete node from Database"
               onClick={this.toggleDeletenodeModal}
             >
-              Delete
+              Delete node from database
             </button>
             <Modal
               isOpen={this.state.isDeleteNodeActivate}
@@ -774,14 +846,17 @@ class Canvas extends Component {
             selectNode: function(event) {
               if (this.state.createEdgeMode === false) {
                 this.handleNodeID(event.nodes);
+                this.props.getNodeIDActionCreator(event.nodes[0]);
               } else {
                 this.handleNodeID2(event.nodes);
+                this.props.getNodeID2ActionCreator(event.nodes[0]);
               }
 
               if (this.state.createEdgeMode === true) {
                 const src = this.props.data.nodeID;
                 const dest = this.props.data.nodeID2;
-                //console.log(src,dest)
+                console.log(src);
+                console.log(dest);
                 //this.setSrcEdge(src);
                 //this.setDecEdge(dest);
                 //this.toggleCreateRelationModalTrue();

@@ -1,8 +1,10 @@
 const data = {
   nodeID: null,
+  nodeID2: null,
   nodeClass: null,
   nodeName: null,
   edgeID: null,
+  edgeName: null,
   edgeClass: null,
   edgeIn: null,
   edgeOut: null,
@@ -30,6 +32,7 @@ const dataReducer = (state = data, action) => {
         ...state,
         nodeID2: action.payload
       };
+      console.log(state);
       console.log("from ", state.nodeID);
       console.log("to ", state.nodeID2);
       return state;
@@ -110,6 +113,12 @@ const dataReducer = (state = data, action) => {
       return {
         ...state,
         message: action.payload
+      };
+
+    case "STORE_EDGE_NAME":
+      return {
+        ...state,
+        edgeName: action.payload
       };
     // case 'STORE_EDIT_NODETIME_VALUE':
 
